@@ -8,19 +8,6 @@ using System.Text;
 namespace Koromo_Copy.Framework.CL
 {
     /// <summary>
-    /// Interface of console top-level commands.
-    /// </summary>
-    public interface IConsole
-    {
-        /// <summary>
-        /// Redirect function.
-        /// </summary>
-        /// <param name="arguments"></param>
-        /// <returns>Whether the redirect was successful.</returns>
-        bool Redirect(string[] arguments, string contents);
-    }
-
-    /// <summary>
     /// This is a console option that must be included.
     /// </summary>
     public class IConsoleOption

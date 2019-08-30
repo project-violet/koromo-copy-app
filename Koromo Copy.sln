@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29215.179
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Koromo_Copy.Framework", "Koromo_Copy.Framework\Koromo_Copy.Framework.csproj", "{CDE812AB-8788-4C42-ACE0-F3ACF2F7E581}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Koromo_Copy.Framework", "Koromo_Copy.Framework\Koromo_Copy.Framework.csproj", "{CDE812AB-8788-4C42-ACE0-F3ACF2F7E581}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Koromo_Copy.UI.Desktop", "Koromo_Copy.UI.Desktop\Koromo_Copy.UI.Desktop.csproj", "{A1145E08-DD9A-4868-AC81-293AA19E9818}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Koromo_Copy.Console", "Koromo_Copy.Console\Koromo_Copy.Console.csproj", "{080CC50F-B760-4571-8833-C0A6A3DA8E3A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{A1145E08-DD9A-4868-AC81-293AA19E9818}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1145E08-DD9A-4868-AC81-293AA19E9818}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1145E08-DD9A-4868-AC81-293AA19E9818}.Release|Any CPU.Build.0 = Release|Any CPU
+		{080CC50F-B760-4571-8833-C0A6A3DA8E3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{080CC50F-B760-4571-8833-C0A6A3DA8E3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{080CC50F-B760-4571-8833-C0A6A3DA8E3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{080CC50F-B760-4571-8833-C0A6A3DA8E3A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

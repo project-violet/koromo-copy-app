@@ -24,11 +24,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Compiler\CodeGen\" />
     <Folder Include="Extractor\Hitomi\" />
-    <Folder Include="HTML\" />
     <Folder Include="Network\" />
-    <Folder Include="DataBase\" />
-    <Folder Include="Utils\" />
     <Folder Include="Script\" />
   </ItemGroup>
 

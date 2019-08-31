@@ -33,6 +33,12 @@ namespace Koromo_Copy.Framework.Html
 
         public List<string> Result { get; private set; }
 
+        /// <summary>
+        /// Parse expath
+        /// 
+        /// Example)
+        /// /html[1]/body[1]/div[8]/div[3]/div[10]/div[1]/div[2]/div[1]/div[5]/div[1]/span[1]/div[1]/table[1]/tr[1]/td[{3+i*1}]/a[1]
+        /// </summary>
         private void parse_pattern()
         {
             var tokens = split_token(pattern);

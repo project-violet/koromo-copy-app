@@ -9,9 +9,9 @@ namespace Koromo_Copy.Framework
 {
     public class Version
     {
-        public const int MajorVersion = 0;
-        public const int MinorVersion = 1;
-        public const int BuildVersion = 0;
+        public const int MajorVersion = 2019;
+        public const int MinorVersion = 8;
+        public const int BuildVersion = 31;
 
         public const string Name = "Koromo Copy";
         public static string Text { get; } = $"{MajorVersion}.{MinorVersion}.{BuildVersion}";

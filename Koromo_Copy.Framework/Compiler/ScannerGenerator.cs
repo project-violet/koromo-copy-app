@@ -373,9 +373,9 @@ namespace Koromo_Copy.Framework.Compiler
         }
 
         /// <summary>
-        /// GraphViz.Net(Jamie Dixon), Microsoft.Bcl.Immutable(Microsoft) 누겟 패키지 설치 필요
+        /// GraphViz.Net(Jamie Dixon), Microsoft.Bcl.Immutable(Microsoft)
         /// 
-        /// App.config 파일 수정해야함
+        /// App.config
         /// <?xml version="1.0" encoding="utf-8"?>
         /// <configuration>
         ///     <startup> 
@@ -1080,10 +1080,7 @@ namespace Koromo_Copy.Framework.Compiler
         string target;
         int pos = 0;
         bool err = false;
-        int latest_pos;
         List<int> err_pos;
-        int current_line;
-        int current_column;
 
         public Scanner(int[][] transition_table, string[] accept_table)
         {
@@ -1095,8 +1092,8 @@ namespace Koromo_Copy.Framework.Compiler
         {
             target = literal;
             pos = 0;
-            current_line = 0;
-            current_column = 0;
+            Line = 0;
+            Column = 0;
             err_pos = new List<int>();
             err = false;
         }
@@ -1111,18 +1108,18 @@ namespace Koromo_Copy.Framework.Compiler
             return err;
         }
 
-        public int Position { get { return latest_pos; } }
-        public int Line { get { return current_line; } set { current_line = value; } }
-        public int Column { get { return current_column; } set { current_column = value; } }
+        public int Position { get; private set; }
+        public int Line { get; set; }
+        public int Column { get; set; }
 
         public Tuple<string, string, int, int> Next()
         {
             var builder = new StringBuilder();
             var node_pos = 0;
-            latest_pos = pos;
+            Position = pos;
 
-            int cur_line = current_line;
-            int cur_column = current_column;
+            int cur_line = Line;
+            int cur_column = Column;
 
             for (; pos < target.Length; pos++)
             {
@@ -1136,12 +1133,12 @@ namespace Koromo_Copy.Framework.Compiler
                         {
                             // Drop string and initialization
                             builder.Clear();
-                            latest_pos = pos;
+                            Position = pos;
                             pos--;
                             node_pos = 0;
-                            current_column--;
-                            cur_line = current_line;
-                            cur_column = current_column;
+                            Column--;
+                            cur_line = Line;
+                            cur_column = Column;
                             continue;
                         }
                         if (accept_table[node_pos] == null)
@@ -1153,7 +1150,7 @@ namespace Koromo_Copy.Framework.Compiler
                         return new Tuple<string, string, int, int>(accept_table[node_pos], builder.ToString(), cur_line + 1, cur_column + 1);
 
                     default:
-                        if (target[pos] == '\n') { current_line++; current_column = 1; } else current_column++;
+                        if (target[pos] == '\n') { Line++; Column = 1; } else Column++;
                         builder.Append(target[pos]);
                         break;
                 }

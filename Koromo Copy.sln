@@ -5,9 +5,11 @@ VisualStudioVersion = 16.0.29215.179
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Koromo_Copy.UI.Desktop", "Koromo_Copy.UI.Desktop\Koromo_Copy.UI.Desktop.csproj", "{A1145E08-DD9A-4868-AC81-293AA19E9818}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Koromo_Copy.Console", "Koromo_Copy.Console\Koromo_Copy.Console.csproj", "{080CC50F-B760-4571-8833-C0A6A3DA8E3A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Koromo_Copy.Console", "Koromo_Copy.Console\Koromo_Copy.Console.csproj", "{080CC50F-B760-4571-8833-C0A6A3DA8E3A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Koromo_Copy.Framework", "Koromo_Copy.Framework\Koromo_Copy.Framework.csproj", "{98B35499-DC95-44CF-808E-7E7F7827C00B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Koromo_Copy.Framework", "Koromo_Copy.Framework\Koromo_Copy.Framework.csproj", "{98B35499-DC95-44CF-808E-7E7F7827C00B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Koromo_Copy.Tool.CustomCrawler", "Koromo_Copy.Tool.CustomCrawler\Koromo_Copy.Tool.CustomCrawler.csproj", "{5551C3F5-9074-4B64-B554-7A7451834407}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{98B35499-DC95-44CF-808E-7E7F7827C00B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{98B35499-DC95-44CF-808E-7E7F7827C00B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{98B35499-DC95-44CF-808E-7E7F7827C00B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5551C3F5-9074-4B64-B554-7A7451834407}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5551C3F5-9074-4B64-B554-7A7451834407}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5551C3F5-9074-4B64-B554-7A7451834407}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5551C3F5-9074-4B64-B554-7A7451834407}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

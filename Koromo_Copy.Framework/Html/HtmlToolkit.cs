@@ -35,10 +35,40 @@ namespace Koromo_Copy.Framework.Html
 
         private void parse_pattern()
         {
-            // xpath, options ...
+            var tokens = split_token(pattern);
+
             Result = new List<string>();
+        }
 
-
+        /// <summary>
+        /// Tokenize e-xpath.
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        private List<string> split_token(string str)
+        {
+            var result = new List<string>();
+            for (int i = 0; i < str.Length; i++)
+            {
+                var builder = new StringBuilder();
+                bool skip = false;
+                for (; i < str.Length; i++)
+                {
+                    if (str[i] == ',' && skip == false)
+                    {
+                        result.Add(builder.ToString());
+                        break;
+                    }
+                    if (str[i] == '[')
+                        skip = true;
+                    else if (str[i] == ']' && skip)
+                        skip = false;
+                    builder.Append(str[i]);
+                }
+                if (i == str.Length)
+                    result.Add(builder.ToString());
+            }
+            return result;
         }
     }
 }

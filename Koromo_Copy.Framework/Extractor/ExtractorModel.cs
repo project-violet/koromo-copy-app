@@ -7,7 +7,8 @@ using System.Text;
 
 namespace Koromo_Copy.Framework.Extractor
 {
-    public class ExtractorModel
+    public abstract class ExtractorModel
     {
+        public abstract bool ValidUrl(string url);
     }
 }

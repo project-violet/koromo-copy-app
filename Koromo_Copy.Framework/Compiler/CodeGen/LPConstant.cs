@@ -12,7 +12,6 @@ namespace Koromo_Copy.Framework.Compiler.CodeGen
     public class LPConstant
         : LPUser
     {
-        public LPType Type { get; set; }
         public object Content { get; set; }
 
         public static LPConstant Create(int content)

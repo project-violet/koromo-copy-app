@@ -9,13 +9,18 @@ using System.Threading.Tasks;
 
 namespace Koromo_Copy.Framework.Compiler.CodeGen
 {
-    public interface LPDefine
+    public interface LPValue
     {
+        string ShortString { get; }
     }
 
     public abstract class LPUser
-        : LPDefine
+        : LPValue
     {
         public LPDebugInfo DebugInfo { get; set; }
+
+        public string ShortString => throw new NotImplementedException();
+
+        public LPType Type { get; set; }
     }
 }

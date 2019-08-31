@@ -10,20 +10,28 @@ using System.Threading.Tasks;
 namespace Koromo_Copy.Framework.Compiler.CodeGen
 {
     public class LPBasicBlock
-        : LPDefine
+        : LPValue
     {
-        List<LPOperator> insts;
-
         public LPBasicBlock()
         {
-            insts = new List<LPOperator>();
+            Childs = new List<LPOperator>();
         }
 
-        public List<LPOperator> Childs { get { return insts; } }
+        public List<LPOperator> Childs { get; }
+        public LPFunction Function { get; set; }
+        public LPModule Module { get; set; }
+
+        public string ShortString => throw new NotImplementedException();
 
         public void Insert(LPOperator op)
         {
-            insts.Add(op);
+            op.Parent = this;
+            op.Function = Function;
+            op.Module = Module;
+            Childs.Add(op);
         }
+
+        public int Position(LPOperator op)
+            => Childs.IndexOf(op);
     }
 }

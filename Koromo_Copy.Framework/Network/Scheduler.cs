@@ -5,10 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Koromo_Copy.Framework.Extractor
+namespace Koromo_Copy.Framework.Network
 {
-    public abstract class ExtractorModel
+    public class Scheduler
     {
-        public abstract bool ValidUrl(string url);
     }
 }

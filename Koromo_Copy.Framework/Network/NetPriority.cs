@@ -17,15 +17,13 @@ namespace Koromo_Copy.Framework.Network
         Emergency = 2,
     }
 
-    public class NetPriority : IComparable
+    public class NetPriority : IComparable<NetPriority>
     {
         public NetPriorityType Type { get; set; }
         public int TaskPriority { get; set; }
 
-        public int CompareTo(object obj)
+        public int CompareTo(NetPriority pp)
         {
-            var pp = (NetPriority)obj;
-
             if (Type > pp.Type) return 1;
             else if (Type < pp.Type) return -1;
 

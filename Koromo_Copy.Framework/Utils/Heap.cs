@@ -13,7 +13,7 @@ namespace Koromo_Copy.Framework.Utils
     /// <typeparam name="T">Type of data</typeparam>
     /// <typeparam name="C">Comparator of data</typeparam>
     public class Heap<T, C>
-        where T : IComparable
+        where T : IComparable<T>
         where C : IComparer<T>, new()
     {
         List<T> heap;
@@ -96,24 +96,24 @@ namespace Koromo_Copy.Framework.Utils
         }
     }
 
-    public class DefaultHeapComparer<T> : Comparer<T> where T : IComparable
+    public class DefaultHeapComparer<T> : Comparer<T> where T : IComparable<T>
     {
         public override int Compare(T x, T y)
             => x.CompareTo(y);
     }
 
-    public class MinHeapComparer<T> : Comparer<T> where T : IComparable
+    public class MinHeapComparer<T> : Comparer<T> where T : IComparable<T>
     {
         public override int Compare(T x, T y)
             => y.CompareTo(x);
     }
 
-    public class Heap<T> : Heap<T, DefaultHeapComparer<T>> where T : IComparable { }
-    public class MinHeap<T> : Heap<T, MinHeapComparer<T>> where T : IComparable { }
-    public class MaxHeap<T> : Heap<T, DefaultHeapComparer<T>> where T : IComparable { }
+    public class Heap<T> : Heap<T, DefaultHeapComparer<T>> where T : IComparable<T> { }
+    public class MinHeap<T> : Heap<T, MinHeapComparer<T>> where T : IComparable<T> { }
+    public class MaxHeap<T> : Heap<T, DefaultHeapComparer<T>> where T : IComparable<T> { }
 
     public class UpdatableHeapElements<T> : IComparable<T>
-        where T : IComparable
+        where T : IComparable<T>
     {
         public T data;
         public int index;
@@ -124,7 +124,7 @@ namespace Koromo_Copy.Framework.Utils
     }
 
     public class UpdatableHeap<S, T, C>
-        where S : IComparable
+        where S : IComparable<S>
         where T : UpdatableHeapElements<S>, IComparable<S>
         where C : IComparer<S>, new()
     {
@@ -227,7 +227,7 @@ namespace Koromo_Copy.Framework.Utils
         }
     }
 
-    public class UpdatableHeap<T> : UpdatableHeap<T, UpdatableHeapElements<T>, DefaultHeapComparer<T>> where T : IComparable { }
-    public class UpdatableMinHeap<T> : UpdatableHeap<T, UpdatableHeapElements<T>, MinHeapComparer<T>> where T : IComparable { }
-    public class UpdatableMaxHeap<T> : UpdatableHeap<T, UpdatableHeapElements<T>, DefaultHeapComparer<T>> where T : IComparable { }
+    public class UpdatableHeap<T> : UpdatableHeap<T, UpdatableHeapElements<T>, DefaultHeapComparer<T>> where T : IComparable<T> { }
+    public class UpdatableMinHeap<T> : UpdatableHeap<T, UpdatableHeapElements<T>, MinHeapComparer<T>> where T : IComparable<T> { }
+    public class UpdatableMaxHeap<T> : UpdatableHeap<T, UpdatableHeapElements<T>, DefaultHeapComparer<T>> where T : IComparable<T> { }
 }

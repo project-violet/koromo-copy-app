@@ -8,6 +8,10 @@ using System.Text;
 
 namespace Koromo_Copy.Framework.Network
 {
+    /// <summary>
+    /// Exists for compatibility with other older projects.
+    /// Never use this class.
+    /// </summary>
     public class NetCommon
     {
         public static WebClient GetDefaultClient()

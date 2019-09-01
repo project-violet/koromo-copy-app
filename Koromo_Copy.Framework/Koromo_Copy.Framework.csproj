@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Postprocessor\" />
     <Folder Include="Settings\" />
   </ItemGroup>
 

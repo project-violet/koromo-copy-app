@@ -27,5 +27,19 @@ namespace Koromo_Copy.Framework.Crypto
             byte[] hash = sha.ComputeHash(Encoding.UTF8.GetBytes(str));
             return BitConverter.ToString(hash).Replace("-", String.Empty);
         }
+
+        public static string GetHashSHA256(this string str)
+        {
+            SHA256Managed sha = new SHA256Managed();
+            byte[] hash = sha.ComputeHash(Encoding.UTF8.GetBytes(str));
+            return BitConverter.ToString(hash).Replace("-", String.Empty);
+        }
+
+        public static string GetHashSHA512(this string str)
+        {
+            SHA512Managed sha = new SHA512Managed();
+            byte[] hash = sha.ComputeHash(Encoding.UTF8.GetBytes(str));
+            return BitConverter.ToString(hash).Replace("-", String.Empty);
+        }
     }
 }

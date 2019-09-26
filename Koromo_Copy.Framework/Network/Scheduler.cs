@@ -151,5 +151,9 @@ namespace Koromo_Copy.Framework.Network
         }
     }
 
-    public class NetScheduler : Scheduler<NetTask, NetPriority, NetField> { }
+    public class NetScheduler : Scheduler<NetTask, NetPriority, NetField>
+    {
+        public NetScheduler(int capacity = 0, bool use_emergency_thread = false) 
+            : base(capacity, use_emergency_thread) { }
+    }
 }

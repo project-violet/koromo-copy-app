@@ -59,6 +59,11 @@ namespace Koromo_Copy.Framework.Network
         public bool DriveCache { get; set; }
 
         /// <summary>
+        /// Download data to memory.
+        /// </summary>
+        public bool MemoryCache { get; set; }
+
+        /// <summary>
         /// Retry download when fail to download.
         /// </summary>
         public bool RetryWhenFail { get; set; }
@@ -74,8 +79,8 @@ namespace Koromo_Copy.Framework.Network
 
         /* Callback Functions */
 
-        public Action<int> SizeCallback;
-        public Action<int> DownloadCallback;
+        public Action<long> SizeCallback;
+        public Action<long> DownloadCallback;
         public Action StartCallback;
         public Action CompleteCallback;
         public Action<string> CompleteCallbackString;
@@ -86,5 +91,10 @@ namespace Koromo_Copy.Framework.Network
         /// </summary>
         public Action<int> RetryCallback;
         public Action<int> ErrorCallback;
+
+        /* For NetField */
+
+        public bool Aborted;
+        public HttpWebRequest Request;
     }
 }

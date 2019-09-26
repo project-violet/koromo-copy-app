@@ -4,6 +4,18 @@
              xmlns:local="clr-namespace:Koromo_Copy.UI.Desktop"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Xceed.Wpf.AvalonDock.Themes.VS2013;component/Themes/generic.xaml" />
+                <ResourceDictionary Source="/Xceed.Wpf.AvalonDock.Themes.VS2013;component/DarkBrushs.xaml" />
+                <ResourceDictionary Source="/MLib;component/Themes/DarkTheme.xaml" />
+                <ResourceDictionary Source="/MWindowLib;component/Themes/DarkBrushs.xaml" />
+                <ResourceDictionary Source="/Koromo_Copy.UI.Desktop;component/MLib/MWindowLib_DarkLightBrushs.xaml" />
+                <ResourceDictionary Source="/Koromo_Copy.UI.Desktop;component/MLib/AvalonDock_Dark_LightBrushs.xaml" />
+                <!--<ResourceDictionary Source="/Koromo_Copy.UI.Desktop;component/MLib/ColorPickerLib_DarkLightBrushs.xaml" />-->
+                <!--<ResourceDictionary Source="/Koromo_Copy.UI.Desktop;component/MLib/NumericUpDownLib_DarkLightBrush.xaml" />-->
+                <!--<ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Pink.xaml" />-->
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

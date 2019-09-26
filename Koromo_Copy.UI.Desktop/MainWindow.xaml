@@ -1,12 +1,148 @@
-﻿<Window x:Class="Koromo_Copy.UI.Desktop.MainWindow"
+﻿<MWindow:MetroWindow x:Class="Koromo_Copy.UI.Desktop.MainWindow"
+        xmlns:MWindow="clr-namespace:MWindowLib;assembly=MWindowLib"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Koromo_Copy.UI.Desktop"
+        xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
+        xmlns:s="clr-namespace:System;assembly=mscorlib"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Koromo Copy" Height="450" Width="800">
+    
+    <MWindow:MetroWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Menu.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </MWindow:MetroWindow.Resources>
+    
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Menu Grid.Row="0" Background="#2d2d30" Foreground="White">
+
+            <MenuItem Header="파일(_F)">
+                <MenuItem Header="데이터 베이스 새로만들기" InputGestureText="Ctrl+N">
+                    <MenuItem.Icon>
+                        <materialDesign:PackIcon Kind="DatabaseAdd" Opacity=".56"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="데이터 베이스 가져오기" InputGestureText="Ctrl+O">
+                    <MenuItem.Icon>
+                        <materialDesign:PackIcon Kind="DatabaseImport" Opacity=".56"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="데이터 베이스 내보내기" InputGestureText="Ctrl+S">
+                    <MenuItem.Icon>
+                        <materialDesign:PackIcon Kind="DatabaseExport" Opacity=".56"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator Background="#636367" Margin="60 0 20 0"/>
+            </MenuItem>
+            <MenuItem Header="보기(_V)">
+
+            </MenuItem>
+            <MenuItem Header="계정(_A)">
+                <MenuItem Header="로그인" InputGestureText="Ctrl+L">
+                    <MenuItem.Icon>
+                        <materialDesign:PackIcon Kind="Login" Opacity=".56"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="로그아웃">
+                    <MenuItem.Icon>
+                        <materialDesign:PackIcon Kind="Logout" Opacity=".56"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="도구(_T)">
+
+            </MenuItem>
+            <MenuItem Header="정보(_I)">
+
+            </MenuItem>
+        </Menu>
+
+        <xcad:DockingManager Grid.Row="1">
+            <xcad:DockingManager.Theme>
+                <xcad:Vs2013DarkTheme />
+            </xcad:DockingManager.Theme>
+            <!--<xcad:DockingManager.Resources>
+            </xcad:DockingManager.Resources>-->
+            <!--<xcad:DockingManager.DocumentHeaderTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="{Binding IconSource}" Margin="0,0,4,0"/>
+                        <TextBlock Text="{Binding Title}" />
+                    </StackPanel>
+                </DataTemplate>
+            </xcad:DockingManager.DocumentHeaderTemplate>-->
+            <xcad:LayoutRoot x:Name="_layoutRoot">
+                <xcad:LayoutPanel Orientation="Horizontal">
+                    <!--<xcad:LayoutAnchorablePane DockWidth="200">
+                        <xcad:LayoutAnchorable ContentId="properties" Title="Properties" CanHide="False" CanClose="False"
+                                            AutoHideWidth="240">
+                            <xctk:PropertyGrid NameColumnWidth="110"
+                        SelectedObject="{Binding ElementName=_layoutRoot, Path=LastFocusedDocument.Content}"/>
+                        </xcad:LayoutAnchorable>
+                    </xcad:LayoutAnchorablePane>-->
+                    <xcad:LayoutDocumentPaneGroup>
+                        <xcad:LayoutDocumentPane>
+                            <xcad:LayoutDocument ContentId="1" Title="1">
+                                <ListView>
+
+                                </ListView>
+                            </xcad:LayoutDocument>
+                            <xcad:LayoutDocument ContentId="2" Title="2">
+                                <TextBox Text="Document 2 Content" AcceptsReturn="True"/>
+                            </xcad:LayoutDocument>
+                        </xcad:LayoutDocumentPane>
+                    </xcad:LayoutDocumentPaneGroup>
+                    <xcad:LayoutAnchorablePaneGroup DockWidth="125">
+                        <xcad:LayoutAnchorablePane>
+                            <xcad:LayoutAnchorable ContentId="alarms" Title="Alarms"  >
+                                <ListBox>
+                                    <s:String>Alarm 1</s:String>
+                                    <s:String>Alarm 2</s:String>
+                                    <s:String>Alarm 3</s:String>
+                                </ListBox>
+                            </xcad:LayoutAnchorable>
+                            <xcad:LayoutAnchorable ContentId="journal" Title="Journal" >
+                                <RichTextBox>
+                                    <FlowDocument>
+                                        <Paragraph FontSize="14" FontFamily="Segoe">
+                                            This is the content of the Journal Pane.
+                                            <LineBreak/>
+                                            A
+                                            <Bold>RichTextBox</Bold> has been added here
+                                        </Paragraph>
+                                    </FlowDocument>
+                                </RichTextBox>
+                            </xcad:LayoutAnchorable>
+                        </xcad:LayoutAnchorablePane>
+                    </xcad:LayoutAnchorablePaneGroup>
+                </xcad:LayoutPanel>
+
+                <xcad:LayoutRoot.LeftSide>
+                    <xcad:LayoutAnchorSide>
+                        <xcad:LayoutAnchorGroup>
+                            <xcad:LayoutAnchorable Title="Agenda" ContentId="agenda">
+                                <TextBlock Text="Agenda Content" Margin="10" FontSize="18" FontWeight="Black" TextWrapping="Wrap"/>
+                            </xcad:LayoutAnchorable>
+                            <xcad:LayoutAnchorable Title="Contacts" ContentId="contacts">
+                                <TextBlock Text="Contacts Content" Margin="10" FontSize="18" FontWeight="Black" TextWrapping="Wrap"/>
+                            </xcad:LayoutAnchorable>
+                        </xcad:LayoutAnchorGroup>
+                    </xcad:LayoutAnchorSide>
+                </xcad:LayoutRoot.LeftSide>
+            </xcad:LayoutRoot>
+        </xcad:DockingManager>
     </Grid>
-</Window>
+</MWindow:MetroWindow>

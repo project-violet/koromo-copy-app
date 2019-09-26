@@ -27,6 +27,10 @@ namespace Koromo_Copy.Framework.Network
                 UserAgent = "Mozilla/5.0 (Android 7.0; Mobile; rv:54.0) Gecko/54.0 Firefox/54.0 AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.125 Mobile Safari/603.2.4"
             };
 
+        /* Task Information */
+
+        public int Index { get; set; }
+
         /* Http Information */
 
         public string Url { get; set; }
@@ -34,6 +38,7 @@ namespace Koromo_Copy.Framework.Network
         public string Referer { get; set; }
         public string UserAgent { get; set; }
         public string Cookie { get; set; }
+        public IWebProxy Proxy { get; set; }
 
         /* Detail Information */
 
@@ -73,6 +78,8 @@ namespace Koromo_Copy.Framework.Network
         public Action<int> DownloadCallback;
         public Action StartCallback;
         public Action CompleteCallback;
+        public Action<string> CompleteCallbackString;
+        public Action<byte[]> CompleteCallbackBytes;
 
         /// <summary>
         /// Return total downloaded size

@@ -3,7 +3,9 @@
 
 using Koromo_Copy.Framework;
 using Koromo_Copy.Framework.CL;
+using Koromo_Copy.Framework.Crypto;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -15,8 +17,13 @@ namespace Koromo_Copy.Console
         public bool Help;
         [CommandLine("-v", CommandType.OPTION, Default = true, Help = "Show version information.")]
         public bool Version;
-        [CommandLine("--dialog-mode", CommandType.OPTION, Default = true, Help = "Run program with dialog mode.")]
+        [CommandLine("--dialog-mode", CommandType.OPTION, Help = "Run program with dialog mode.")]
         public bool DialogMode;
+
+#if DEBUG
+        [CommandLine("--test", CommandType.ARGUMENTS, ArgumentsCount = 1, Help = "For test.", Info = "use --test <What test for>")]
+        public string[] Test;
+#endif
     }
 
     public class Runnable
@@ -47,6 +54,15 @@ namespace Koromo_Copy.Console
             {
                 Dialog.StartDialog();
             }
+#if DEBUG
+            //
+            //  Test
+            //
+            else if (option.Test != null)
+            {
+                ProcessTest(option.Test);
+            }
+#endif
 
             return;
         }
@@ -71,6 +87,32 @@ namespace Koromo_Copy.Console
         {
             System.Console.WriteLine($"{Version.Name} {Version.Text}\r\n");
         }
+
+#if DEBUG
+        static void ProcessTest(string[] args)
+        {
+            switch (args[0])
+            {
+                case "rsa":
+                    {
+                        var vpkp = RSAHelper.CreateKey();
+
+                        System.Console.WriteLine(vpkp.Item1);
+                        System.Console.WriteLine(vpkp.Item2);
+
+                        var rsa_test_text = "ABCD";
+                        var bb = Encoding.UTF8.GetBytes(rsa_test_text);
+
+                        var enc = RSAHelper.Encrypt(bb, vpkp.Item2);
+                        var dec = RSAHelper.Decrypt(enc, vpkp.Item1);
+
+                        System.Console.WriteLine(Encoding.UTF8.GetString(dec));
+                    }
+                    break;
+            }
+
+        }
+#endif
     }
 
 }

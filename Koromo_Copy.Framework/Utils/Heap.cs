@@ -169,6 +169,8 @@ namespace Koromo_Copy.Framework.Utils
 
         public S Front => heap[0].data;
 
+        public int Count { get { return heap.Count; } }
+
         private void bottom_up(int x = 0)
         {
             int l = heap.Count - 1;

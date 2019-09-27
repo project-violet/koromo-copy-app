@@ -17,17 +17,17 @@ namespace Koromo_Copy.Console
     {
         [CommandLine("--help", CommandType.OPTION, Default = true)]
         public bool Help;
-        [CommandLine("-v", CommandType.OPTION, Default = true, Help = "Show version information.")]
+        [CommandLine("-v", CommandType.OPTION, Default = true, Info = "Show version information.")]
         public bool Version;
-        [CommandLine("--dialog-mode", CommandType.OPTION, Help = "Run program with dialog mode.")]
+        [CommandLine("--dialog-mode", CommandType.OPTION, Info = "Run program with dialog mode.")]
         public bool DialogMode;
 
 #if DEBUG
-        [CommandLine("--test", CommandType.ARGUMENTS, ArgumentsCount = 1, Help = "For test.", Info = "use --test <What test for>")]
+        [CommandLine("--test", CommandType.ARGUMENTS, ArgumentsCount = 1, Info = "For test.", Help = "use --test <What test for>")]
         public string[] Test;
 #endif
 
-        [CommandLine("net", CommandType.OPTION, Help = "Multi-commands net.", Info = "use net <Others>")]
+        [CommandLine("net", CommandType.OPTION, Info = "Multi-commands net.", Help = "use net <Others>")]
         public bool Net;
     }
 
@@ -91,10 +91,10 @@ namespace Koromo_Copy.Console
             CommandLineParser<Options>.GetFields().ToList().ForEach(
                 x =>
                 {
-                    if (!string.IsNullOrEmpty(x.Value.Item2.Help))
-                        builder.Append($" {x.Key} : {x.Value.Item2.Help} [{x.Value.Item2.Info}]\r\n");
+                    if (!string.IsNullOrEmpty(x.Value.Item2.Info))
+                        builder.Append($" {x.Key} : {x.Value.Item2.Info} [{x.Value.Item2.Help}]\r\n");
                     else
-                        builder.Append($" {x.Key} [{x.Value.Item2.Info}]\r\n");
+                        builder.Append($" {x.Key} [{x.Value.Item2.Help}]\r\n");
                 });
             System.Console.WriteLine(builder.ToString());
         }

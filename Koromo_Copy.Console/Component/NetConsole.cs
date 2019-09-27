@@ -16,7 +16,7 @@ namespace Koromo_Copy.Console.Component
         public bool Help;
 
         [CommandLine("--download-html", CommandType.ARGUMENTS, ArgumentsCount = 1, 
-            Help = "Download html file.", Info = "use net --download-html <URL>")]
+            Info = "Download html file.", Help = "use net --download-html <URL>")]
         public string[] DownloadHtml;
     }
 
@@ -52,10 +52,10 @@ namespace Koromo_Copy.Console.Component
             CommandLineParser<NetConsoleOption>.GetFields().ToList().ForEach(
                 x =>
                 {
-                    if (!string.IsNullOrEmpty(x.Value.Item2.Help))
-                        builder.Append($" {x.Key} : {x.Value.Item2.Help} [{x.Value.Item2.Info}]\r\n");
+                    if (!string.IsNullOrEmpty(x.Value.Item2.Info))
+                        builder.Append($" {x.Key} : {x.Value.Item2.Info} [{x.Value.Item2.Help}]\r\n");
                     else
-                        builder.Append($" {x.Key} [{x.Value.Item2.Info}]\r\n");
+                        builder.Append($" {x.Key} [{x.Value.Item2.Help}]\r\n");
                 });
             System.Console.WriteLine(builder.ToString());
         }

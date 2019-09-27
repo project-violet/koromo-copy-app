@@ -23,10 +23,19 @@ namespace Koromo_Copy.Console
                 lock (Logs.Instance.LogError)
                 {
                     CultureInfo en = new CultureInfo("en-US");
-                    System.Console.WriteLine($"[{Logs.Instance.LogError.Last().Item1.ToString(en)}] {Logs.Instance.LogError.Last().Item2}");
+                    System.Console.Error.WriteLine($"[{Logs.Instance.LogError.Last().Item1.ToString(en)}] {Logs.Instance.LogError.Last().Item2}");
                 }
             });
-            Runnable.Start(args);
+
+            try
+            {
+                Runnable.Start(args);
+            }
+            catch (Exception e)
+            {
+                System.Console.WriteLine("An error occured! " + e.Message);
+                System.Console.WriteLine("Please, check log.txt file.");
+            }
 
             AppProvider.Deinitialize();
 

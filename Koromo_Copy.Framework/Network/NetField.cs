@@ -23,40 +23,45 @@ namespace Koromo_Copy.Framework.Network
 
             interrupt.WaitOne();
 
+            Log.Logs.Instance.Push("[NetField] Start download...");
+            Log.Logs.Instance.Push(content);
+
+            interrupt.WaitOne();
+
             content.StartCallback?.Invoke();
-
-            //
-            //  Initialize http-web-request
-            //
-
-            var request = (HttpWebRequest)WebRequest.Create(content.Url);
-            content.Request = request;
-
-            request.Accept = content.Accept;
-            request.UserAgent = content.UserAgent;
-
-            if (content.Referer != null)
-                request.Referer = content.Referer;
-            else
-                request.Referer = (content.Url.StartsWith("https://") ? "https://" : (content.Url.Split(':')[0] + "//")) + request.RequestUri.Host;
-
-            if (content.Cookie != null)
-                request.Headers.Add(HttpRequestHeader.Cookie, content.Cookie);
-
-            if (content.Proxy != null)
-                request.Proxy = content.Proxy;
-
-            if (content.TimeoutInfinite)
-                request.Timeout = Timeout.Infinite;
-            else
-                request.Timeout = content.TimeoutMillisecond;
-
-            //
-            //  Wait request
-            //
 
             try
             {
+                //
+                //  Initialize http-web-request
+                //
+
+                var request = (HttpWebRequest)WebRequest.Create(content.Url);
+                content.Request = request;
+
+                request.Accept = content.Accept;
+                request.UserAgent = content.UserAgent;
+
+                if (content.Referer != null)
+                    request.Referer = content.Referer;
+                else
+                    request.Referer = (content.Url.StartsWith("https://") ? "https://" : (content.Url.Split(':')[0] + "//")) + request.RequestUri.Host;
+
+                if (content.Cookie != null)
+                    request.Headers.Add(HttpRequestHeader.Cookie, content.Cookie);
+
+                if (content.Proxy != null)
+                    request.Proxy = content.Proxy;
+
+                if (content.TimeoutInfinite)
+                    request.Timeout = Timeout.Infinite;
+                else
+                    request.Timeout = content.TimeoutMillisecond;
+
+                //
+                //  Wait request
+                //
+
                 using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
                 {
                     if (response.StatusCode == HttpStatusCode.NotFound ||
@@ -141,13 +146,15 @@ namespace Koromo_Copy.Framework.Network
                     }
                 }
             }
-            catch (WebException we)
+            catch (WebException e)
             {
-
+                Log.Logs.Instance.Push("[NetField] Web Excpetion - " + e.Message);
+                Log.Logs.Instance.Push(content);
             }
             catch (Exception e)
             {
-
+                Log.Logs.Instance.Push("[NetField] Unhandled Excpetion - " + e.Message);
+                Log.Logs.Instance.Push(content);
             }
 
             //
@@ -166,7 +173,11 @@ namespace Koromo_Copy.Framework.Network
                 content.RetryCallback?.Invoke(++retry_count);
 
                 if (content.RetryCount > retry_count)
+                {
+                    Log.Logs.Instance.Push($"[NetField] Retry [{retry_count}/{content.RetryCount}]");
+                    Log.Logs.Instance.Push(content);
                     goto RETRY_PROCEDURE;
+                }
 
                 //
                 //  Many retry

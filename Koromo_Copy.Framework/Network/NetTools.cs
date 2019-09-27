@@ -28,7 +28,8 @@ namespace Koromo_Copy.Framework.Network
                 task.ErrorCallback = (int code) =>
                 {
                     task.ErrorCallback = null;
-                    throw new Exception("Download Error!");
+                    result = "";
+                    interrupt.Set();
                 };
 
                 AppProvider.Scheduler.Add(task);

@@ -23,7 +23,7 @@ namespace Koromo_Copy.Console
                 lock (Logs.Instance.LogError)
                 {
                     CultureInfo en = new CultureInfo("en-US");
-                    System.Console.Error.WriteLine($"[{Logs.Instance.LogError.Last().Item1.ToString(en)}] {Logs.Instance.LogError.Last().Item2}");
+                    System.Console.Error.WriteLine($"[{Logs.Instance.LogError.Last().Item1.ToString(en)}] [Error] {Logs.Instance.LogError.Last().Item2}");
                 }
             });
 

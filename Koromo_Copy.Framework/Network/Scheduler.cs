@@ -146,6 +146,7 @@ namespace Koromo_Copy.Framework.Network
 
         public void Add(T task)
         {
+            task.scheduler = this;
             lock (queue) queue.Push(task);
             lock (notify_lock) Notify();
         }

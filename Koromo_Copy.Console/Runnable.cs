@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace Koromo_Copy.Console
 {
@@ -129,7 +130,21 @@ namespace Koromo_Copy.Console
                 case "dcinside":
                     {
                         Framework.Extractor.DCInsideExtractor extractor = new Framework.Extractor.DCInsideExtractor();
-                        extractor.Extract("https://gall.dcinside.com/board/view/?id=superidea&no=194789");
+                        var imgs = extractor.Extract("https://gall.dcinside.com/board/view/?id=superidea&no=194789");
+                        int count = imgs.Count;
+                        imgs.ForEach(x => {
+                            x.Filename = Path.Combine(Directory.GetCurrentDirectory(), x.Filename);
+                            x.CompleteCallback = () =>
+                            {
+                                Interlocked.Decrement(ref count);
+                            };
+                        });
+                        imgs.ForEach(x => AppProvider.Scheduler.Add(x));
+
+                        while (count != 0)
+                        {
+                            Thread.Sleep(500);
+                        }
                     }
                     break;
             }

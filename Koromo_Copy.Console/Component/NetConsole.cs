@@ -69,7 +69,10 @@ namespace Koromo_Copy.Console.Component
             var task = NetTask.MakeDefault(args[0]);
             task.AutoRedirection = !DisableAutoRedirection;
             var html = NetTools.DownloadStringAsync(task).Result;
-            System.Console.WriteLine(html);
+            if (html != null)
+                System.Console.WriteLine(html);
+            else
+                System.Console.WriteLine("Internal error! Please, check log.txt file.");
         }
     }
 }

@@ -49,7 +49,8 @@ sudo apt-get install dotnet-sdk-3.0
 Second, build project.
 
 ```
-cd Koromo_Copy.Console
+git clone https://github.com/dc-koromo/koromo-copy2
+cd koromo-copy2/Koromo_Copy.Console
 nuget restore Koromo_Copy.Console.csproj
 dotnet build -c Release
 ```

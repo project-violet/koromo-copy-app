@@ -11,10 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Koromo_Copy.Framework", "Ko
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Koromo_Copy.Tool.CustomCrawler", "Koromo_Copy.Tool.CustomCrawler\Koromo_Copy.Tool.CustomCrawler.csproj", "{5551C3F5-9074-4B64-B554-7A7451834407}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ibm.webclient", "ibm.socket-io\ibm.webclient\ibm.webclient.csproj", "{189F39BC-D399-47B0-AC38-40E68263E52A}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ibm.socket-io.client", "ibm.socket-io\ibm.socket-io.client\ibm.socket-io.client.csproj", "{228391C0-7FEA-4261-8AF3-E2B5522725FA}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,14 +33,6 @@ Global
 		{5551C3F5-9074-4B64-B554-7A7451834407}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5551C3F5-9074-4B64-B554-7A7451834407}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5551C3F5-9074-4B64-B554-7A7451834407}.Release|Any CPU.Build.0 = Release|Any CPU
-		{189F39BC-D399-47B0-AC38-40E68263E52A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{189F39BC-D399-47B0-AC38-40E68263E52A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{189F39BC-D399-47B0-AC38-40E68263E52A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{189F39BC-D399-47B0-AC38-40E68263E52A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{228391C0-7FEA-4261-8AF3-E2B5522725FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{228391C0-7FEA-4261-8AF3-E2B5522725FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{228391C0-7FEA-4261-8AF3-E2B5522725FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{228391C0-7FEA-4261-8AF3-E2B5522725FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

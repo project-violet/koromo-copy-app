@@ -154,12 +154,13 @@ namespace Koromo_Copy.Framework.Network
 
                 var response = (HttpWebResponse)e.Response;
 
-                if (response != null && (
+                if ((response != null && (
                     response.StatusCode == HttpStatusCode.NotFound ||
                     response.StatusCode == HttpStatusCode.Forbidden ||
                     response.StatusCode == HttpStatusCode.Unauthorized ||
                     response.StatusCode == HttpStatusCode.BadRequest ||
-                    response.StatusCode == HttpStatusCode.InternalServerError))
+                    response.StatusCode == HttpStatusCode.InternalServerError)) ||
+                    response == null)
                 {
                     //
                     //  Cannot continue
@@ -200,10 +201,12 @@ namespace Koromo_Copy.Framework.Network
 
             if (content.RetryWhenFail)
             {
-                content.RetryCallback?.Invoke(++retry_count);
-
                 if (content.RetryCount > retry_count)
                 {
+                    retry_count += 1;
+
+                    content.RetryCallback?.Invoke(retry_count);
+
                     Log.Logs.Instance.Push($"[NetField] Retry [{retry_count}/{content.RetryCount}]");
                     Log.Logs.Instance.Push(content);
                     goto RETRY_PROCEDURE;
@@ -213,6 +216,8 @@ namespace Koromo_Copy.Framework.Network
                 //  Many retry
                 //
 
+                Log.Logs.Instance.Push($"[NetField] Many Retry");
+                Log.Logs.Instance.Push(content);
                 content.ErrorCallback?.Invoke(2);
             }
 

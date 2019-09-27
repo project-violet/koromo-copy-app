@@ -29,6 +29,7 @@ namespace Koromo_Copy.Framework.Extractor
             var nt = NetTask.MakeDefault(url);
             nt.DownloadBufferSize = 10241024;
             nt.TimeoutMillisecond = 3000;
+            nt.Priority = new NetPriority() { Type = NetPriorityType.Trivial };
             var html = NetTools.DownloadStringAsync(nt).Result;
 
             if (match[1].Value == "gall")

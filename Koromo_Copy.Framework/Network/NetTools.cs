@@ -21,8 +21,14 @@ namespace Koromo_Copy.Framework.Network
                 task.DownloadString = true;
                 task.CompleteCallbackString = (string str) =>
                 {
-                    interrupt.Set();
                     result = str;
+                    interrupt.Set();
+                };
+
+                task.ErrorCallback = (int code) =>
+                {
+                    task.ErrorCallback = null;
+                    throw new Exception("Download Error!");
                 };
 
                 AppProvider.Scheduler.Add(task);

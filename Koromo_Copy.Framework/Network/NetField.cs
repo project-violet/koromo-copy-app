@@ -160,7 +160,7 @@ namespace Koromo_Copy.Framework.Network
                     response.StatusCode == HttpStatusCode.Unauthorized ||
                     response.StatusCode == HttpStatusCode.BadRequest ||
                     response.StatusCode == HttpStatusCode.InternalServerError)) ||
-                    response == null)
+                    e.Status == WebExceptionStatus.NameResolutionFailure)
                 {
                     //
                     //  Cannot continue

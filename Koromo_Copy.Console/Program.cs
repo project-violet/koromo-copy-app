@@ -3,7 +3,10 @@
 
 using Koromo_Copy.Framework;
 using Koromo_Copy.Framework.CL;
+using Koromo_Copy.Framework.Log;
 using System;
+using System.Globalization;
+using System.Linq;
 
 namespace Koromo_Copy.Console
 {
@@ -11,8 +14,21 @@ namespace Koromo_Copy.Console
     {
         static void Main(string[] args)
         {
+#if DEBUG
+            args = new string[] { "--test", "dcinside" };
+#endif
             AppProvider.Initialize();
+
+            Logs.Instance.AddLogNotify((s, e) => {
+                lock (Logs.Instance.Log)
+                {
+                    CultureInfo en = new CultureInfo("en-US");
+                    System.Console.WriteLine($"[{Logs.Instance.Log.Last().Item1.ToString(en)}] {Logs.Instance.Log.Last().Item2}");
+                }
+            });
             Runnable.Start(args);
+
+
             AppProvider.Deinitialize();
 
             Environment.Exit(0);

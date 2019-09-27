@@ -50,8 +50,8 @@ namespace Koromo_Copy.Framework.Log
             }
         }
 
-        ObservableCollection<Tuple<DateTime, string, bool>> log = new ObservableCollection<Tuple<DateTime, string, bool>>();
         public delegate void NotifyEvent(object sender, NotifyCollectionChangedEventArgs e);
+        public ObservableCollection<Tuple<DateTime, string, bool>> Log { get; } = new ObservableCollection<Tuple<DateTime, string, bool>>();
 
         public Logs()
         {
@@ -64,7 +64,7 @@ namespace Koromo_Copy.Framework.Log
         /// <param name="notify_event"></param>
         public void AddLogNotify(NotifyEvent notify_event)
         {
-            log.CollectionChanged += new NotifyCollectionChangedEventHandler(notify_event);
+            Log.CollectionChanged += new NotifyCollectionChangedEventHandler(notify_event);
         }
 
         /// <summary>
@@ -73,9 +73,9 @@ namespace Koromo_Copy.Framework.Log
         /// <param name="str"></param>
         public void Push(string str)
         {
-            lock (log)
+            lock (Log)
             {
-                log.Add(Tuple.Create(DateTime.Now, str, false));
+                Log.Add(Tuple.Create(DateTime.Now, str, false));
             }
         }
 
@@ -85,19 +85,19 @@ namespace Koromo_Copy.Framework.Log
         /// <param name="obj"></param>
         public void Push(object obj)
         {
-            lock (log)
+            lock (Log)
             {
-                log.Add(Tuple.Create(DateTime.Now, obj.ToString(), false));
-                log.Add(Tuple.Create(DateTime.Now, SerializeObject(obj), true));
+                Log.Add(Tuple.Create(DateTime.Now, obj.ToString(), false));
+                Log.Add(Tuple.Create(DateTime.Now, SerializeObject(obj), true));
             }
         }
 
         private void Logs_Notify(object sender, NotifyCollectionChangedEventArgs e)
         {
-            lock (log)
+            lock (Log)
             {
                 CultureInfo en = new CultureInfo("en-US");
-                File.AppendAllText("log.txt", $"[{log.Last().Item1.ToString(en)}] {log.Last().Item2}\r\n");
+                File.AppendAllText("log.txt", $"[{Log.Last().Item1.ToString(en)}] {Log.Last().Item2}\r\n");
             }
         }
     }

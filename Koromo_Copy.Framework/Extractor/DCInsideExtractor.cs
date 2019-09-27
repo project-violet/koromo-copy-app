@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using Koromo_Copy.Framework.Network;
 
 namespace Koromo_Copy.Framework.Extractor
@@ -20,7 +21,22 @@ namespace Koromo_Copy.Framework.Extractor
 
         public override List<NetTask> Extract(string url)
         {
-            throw new NotImplementedException();
+            var regex = new Regex(ValidUrl());
+            var match = regex.Matches(url);
+
+            var result = new List<NetTask>();
+
+            var nt = NetTask.MakeDefault(url);
+            nt.DownloadBufferSize = 10241024;
+            nt.TimeoutMillisecond = 3000;
+            var html = NetTools.DownloadStringAsync(nt).Result;
+
+            if (match[1].Value == "gall")
+            {
+
+            }
+
+            return result;
         }
     }
 }

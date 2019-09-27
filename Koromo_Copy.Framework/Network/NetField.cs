@@ -25,6 +25,8 @@ namespace Koromo_Copy.Framework.Network
 
             Log.Logs.Instance.Push("[NetField] Start download... " + content.Url);
 
+        REDIRECTION:
+
             interrupt.WaitOne();
 
             content.StartCallback?.Invoke();
@@ -156,8 +158,10 @@ namespace Koromo_Copy.Framework.Network
                 {
                     if (content.AutoRedirection)
                     {
+                        var old = content.Url;
                         content.Url = response.Headers.Get("Location");
-                        goto RETRY_PROCEDURE;
+                        Log.Logs.Instance.Push("[NetField] Redirection " + old + " to " + content.Url);
+                        goto REDIRECTION;
                     }
                 }
 

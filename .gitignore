@@ -429,3 +429,6 @@ public
 
 # DynamoDB Local files
 .dynamodb/
+
+# Cake
+tools

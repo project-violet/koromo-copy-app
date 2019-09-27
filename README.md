@@ -29,6 +29,15 @@ This project will increases development productivity and eases maintenance.
 
 ### Server User
 
+## How to build?
+
+### Linux
+
+```
+nuget restore "Koromo Copy.sln"
+msbuild
+```
+
 ## Supports
 
 ```

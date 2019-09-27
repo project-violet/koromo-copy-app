@@ -23,8 +23,7 @@ namespace Koromo_Copy.Framework.Network
 
             interrupt.WaitOne();
 
-            Log.Logs.Instance.Push("[NetField] Start download...");
-            Log.Logs.Instance.Push(content);
+            Log.Logs.Instance.Push("[NetField] Start download... " + content.Url);
 
             interrupt.WaitOne();
 

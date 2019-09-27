@@ -154,11 +154,12 @@ namespace Koromo_Copy.Framework.Network
 
                 var response = (HttpWebResponse)e.Response;
 
-                if (response.StatusCode == HttpStatusCode.NotFound ||
+                if (response != null && (
+                    response.StatusCode == HttpStatusCode.NotFound ||
                     response.StatusCode == HttpStatusCode.Forbidden ||
                     response.StatusCode == HttpStatusCode.Unauthorized ||
                     response.StatusCode == HttpStatusCode.BadRequest ||
-                    response.StatusCode == HttpStatusCode.InternalServerError)
+                    response.StatusCode == HttpStatusCode.InternalServerError))
                 {
                     //
                     //  Cannot continue

@@ -160,13 +160,21 @@ namespace Koromo_Copy.Framework.Network
                     response.StatusCode == HttpStatusCode.Unauthorized ||
                     response.StatusCode == HttpStatusCode.BadRequest ||
                     response.StatusCode == HttpStatusCode.InternalServerError)) ||
-                    e.Status == WebExceptionStatus.NameResolutionFailure)
+                    e.Status == WebExceptionStatus.NameResolutionFailure ||
+                    e.Status == WebExceptionStatus.UnknownError)
                 {
                     //
                     //  Cannot continue
                     //
 
                     content.ErrorCallback?.Invoke(3);
+
+                    if (e.Status == WebExceptionStatus.UnknownError)
+                    {
+                        Log.Logs.Instance.PushError("[NetField] Check your Firewall, Router or DPI settings.");
+                        Log.Logs.Instance.PushError("[NetField] If you continue to receive this error, please contact developer.");
+                    }
+
                     return;
                 }
             }

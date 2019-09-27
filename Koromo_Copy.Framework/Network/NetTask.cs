@@ -110,6 +110,9 @@ namespace Koromo_Copy.Framework.Network
         [JsonProperty]
         public int DownloadBufferSize { get; set; }
 
+        [JsonProperty]
+        public bool AutoRedirection { get; set; }
+
         /* Callback Functions */
 
         public Action<long> SizeCallback;

@@ -57,6 +57,8 @@ namespace Koromo_Copy.Framework.Network
                 else
                     request.Timeout = content.TimeoutMillisecond;
 
+                request.AllowAutoRedirect = content.AutoRedirection;
+
                 //
                 //  Wait request
                 //
@@ -148,10 +150,19 @@ namespace Koromo_Copy.Framework.Network
             }
             catch (WebException e)
             {
+                var response = (HttpWebResponse)e.Response;
+
+                if (response != null && response.StatusCode == HttpStatusCode.Moved)
+                {
+                    if (content.AutoRedirection)
+                    {
+                        content.Url = response.Headers.Get("Location");
+                        goto RETRY_PROCEDURE;
+                    }
+                }
+
                 Log.Logs.Instance.PushError("[NetField] Web Excpetion - " + e.Message + "\r\n" + e.StackTrace);
                 Log.Logs.Instance.PushError(content);
-
-                var response = (HttpWebResponse)e.Response;
 
                 if ((response != null && (
                     response.StatusCode == HttpStatusCode.NotFound ||

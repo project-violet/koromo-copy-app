@@ -15,7 +15,7 @@ namespace Koromo_Copy.Console
         static void Main(string[] args)
         {
 #if DEBUG
-            args = new string[] { "net", "--download-html", "https://www.naver.com" };
+            args = new string[] { "net", "--download-html", "https://naver.com", /*"--disable-auto-redirection"*/ };
 #endif
             AppProvider.Initialize();
 

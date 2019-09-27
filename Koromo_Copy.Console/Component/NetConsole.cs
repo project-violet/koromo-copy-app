@@ -15,6 +15,10 @@ namespace Koromo_Copy.Console.Component
         [CommandLine("--help", CommandType.OPTION, Default = true)]
         public bool Help;
 
+        [CommandLine("--disable-auto-redirection", CommandType.OPTION,
+            Info = "Disable auto redirection when http-request.", Help = "use net --disable-auto-redirection")]
+        public bool DisableAutoRedirection;
+
         [CommandLine("--download-html", CommandType.ARGUMENTS, ArgumentsCount = 1, 
             Info = "Download html file.", Help = "use net --download-html <URL>")]
         public string[] DownloadHtml;
@@ -39,7 +43,7 @@ namespace Koromo_Copy.Console.Component
             }
             else if (option.DownloadHtml != null)
             {
-                ProcessDownloadHtml(option.DownloadHtml);
+                ProcessDownloadHtml(option.DownloadHtml, option.DisableAutoRedirection);
             }
         }
 
@@ -60,9 +64,11 @@ namespace Koromo_Copy.Console.Component
             System.Console.WriteLine(builder.ToString());
         }
 
-        static void ProcessDownloadHtml(string[] args)
+        static void ProcessDownloadHtml(string[] args, bool DisableAutoRedirection)
         {
-            var html = NetTools.DownloadStringAsync(NetTask.MakeDefault(args[0])).Result;
+            var task = NetTask.MakeDefault(args[0]);
+            task.AutoRedirection = !DisableAutoRedirection;
+            var html = NetTools.DownloadStringAsync(task).Result;
             System.Console.WriteLine(html);
         }
     }

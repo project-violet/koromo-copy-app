@@ -9,6 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Compiler\**" />
+    <EmbeddedResource Remove="Compiler\**" />
+    <None Remove="Compiler\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="build-debug.bat" />
     <None Remove="build-release.bat" />
   </ItemGroup>

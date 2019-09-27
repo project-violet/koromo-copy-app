@@ -46,7 +46,7 @@ namespace Koromo_Copy.Console.Component
         static void PrintHelp()
         {
             Runnable.PrintVersion();
-            System.Console.WriteLine("Net - Network component");
+            System.Console.WriteLine("Net - Network component\r\n");
 
             var builder = new StringBuilder();
             CommandLineParser<NetConsoleOption>.GetFields().ToList().ForEach(

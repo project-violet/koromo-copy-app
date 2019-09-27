@@ -82,6 +82,7 @@ namespace Koromo_Copy.Console
         static void PrintHelp()
         {
             PrintVersion();
+            System.Console.WriteLine($"\r\n");
 
             var builder = new StringBuilder();
             CommandLineParser<Options>.GetFields().ToList().ForEach(
@@ -97,7 +98,7 @@ namespace Koromo_Copy.Console
 
         public static void PrintVersion()
         {
-            System.Console.WriteLine($"{Version.Name} {Version.Text}\r\n");
+            System.Console.WriteLine($"{Version.Name} {Version.Text}");
         }
 
 #if DEBUG

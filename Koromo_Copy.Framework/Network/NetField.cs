@@ -148,13 +148,13 @@ namespace Koromo_Copy.Framework.Network
             }
             catch (WebException e)
             {
-                Log.Logs.Instance.Push("[NetField] Web Excpetion - " + e.Message);
-                Log.Logs.Instance.Push(content);
+                Log.Logs.Instance.PushError("[NetField] Web Excpetion - " + e.Message);
+                Log.Logs.Instance.PushError(content);
             }
             catch (Exception e)
             {
-                Log.Logs.Instance.Push("[NetField] Unhandled Excpetion - " + e.Message);
-                Log.Logs.Instance.Push(content);
+                Log.Logs.Instance.PushError("[NetField] Unhandled Excpetion - " + e.Message);
+                Log.Logs.Instance.PushError(content);
             }
 
             //

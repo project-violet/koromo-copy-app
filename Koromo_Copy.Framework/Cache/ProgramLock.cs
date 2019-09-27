@@ -34,17 +34,17 @@ namespace Koromo_Copy.Framework.Cache
             catch (FileNotFoundException e)
             {
                 // Write Permission Error
-                Logs.Instance.Push("[Program Lock] Locking pp-error - " + e.Message);
+                Logs.Instance.PushError("[Program Lock] Locking pp-error - " + e.Message);
                 return false;
             }
             catch (IOException e)
             {
-                Logs.Instance.Push("[Program Lock] Locking io-error - " + e.Message);
+                Logs.Instance.PushError("[Program Lock] Locking io-error - " + e.Message);
                 return false;
             }
             catch (Exception e)
             {
-                Logs.Instance.Push("[Program Lock] Locking unhandled-error - " + e.Message);
+                Logs.Instance.PushError("[Program Lock] Locking unhandled-error - " + e.Message);
                 return false;
             }
         }

@@ -4,6 +4,7 @@
 using Koromo_Copy.Framework;
 using Koromo_Copy.Framework.CL;
 using Koromo_Copy.Framework.Crypto;
+using Koromo_Copy.Framework.Network;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -109,8 +110,17 @@ namespace Koromo_Copy.Console
                         System.Console.WriteLine(Encoding.UTF8.GetString(dec));
                     }
                     break;
-            }
 
+                case "dcinside":
+                    {
+                        //Framework.Extractor.DCInsideExtractor extractor = new Framework.Extractor.DCInsideExtractor();
+                        //extractor.Extract("https://gall.dcinside.com/board/view/?id=superidea&no=194789");
+
+                        var html = NetTools.DownloadStringAsync(NetTask.MakeDefault("https://gall.dcinside.com/board/view/?id=superidea&no=194789")).Result;
+                        System.Console.WriteLine(html);
+                    }
+                    break;
+            }
         }
 #endif
     }

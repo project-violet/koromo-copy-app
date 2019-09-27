@@ -17,20 +17,14 @@ namespace Koromo_Copy.Framework.Extractor
     public class DCInsideExtractor : ExtractorModel
     {
         public new static string ValidUrl()
-            => @"https?://(?:gall|m)\.dcinside\.com/(?:mgallery/)?board/(?:lists|view/)\?(?:.*?)";
+            => @"^https?://(gall|m)\.dcinside\.com/(mgallery/)?board/(lists|view/)\?(.*?)$";
 
         public override List<NetTask> Extract(string url)
         {
             var regex = new Regex(ValidUrl());
-            var match = regex.Matches(url);
-
+            var match = regex.Match(url).Groups;
             var result = new List<NetTask>();
-
-            var nt = NetTask.MakeDefault(url);
-            nt.DownloadBufferSize = 10241024;
-            nt.TimeoutMillisecond = 3000;
-            nt.Priority = new NetPriority() { Type = NetPriorityType.Trivial };
-            var html = NetTools.DownloadStringAsync(nt).Result;
+            var html = NetTools.DownloadStringAsync(NetTask.MakeDefault(url)).Result;
 
             if (match[1].Value == "gall")
             {

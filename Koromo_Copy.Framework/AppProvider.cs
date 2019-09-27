@@ -4,6 +4,7 @@
 using Koromo_Copy.Framework.Cache;
 using Koromo_Copy.Framework.Log;
 using Koromo_Copy.Framework.Network;
+using Koromo_Copy.Framework.Setting;
 using Koromo_Copy.Framework.Utils;
 using System;
 using System.Collections.Generic;
@@ -46,7 +47,8 @@ namespace Koromo_Copy.Framework
             RuntimeHelpers.PrepareConstrainedRegions();
             GCSettings.LatencyMode = GCLatencyMode.Batch;
 
-            Scheduler = new NetScheduler(0);
+            // Initialize Scheduler
+            Scheduler = new NetScheduler(Settings.Instance.Model.ThreadCount);
 
 
             Logs.Instance.Push("App provider starts.");

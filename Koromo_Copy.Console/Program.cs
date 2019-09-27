@@ -11,6 +11,9 @@ namespace Koromo_Copy.Console
     {
         static void Main(string[] args)
         {
+#if DEBUG
+            args = new string[] { "--test", "dcinside" };
+#endif
             AppProvider.Initialize();
             Runnable.Start(args);
             AppProvider.Deinitialize();

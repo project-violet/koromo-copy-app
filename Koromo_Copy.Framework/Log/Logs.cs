@@ -31,7 +31,7 @@ namespace Koromo_Copy.Framework.Log
                     ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                 });
             }
-            catch
+            catch (Exception e)
             {
                 try
                 {
@@ -43,7 +43,7 @@ namespace Koromo_Copy.Framework.Log
                         return textWriter.ToString();
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
                     return toSerialize.ToString();
                 }

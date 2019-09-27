@@ -2,6 +2,7 @@
 // Copyright (C) 2019. dc-koromo. Licensed under the MIT Licence.
 
 using Koromo_Copy.Framework.Utils;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,7 @@ namespace Koromo_Copy.Framework.Network
         /* Scheduler Information */
         P priority;
 
+        [JsonProperty]
         public P Priority { get { return priority; } set { priority = value; if (scheduler != null) scheduler.update(heap_elements); } }
         public int CompareTo(ISchedulerContents<T, P> other)
             => Priority.CompareTo(other.Priority);
@@ -147,6 +149,7 @@ namespace Koromo_Copy.Framework.Network
         public void Add(T task)
         {
             task.scheduler = this;
+            Log.Logs.Instance.Push(task);
             lock (queue) queue.Push(task);
             lock (notify_lock) Notify();
         }

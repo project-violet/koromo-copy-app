@@ -1,6 +1,7 @@
 ﻿// This source code is a part of Koromo Copy Project.
 // Copyright (C) 2019. dc-koromo. Licensed under the MIT Licence.
 
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -11,6 +12,7 @@ namespace Koromo_Copy.Framework.Network
     /// <summary>
     /// Information of what download for
     /// </summary>
+    [JsonObject(MemberSerialization.OptIn)]
     public class NetTask : ISchedulerContents<NetTask, NetPriority>
     {
         public static NetTask MakeDefault(string url)
@@ -30,15 +32,21 @@ namespace Koromo_Copy.Framework.Network
             };
 
         /* Task Information */
-
+        
+        [JsonProperty]
         public int Index { get; set; }
 
         /* Http Information */
 
+        [JsonProperty]
         public string Url { get; set; }
+        [JsonProperty]
         public string Accept { get; set; }
+        [JsonProperty]
         public string Referer { get; set; }
+        [JsonProperty]
         public string UserAgent { get; set; }
+        [JsonProperty]
         public string Cookie { get; set; }
         public IWebProxy Proxy { get; set; }
 
@@ -47,36 +55,46 @@ namespace Koromo_Copy.Framework.Network
         /// <summary>
         /// Set if you want to download and save file to your own device.
         /// </summary>
+        [JsonProperty]
         public bool SaveFile { get; set; }
+        [JsonProperty]
         public string Filename { get; set; }
 
         /// <summary>
         /// Set if needing only string datas.
         /// </summary>
+        [JsonProperty]
         public bool DownloadString { get; set; }
 
         /// <summary>
         /// Download data to temporary directory on your device.
         /// </summary>
+        [JsonProperty]
         public bool DriveCache { get; set; }
 
         /// <summary>
         /// Download data to memory.
         /// </summary>
+        [JsonProperty]
         public bool MemoryCache { get; set; }
 
         /// <summary>
         /// Retry download when fail to download.
         /// </summary>
+        [JsonProperty]
         public bool RetryWhenFail { get; set; }
+        [JsonProperty]
         public int RetryCount { get; set; }
 
         /// <summary>
         /// Timeout settings
         /// </summary>
+        [JsonProperty]
         public bool TimeoutInfinite { get; set; }
+        [JsonProperty]
         public int TimeoutMillisecond { get; set; }
 
+        [JsonProperty]
         public int DownloadBufferSize { get; set; }
 
         /* Callback Functions */

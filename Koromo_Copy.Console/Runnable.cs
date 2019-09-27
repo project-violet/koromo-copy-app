@@ -82,7 +82,10 @@ namespace Koromo_Copy.Console
         static void PrintHelp()
         {
             PrintVersion();
-            System.Console.WriteLine($"\r\n");
+            System.Console.WriteLine($"Copyright (C) 2019. Koromo Copy Developer");
+            System.Console.WriteLine($"E-Mail: koromo.software@gmail.com");
+            System.Console.WriteLine($"Source-code: https://github.com/dc-koromo/koromo-copy2");
+            System.Console.WriteLine($"");
 
             var builder = new StringBuilder();
             CommandLineParser<Options>.GetFields().ToList().ForEach(

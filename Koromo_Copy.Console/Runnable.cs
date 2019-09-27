@@ -37,16 +37,23 @@ namespace Koromo_Copy.Console
         {
             var option = CommandLineParser<Options>.Parse(arguments);
 
-            if (option.Error)
+            //
+            //  Multi Commands
+            //
+            if (option.Net)
+            {
+                NetConsole.Start(arguments.Skip(1).ToArray());
+            }
+            //
+            //  Single Commands
+            //
+            else if (option.Error)
             {
                 System.Console.WriteLine(option.ErrorMessage);
                 if (option.HelpMessage != null)
                     System.Console.WriteLine(option.HelpMessage);
                 return;
             }
-            //
-            //  Single Commands
-            //
             else if (option.Help)
             {
                 PrintHelp();
@@ -68,13 +75,6 @@ namespace Koromo_Copy.Console
                 ProcessTest(option.Test);
             }
 #endif
-            //
-            //  Multi Commands
-            //
-            else if (option.Net)
-            {
-                NetConsole.Start(arguments.Skip(1).ToArray());
-            }
 
             return;
         }
@@ -89,9 +89,9 @@ namespace Koromo_Copy.Console
                 x =>
                 {
                     if (!string.IsNullOrEmpty(x.Value.Item2.Help))
-                        builder.Append($" {x.Key} : {x.Value.Item2.Help}\r\n");
+                        builder.Append($" {x.Key} : {x.Value.Item2.Help} [{x.Value.Item2.Info}]\r\n");
                     else
-                        builder.Append($" {x.Key}\r\n");
+                        builder.Append($" {x.Key} [{x.Value.Item2.Info}]\r\n");
                 });
             System.Console.WriteLine(builder.ToString());
         }

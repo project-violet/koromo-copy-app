@@ -53,9 +53,9 @@ namespace Koromo_Copy.Console.Component
                 x =>
                 {
                     if (!string.IsNullOrEmpty(x.Value.Item2.Help))
-                        builder.Append($" {x.Key} : {x.Value.Item2.Help}\r\n");
+                        builder.Append($" {x.Key} : {x.Value.Item2.Help} [{x.Value.Item2.Info}]\r\n");
                     else
-                        builder.Append($" {x.Key}\r\n");
+                        builder.Append($" {x.Key} [{x.Value.Item2.Info}]\r\n");
                 });
             System.Console.WriteLine(builder.ToString());
         }

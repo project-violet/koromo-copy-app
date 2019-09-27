@@ -1,6 +1,7 @@
 ﻿// This source code is a part of Koromo Copy Project.
 // Copyright (C) 2019. dc-koromo. Licensed under the MIT Licence.
 
+using Koromo_Copy.Console.Component;
 using Koromo_Copy.Framework;
 using Koromo_Copy.Framework.CL;
 using Koromo_Copy.Framework.Crypto;
@@ -25,6 +26,9 @@ namespace Koromo_Copy.Console
         [CommandLine("--test", CommandType.ARGUMENTS, ArgumentsCount = 1, Help = "For test.", Info = "use --test <What test for>")]
         public string[] Test;
 #endif
+
+        [CommandLine("net", CommandType.OPTION, Help = "Multi-commands net.", Info = "use net <Others>")]
+        public bool Net;
     }
 
     public class Runnable
@@ -64,6 +68,13 @@ namespace Koromo_Copy.Console
                 ProcessTest(option.Test);
             }
 #endif
+            //
+            //  Multi Commands
+            //
+            else if (option.Net)
+            {
+                NetConsole.Start(arguments.Skip(1).ToArray());
+            }
 
             return;
         }
@@ -84,7 +95,7 @@ namespace Koromo_Copy.Console
             System.Console.WriteLine(builder.ToString());
         }
 
-        static void PrintVersion()
+        public static void PrintVersion()
         {
             System.Console.WriteLine($"{Version.Name} {Version.Text}\r\n");
         }
@@ -113,11 +124,8 @@ namespace Koromo_Copy.Console
 
                 case "dcinside":
                     {
-                        //Framework.Extractor.DCInsideExtractor extractor = new Framework.Extractor.DCInsideExtractor();
-                        //extractor.Extract("https://gall.dcinside.com/board/view/?id=superidea&no=194789");
-
-                        var html = NetTools.DownloadStringAsync(NetTask.MakeDefault("https://gall.dcinside.com/board/view/?id=superidea&no=194789")).Result;
-                        System.Console.WriteLine(html);
+                        Framework.Extractor.DCInsideExtractor extractor = new Framework.Extractor.DCInsideExtractor();
+                        extractor.Extract("https://gall.dcinside.com/board/view/?id=superidea&no=194789");
                     }
                     break;
             }

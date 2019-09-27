@@ -75,6 +75,7 @@ namespace Koromo_Copy.Framework.Network
                         //
 
                         content.ErrorCallback?.Invoke(3);
+                        return;
                     }
                     else if (response.StatusCode == HttpStatusCode.OK ||
                              response.StatusCode == HttpStatusCode.Moved ||
@@ -148,12 +149,40 @@ namespace Koromo_Copy.Framework.Network
             }
             catch (WebException e)
             {
-                Log.Logs.Instance.PushError("[NetField] Web Excpetion - " + e.Message);
+                Log.Logs.Instance.PushError("[NetField] Web Excpetion - " + e.Message + "\r\n" + e.StackTrace);
                 Log.Logs.Instance.PushError(content);
+
+                var response = (HttpWebResponse)e.Response;
+
+                if (response.StatusCode == HttpStatusCode.NotFound ||
+                    response.StatusCode == HttpStatusCode.Forbidden ||
+                    response.StatusCode == HttpStatusCode.Unauthorized ||
+                    response.StatusCode == HttpStatusCode.BadRequest ||
+                    response.StatusCode == HttpStatusCode.InternalServerError)
+                {
+                    //
+                    //  Cannot continue
+                    //
+
+                    content.ErrorCallback?.Invoke(3);
+                    return;
+                }
+            }
+            catch (UriFormatException e)
+            {
+                Log.Logs.Instance.PushError("[NetField] URI Exception - " + e.Message + "\r\n" + e.StackTrace);
+                Log.Logs.Instance.PushError(content);
+
+                //
+                //  Cannot continue
+                //
+
+                content.ErrorCallback?.Invoke(4);
+                return;
             }
             catch (Exception e)
             {
-                Log.Logs.Instance.PushError("[NetField] Unhandled Excpetion - " + e.Message);
+                Log.Logs.Instance.PushError("[NetField] Unhandled Excpetion - " + e.Message + "\r\n" + e.StackTrace);
                 Log.Logs.Instance.PushError(content);
             }
 

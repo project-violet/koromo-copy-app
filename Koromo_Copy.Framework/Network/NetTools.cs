@@ -28,7 +28,6 @@ namespace Koromo_Copy.Framework.Network
                 task.ErrorCallback = (int code) =>
                 {
                     task.ErrorCallback = null;
-                    result = "";
                     interrupt.Set();
                 };
 

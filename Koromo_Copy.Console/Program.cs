@@ -19,15 +19,14 @@ namespace Koromo_Copy.Console
 #endif
             AppProvider.Initialize();
 
-            Logs.Instance.AddLogNotify((s, e) => {
-                lock (Logs.Instance.Log)
+            Logs.Instance.AddLogErrorNotify((s, e) => {
+                lock (Logs.Instance.LogError)
                 {
                     CultureInfo en = new CultureInfo("en-US");
-                    System.Console.WriteLine($"[{Logs.Instance.Log.Last().Item1.ToString(en)}] {Logs.Instance.Log.Last().Item2}");
+                    System.Console.WriteLine($"[{Logs.Instance.LogError.Last().Item1.ToString(en)}] {Logs.Instance.LogError.Last().Item2}");
                 }
             });
             Runnable.Start(args);
-
 
             AppProvider.Deinitialize();
 

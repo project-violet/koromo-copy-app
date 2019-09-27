@@ -31,7 +31,7 @@ namespace Koromo_Copy.Framework.Log
                     ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                 });
             }
-            catch (Exception e)
+            catch
             {
                 try
                 {
@@ -43,7 +43,7 @@ namespace Koromo_Copy.Framework.Log
                         return textWriter.ToString();
                     }
                 }
-                catch (Exception ex)
+                catch
                 {
                     return toSerialize.ToString();
                 }
@@ -52,10 +52,12 @@ namespace Koromo_Copy.Framework.Log
 
         public delegate void NotifyEvent(object sender, NotifyCollectionChangedEventArgs e);
         public ObservableCollection<Tuple<DateTime, string, bool>> Log { get; } = new ObservableCollection<Tuple<DateTime, string, bool>>();
+        public ObservableCollection<Tuple<DateTime, string, bool>> LogError { get; } = new ObservableCollection<Tuple<DateTime, string, bool>>();
 
         public Logs()
         {
             AddLogNotify(Logs_Notify);
+            AddLogErrorNotify(LogsError_Notify);
         }
 
         /// <summary>
@@ -65,6 +67,15 @@ namespace Koromo_Copy.Framework.Log
         public void AddLogNotify(NotifyEvent notify_event)
         {
             Log.CollectionChanged += new NotifyCollectionChangedEventHandler(notify_event);
+        }
+
+        /// <summary>
+        /// Attach your own notify event.
+        /// </summary>
+        /// <param name="notify_event"></param>
+        public void AddLogErrorNotify(NotifyEvent notify_event)
+        {
+            LogError.CollectionChanged += new NotifyCollectionChangedEventHandler(notify_event);
         }
 
         /// <summary>
@@ -92,12 +103,46 @@ namespace Koromo_Copy.Framework.Log
             }
         }
 
+        /// <summary>
+        /// Push some message to log.
+        /// </summary>
+        /// <param name="str"></param>
+        public void PushError(string str)
+        {
+            lock (Log)
+            {
+                LogError.Add(Tuple.Create(DateTime.Now, str, false));
+            }
+        }
+
+        /// <summary>
+        /// Push some object to log.
+        /// </summary>
+        /// <param name="obj"></param>
+        public void PushError(object obj)
+        {
+            lock (Log)
+            {
+                LogError.Add(Tuple.Create(DateTime.Now, obj.ToString(), false));
+                LogError.Add(Tuple.Create(DateTime.Now, SerializeObject(obj), true));
+            }
+        }
+
         private void Logs_Notify(object sender, NotifyCollectionChangedEventArgs e)
         {
             lock (Log)
             {
                 CultureInfo en = new CultureInfo("en-US");
                 File.AppendAllText("log.txt", $"[{Log.Last().Item1.ToString(en)}] {Log.Last().Item2}\r\n");
+            }
+        }
+
+        private void LogsError_Notify(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            lock (Log)
+            {
+                CultureInfo en = new CultureInfo("en-US");
+                File.AppendAllText("log.txt", $"[{LogError.Last().Item1.ToString(en)}] [Error] {LogError.Last().Item2}\r\n");
             }
         }
     }

@@ -35,7 +35,7 @@ namespace Koromo_Copy.Framework
 
             // Check program crashed.
             if (ProgramLock.ProgramCrashed)
-                ;
+                Logs.Instance.Push("Program is terminated abnormally.");
 
             // Check exists instances.
             if (Instance.Count > 1)

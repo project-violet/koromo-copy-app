@@ -126,7 +126,7 @@ namespace Koromo_Copy.Framework.Extractor
             var regex = new Regex(ValidUrl());
             var match = regex.Match(url).Groups;
             var result = new List<NetTask>();
-            var html = NetTools.DownloadStringAsync(NetTask.MakeDefault(url)).Result;
+            var html = NetTools.DownloadString(url);
 
             if (html == null)
                 return new Tuple<List<NetTask>, object> (result, null);

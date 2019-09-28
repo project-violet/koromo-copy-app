@@ -214,6 +214,29 @@ namespace Koromo_Copy.Console
                         }
                     }
                     break;
+
+                case "eh":
+                    {
+                        var ext = EHentaiExtractor.Extract("https://e-hentai.org/g/1491793/45f9e85e48/");
+                        var imgs = ext.Item1;
+                        int count = imgs.Count;
+                        Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), (ext.Item2 as EHentaiArticle).Title));
+                        imgs.ForEach(x =>
+                        {
+                            x.Filename = Path.Combine(Directory.GetCurrentDirectory(), (ext.Item2 as EHentaiArticle).Title, x.Filename);
+                            x.CompleteCallback = () =>
+                            {
+                                Interlocked.Decrement(ref count);
+                            };
+                        });
+                        imgs.ForEach(x => AppProvider.Scheduler.Add(x));
+
+                        while (count != 0)
+                        {
+                            Thread.Sleep(500);
+                        }
+                    }
+                    break;
             }
         }
 #endif

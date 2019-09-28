@@ -152,11 +152,13 @@ namespace Koromo_Copy.Console
                 case "pixiv":
                     {
                         PixivExtractor extractor = new PixivExtractor();
-                        var imgs = extractor.Extract("https://www.pixiv.net/member.php?id=312852").Item1;
+                        var ext = extractor.Extract("https://www.pixiv.net/member.php?id=312852");
+                        var imgs = ext.Item1;
+                        var uinfo = $"{(ext.Item2 as List<PixivExtractor.PixivAPI.User>)[0].Name} ({(ext.Item2 as List<PixivExtractor.PixivAPI.User>)[0].Account})";
                         int count = imgs.Count;
-                        Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), "312852"));
+                        Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), uinfo));
                         imgs.ForEach(x => {
-                            x.Filename = Path.Combine(Directory.GetCurrentDirectory(), "312852", x.Filename);
+                            x.Filename = Path.Combine(Directory.GetCurrentDirectory(), uinfo, x.Filename);
                             x.CompleteCallback = () =>
                             {
                                 Interlocked.Decrement(ref count);

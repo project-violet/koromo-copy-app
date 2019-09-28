@@ -47,6 +47,7 @@ namespace Koromo_Copy.Framework.Extractor
 
             if (match[1].Value.StartsWith("member"))
             {
+                var user = PixivAPI.GetUsersAsync(match[2].Value.ToInt()).Result;
                 var works = PixivAPI.GetUsersWorksAsync(match[2].Value.ToInt()).Result;
                 return new Tuple<List<NetTask>, object>(works.Select(x => {
                     var task = NetTask.MakeDefault(x.ImageUrls.Large);
@@ -54,7 +55,7 @@ namespace Koromo_Copy.Framework.Extractor
                     task.SaveFile = true;
                     task.Referer = url;
                     return task;
-                }).ToList(), null);
+                }).ToList(), user);
             }
 
             return null;
@@ -427,9 +428,33 @@ namespace Koromo_Copy.Framework.Extractor
                 return true;
             }
 
+            /// <summary>
+            /// Get user informations
+            /// </summary>
+            /// <param name="authorId"></param>
+            /// <returns></returns>
             public static async Task<List<User>> GetUsersAsync(long authorId)
             {
-                throw new Exception();
+                var url = "https://public-api.secure.pixiv.net/v1/users/" + authorId.ToString() + ".json";
+
+                var param = new Dictionary<string, string>
+                {
+                    { "profile_image_sizes", "px_170x170,px_50x50" } ,
+                    { "image_sizes", "px_128x128,small,medium,large,px_480mw" } ,
+                    { "include_stats", "1" } ,
+                    { "include_profile", "1" } ,
+                    { "include_workspace", "1" } ,
+                    { "include_contacts", "1" } ,
+                };
+
+                var task = NetTask.MakeDefault(url + "?" + string.Join("&", param.ToList().Select(x => $"{x.Key}={x.Value}")));
+                task.Referer = "http://spapi.pixiv.net/";
+                task.UserAgent = "PixivIOSApp/5.8.0";
+                task.Headers = new Dictionary<string, string>();
+                task.Headers.Add("Authorization", "Bearer " + AccessToken);
+
+                var result = await NetTools.DownloadStringAsync(task);
+                return JToken.Parse(result).SelectToken("response").ToObject<List<User>>();
             }
 
             /// <summary>

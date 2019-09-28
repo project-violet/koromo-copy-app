@@ -1,0 +1,2 @@
+# Koromo Copy Development Manual
+

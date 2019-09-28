@@ -23,11 +23,9 @@ This project will increases development productivity and eases maintenance.
 
 [Click here for more informations.](Document/CustomCrawler.md)
 
-## Koromo Copy for Users
+## Documents
 
-### Desktop User
-
-### Server User
+[Development Manual](Document/Development.md)
 
 ## How to build?
 
@@ -61,6 +59,12 @@ Last, run program!
 cd bin/Release/netcoreapp3
 ./Koromo_Copy.Console
 ```
+
+### Windows
+
+Install VisualStudio 2019 and .NetCore 3.0.
+
+Open `Koromo Copy.sln` and build solutions.
 
 ## Supports
 

@@ -5,6 +5,7 @@ using Koromo_Copy.Console.Component;
 using Koromo_Copy.Framework;
 using Koromo_Copy.Framework.CL;
 using Koromo_Copy.Framework.Crypto;
+using Koromo_Copy.Framework.Extractor;
 using Koromo_Copy.Framework.Network;
 using System.Collections.Generic;
 using System.IO;
@@ -129,7 +130,7 @@ namespace Koromo_Copy.Console
 
                 case "dcinside":
                     {
-                        Framework.Extractor.DCInsideExtractor extractor = new Framework.Extractor.DCInsideExtractor();
+                        DCInsideExtractor extractor = new DCInsideExtractor();
                         var imgs = extractor.Extract("https://gall.dcinside.com/mgallery/board/view?id=plamodels&no=22155", null).Item1;
                         int count = imgs.Count;
                         imgs.ForEach(x => {
@@ -145,6 +146,13 @@ namespace Koromo_Copy.Console
                         {
                             Thread.Sleep(500);
                         }
+                    }
+                    break;
+
+                case "pixiv":
+                    {
+                        PixivExtractor.PixivAPI.Auth("", "");
+                        var r = PixivExtractor.PixivAPI.GetUsersWorksAsync(312852).Result;
                     }
                     break;
             }

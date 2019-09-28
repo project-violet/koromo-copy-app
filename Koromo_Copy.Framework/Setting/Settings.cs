@@ -23,6 +23,14 @@ namespace Koromo_Copy.Framework.Setting
 
         public NetworkSetting NetworkSettings;
 
+        public class PixivSetting
+        {
+            public string Id;
+            public string Password;
+        }
+
+        public PixivSetting PixivSettings;
+
         /// <summary>
         /// Scheduler Thread Count
         /// </summary>
@@ -78,6 +86,11 @@ namespace Koromo_Copy.Framework.Setting
                         TimeoutMillisecond = 10000,
                         DownloadBufferSize = 131072,
                         RetryCount = 10
+                    },
+
+                    PixivSettings = new SettingModel.PixivSetting()
+                    {
+                        
                     },
                 };
             }

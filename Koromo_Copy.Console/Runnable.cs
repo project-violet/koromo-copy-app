@@ -130,8 +130,7 @@ namespace Koromo_Copy.Console
 
                 case "dcinside":
                     {
-                        DCInsideExtractor extractor = new DCInsideExtractor();
-                        var imgs = extractor.Extract("https://gall.dcinside.com/mgallery/board/view?id=plamodels&no=22155", null).Item1;
+                        var imgs = DCInsideExtractor.Extract("https://gall.dcinside.com/mgallery/board/view?id=plamodels&no=22155", null).Item1;
                         int count = imgs.Count;
                         imgs.ForEach(x => {
                             x.Filename = Path.Combine(Directory.GetCurrentDirectory(), x.Filename);
@@ -151,8 +150,7 @@ namespace Koromo_Copy.Console
 
                 case "pixiv":
                     {
-                        PixivExtractor extractor = new PixivExtractor();
-                        var ext = extractor.Extract("https://www.pixiv.net/member.php?id=4462");
+                        var ext = PixivExtractor.Extract("https://www.pixiv.net/member.php?id=4462");
                         var imgs = ext.Item1;
                         var uinfo = $"{(ext.Item2 as List<PixivExtractor.PixivAPI.User>)[0].Name} ({(ext.Item2 as List<PixivExtractor.PixivAPI.User>)[0].Account})";
                         int count = imgs.Count;
@@ -175,8 +173,7 @@ namespace Koromo_Copy.Console
 
                 case "gelbooru":
                     {
-                        GelbooruExtractor extractor = new GelbooruExtractor();
-                        var ext = extractor.Extract("https://gelbooru.com/index.php?page=post&s=list&tags=kokkoro_%28princess_connect%21%29");
+                        var ext = GelbooruExtractor.Extract("https://gelbooru.com/index.php?page=post&s=list&tags=kokkoro_%28princess_connect%21%29");
                         var imgs = ext.Item1;
                         int count = imgs.Count;
                         Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), ext.Item2 as string));
@@ -198,8 +195,7 @@ namespace Koromo_Copy.Console
 
                 case "naver":
                     {
-                        NaverExtractor extractor = new NaverExtractor();
-                        var ext = extractor.Extract("https://comic.naver.com/webtoon/detail.nhn?titleId=318995&no=434&weekday=fri");
+                        var ext = NaverExtractor.Extract("https://comic.naver.com/webtoon/detail.nhn?titleId=318995&no=434&weekday=fri");
                         var imgs = ext.Item1;
                         int count = imgs.Count;
                         Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), (ext.Item2 as NaverExtractor.ComicInformation).Title));

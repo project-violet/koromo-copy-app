@@ -195,6 +195,13 @@ namespace Koromo_Copy.Console
                         }
                     }
                     break;
+
+                case "naver":
+                    {
+                        NaverExtractor extractor = new NaverExtractor();
+                        extractor.Extract("https://comic.naver.com/webtoon/detail.nhn?titleId=734011&no=2&weekday=sat");
+                    }
+                    break;
             }
         }
 #endif

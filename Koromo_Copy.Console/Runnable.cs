@@ -199,7 +199,23 @@ namespace Koromo_Copy.Console
                 case "naver":
                     {
                         NaverExtractor extractor = new NaverExtractor();
-                        extractor.Extract("https://comic.naver.com/webtoon/detail.nhn?titleId=734011&no=2&weekday=sat");
+                        var ext = extractor.Extract("https://comic.naver.com/webtoon/detail.nhn?titleId=318995&no=434&weekday=fri");
+                        var imgs = ext.Item1;
+                        int count = imgs.Count;
+                        Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), (ext.Item2 as NaverExtractor.ComicInformation).Title));
+                        imgs.ForEach(x => {
+                            x.Filename = Path.Combine(Directory.GetCurrentDirectory(), (ext.Item2 as NaverExtractor.ComicInformation).Title, x.Filename);
+                            x.CompleteCallback = () =>
+                            {
+                                Interlocked.Decrement(ref count);
+                            };
+                        });
+                        imgs.ForEach(x => AppProvider.Scheduler.Add(x));
+
+                        while (count != 0)
+                        {
+                            Thread.Sleep(500);
+                        }
                     }
                     break;
             }

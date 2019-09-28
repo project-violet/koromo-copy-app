@@ -27,44 +27,7 @@ This project will increases development productivity and eases maintenance.
 
 [Development Manual](Document/Development.md)
 
-## How to build?
-
-### Linux
-
-First, you must download and install .net-sdk for mono.
-
-```
-https://dotnet.microsoft.com/download/dotnet-core/3.0
-
-Ubuntu 19.04 - x64
-wget -q https://packages.microsoft.com/config/ubuntu/19.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-sudo dpkg -i packages-microsoft-prod.deb
-sudo apt-get update
-sudo apt-get install apt-transport-https
-sudo apt-get install dotnet-sdk-3.0
-```
-
-Second, build project.
-
-```
-git clone https://github.com/dc-koromo/koromo-copy2
-cd koromo-copy2/Koromo_Copy.Console
-nuget restore Koromo_Copy.Console.csproj
-dotnet build -c Release
-```
-
-Last, run program!
-
-```
-cd bin/Release/netcoreapp3
-./Koromo_Copy.Console
-```
-
-### Windows
-
-Install VisualStudio 2019 and .NetCore 3.0.
-
-Open `Koromo Copy.sln` and build solutions.
+[Apply to my project](Document/Embedding.md)
 
 ## Supports
 

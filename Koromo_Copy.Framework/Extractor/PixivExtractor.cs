@@ -48,7 +48,7 @@ namespace Koromo_Copy.Framework.Extractor
             if (match[1].Value.StartsWith("member"))
             {
                 var user = PixivAPI.GetUsersAsync(match[2].Value.ToInt()).Result;
-                var works = PixivAPI.GetUsersWorksAsync(match[2].Value.ToInt()).Result;
+                var works = PixivAPI.GetUsersWorksAsync(match[2].Value.ToInt(), 1, 10000000).Result;
                 return new Tuple<List<NetTask>, object>(works.Select(x => {
                     var task = NetTask.MakeDefault(x.ImageUrls.Large);
                     task.Filename = x.ImageUrls.Large.Split('/').Last();

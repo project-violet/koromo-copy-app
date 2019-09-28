@@ -121,7 +121,7 @@ namespace Koromo_Copy.Framework.Extractor
         public new static string ValidUrl()
             => @"^https?://(gall|m)\.dcinside\.com/(mgallery/)?board/(lists|view)\?(.*?)$";
 
-        public override Tuple<List<NetTask>, object> Extract(string url, DCInsideExtractorOption option)
+        public override Tuple<List<NetTask>, object> Extract(string url, DCInsideExtractorOption option = null)
         {
             var regex = new Regex(ValidUrl());
             var match = regex.Match(url).Groups;
@@ -130,6 +130,9 @@ namespace Koromo_Copy.Framework.Extractor
 
             if (html == null)
                 return new Tuple<List<NetTask>, object> (result, null);
+
+            if (option == null)
+                option = new DCInsideExtractorOption { Type = DCInsideExtractorOption.ExtratorType.Images };
 
             if (match[1].Value == "gall")
             {

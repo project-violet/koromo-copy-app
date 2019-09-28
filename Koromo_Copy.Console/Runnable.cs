@@ -130,7 +130,7 @@ namespace Koromo_Copy.Console
                 case "dcinside":
                     {
                         Framework.Extractor.DCInsideExtractor extractor = new Framework.Extractor.DCInsideExtractor();
-                        var imgs = extractor.Extract("https://gall.dcinside.com/board/view/?id=superidea&no=194789");
+                        var imgs = extractor.Extract("https://gall.dcinside.com/mgallery/board/view?id=plamodels&no=22155", null).Item1;
                         int count = imgs.Count;
                         imgs.ForEach(x => {
                             x.Filename = Path.Combine(Directory.GetCurrentDirectory(), x.Filename);

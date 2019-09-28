@@ -13,16 +13,16 @@ namespace Koromo_Copy.Framework.Extractor
     {
     }
 
-    public abstract class ExtractorModel
+    public interface IExtractorOption
+    {
+    }
+
+    public abstract class ExtractorModel<T>
+        where T : IExtractorOption
     {
         public static string ValidUrl() { throw new InvalidOperationException(); }
 
-        public abstract List<NetTask> Extract(string url);
-    }
-
-    public class ExtractorOption
-    {
-
+        public abstract Tuple<List<NetTask>, object> Extract(string url, T option);
     }
 
     public class ExtractorManager : ILazy<ExtractorManager>

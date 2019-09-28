@@ -29,13 +29,12 @@ namespace Koromo_Copy.Framework.Extractor
 
     public class GelbooruExtractor : ExtractorModel<GelbooruExtractorOption>
     {
-        public new static string ValidUrl()
-            => @"^https?://gelbooru\.com/index\.php\?.*?tags\=(.*?)(\&.*?)?$";
+        static GelbooruExtractor()
+            => ValidUrl = new Regex(@"^https?://gelbooru\.com/index\.php\?.*?tags\=(.*?)(\&.*?)?$");
 
         public override Tuple<List<NetTask>, object> Extract(string url, GelbooruExtractorOption option = null)
         {
-            var regex = new Regex(ValidUrl());
-            var match = regex.Match(url).Groups;
+            var match = ValidUrl.Match(url).Groups;
 
             if (option == null)
                 option = new GelbooruExtractorOption { Type = GelbooruExtractorOption.ExtratorType.Images };

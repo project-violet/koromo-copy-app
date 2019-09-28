@@ -6,6 +6,7 @@ using Koromo_Copy.Framework.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Koromo_Copy.Framework.Extractor
 {
@@ -22,7 +23,7 @@ namespace Koromo_Copy.Framework.Extractor
     public abstract class ExtractorModel<T>
         where T : IExtractorOption
     {
-        public static string ValidUrl() { throw new InvalidOperationException(); }
+        public static Regex ValidUrl { get; protected set; }
 
         public abstract Tuple<List<NetTask>, object> Extract(string url, T option);
     }

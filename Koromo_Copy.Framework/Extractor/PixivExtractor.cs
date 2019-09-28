@@ -29,8 +29,8 @@ namespace Koromo_Copy.Framework.Extractor
 
     public class PixivExtractor : ExtractorModel<PixivExtractorOption>
     {
-        public new static string ValidUrl()
-            => @"^https?://www\.pixiv\.net/(member\.php\?id\=|artworks/)(.*?)$";
+        static PixivExtractor()
+            => ValidUrl = new Regex(@"^https?://www\.pixiv\.net/(member\.php\?id\=|artworks/)(.*?)$");
 
         public override Tuple<List<NetTask>, object> Extract(string url, PixivExtractorOption option = null)
         {
@@ -39,8 +39,7 @@ namespace Koromo_Copy.Framework.Extractor
                 throw new ExtractorException("Authentication error! Check setting.json/PixivSetting.");
             }
 
-            var regex = new Regex(ValidUrl());
-            var match = regex.Match(url).Groups;
+            var match = ValidUrl.Match(url).Groups;
 
             if (option == null)
                 option = new PixivExtractorOption { Type = PixivExtractorOption.ExtratorType.Works };

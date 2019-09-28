@@ -118,13 +118,12 @@ namespace Koromo_Copy.Framework.Extractor
 
     public class DCInsideExtractor : ExtractorModel<DCInsideExtractorOption>
     {
-        public new static string ValidUrl()
-            => @"^https?://(gall|m)\.dcinside\.com/(mgallery/)?board/(lists|view)\?(.*?)$";
+        static DCInsideExtractor()
+            => ValidUrl = new Regex(@"^https?://(gall|m)\.dcinside\.com/(mgallery/)?board/(lists|view)\?(.*?)$");
 
         public override Tuple<List<NetTask>, object> Extract(string url, DCInsideExtractorOption option = null)
         {
-            var regex = new Regex(ValidUrl());
-            var match = regex.Match(url).Groups;
+            var match = ValidUrl.Match(url).Groups;
             var result = new List<NetTask>();
             var html = NetTools.DownloadString(url);
 

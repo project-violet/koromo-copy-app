@@ -24,9 +24,14 @@ namespace Koromo_Copy.Framework.Network
 
             interrupt.WaitOne();
 
-            Log.Logs.Instance.Push("[NetField] Start download... " + content.Url);
+            if (content.DownloadString)
+                Log.Logs.Instance.Push("[NetField] Start download string... " + content.Url);
+            else if (content.MemoryCache)
+                Log.Logs.Instance.Push("[NetField] Start download to memory... " + content.Url);
+            else if (content.SaveFile)
+                Log.Logs.Instance.Push("[NetField] Start download file... " + content.Url + " to " + content.Filename);
 
-        REDIRECTION:
+            REDIRECTION:
 
             interrupt.WaitOne();
 

@@ -172,6 +172,29 @@ namespace Koromo_Copy.Console
                         }
                     }
                     break;
+
+                case "gelbooru":
+                    {
+                        GelbooruExtractor extractor = new GelbooruExtractor();
+                        var ext = extractor.Extract("https://gelbooru.com/index.php?page=post&s=list&tags=kokkoro_%28princess_connect%21%29");
+                        var imgs = ext.Item1;
+                        int count = imgs.Count;
+                        Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), ext.Item2 as string));
+                        imgs.ForEach(x => {
+                            x.Filename = Path.Combine(Directory.GetCurrentDirectory(), ext.Item2 as string, x.Filename);
+                            x.CompleteCallback = () =>
+                            {
+                                Interlocked.Decrement(ref count);
+                            };
+                        });
+                        imgs.ForEach(x => AppProvider.Scheduler.Add(x));
+
+                        while (count != 0)
+                        {
+                            Thread.Sleep(500);
+                        }
+                    }
+                    break;
             }
         }
 #endif

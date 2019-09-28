@@ -41,5 +41,12 @@ namespace Koromo_Copy.Framework.Crypto
             byte[] hash = sha.ComputeHash(Encoding.UTF8.GetBytes(str));
             return BitConverter.ToString(hash).Replace("-", String.Empty);
         }
+
+        public static string GetHashMD5(this string str)
+        {
+            var md5 = MD5.Create();
+            byte[] hash = md5.ComputeHash(Encoding.UTF8.GetBytes(str));
+            return BitConverter.ToString(hash).Replace("-", String.Empty);
+        }
     }
 }

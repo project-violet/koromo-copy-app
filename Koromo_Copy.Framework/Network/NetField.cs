@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
@@ -51,6 +52,9 @@ namespace Koromo_Copy.Framework.Network
                 if (content.Cookie != null)
                     request.Headers.Add(HttpRequestHeader.Cookie, content.Cookie);
 
+                if (content.Headers != null)
+                    content.Headers.ToList().ForEach(p => request.Headers.Add(p.Key, p.Value));
+
                 if (content.Proxy != null)
                     request.Proxy = content.Proxy;
 
@@ -60,6 +64,23 @@ namespace Koromo_Copy.Framework.Network
                     request.Timeout = content.TimeoutMillisecond;
 
                 request.AllowAutoRedirect = content.AutoRedirection;
+
+                //
+                //  POST Data
+                //
+
+                if (content.Query != null)
+                {
+                    request.Method = "POST";
+                    request.ContentType = "application/x-www-form-urlencoded";
+
+                    var request_stream = new StreamWriter(request.GetRequestStream());
+                    var query = string.Join("&", content.Query.ToList().Select(x => $"{x.Key}={x.Value}"));
+                    request_stream.Write(query);
+                    request_stream.Close();
+
+                    interrupt.WaitOne();
+                }
 
                 //
                 //  Wait request
@@ -103,6 +124,13 @@ namespace Koromo_Copy.Framework.Network
                         }
 
                         content.SizeCallback?.Invoke(response.ContentLength);
+
+                        if (content.NotifyOnlySize)
+                        {
+                            ostream.Close();
+                            istream.Close();
+                            return;
+                        }
 
                         interrupt.WaitOne();
 

@@ -45,7 +45,7 @@ namespace Koromo_Copy.Framework.Network
             };
 
         /* Task Information */
-        
+
         [JsonProperty]
         public int Index { get; set; }
 
@@ -61,6 +61,10 @@ namespace Koromo_Copy.Framework.Network
         public string UserAgent { get; set; }
         [JsonProperty]
         public string Cookie { get; set; }
+        [JsonProperty]
+        public Dictionary<string, string> Headers { get; set; }
+        [JsonProperty]
+        public Dictionary<string, string> Query { get; set; }
         public IWebProxy Proxy { get; set; }
 
         /* Detail Information */
@@ -112,6 +116,9 @@ namespace Koromo_Copy.Framework.Network
 
         [JsonProperty]
         public bool AutoRedirection { get; set; }
+
+        [JsonProperty]
+        public bool NotifyOnlySize { get; set; }
 
         /* Callback Functions */
 

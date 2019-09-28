@@ -4,12 +4,15 @@
 using Koromo_Copy.Framework.Crypto;
 using Koromo_Copy.Framework.Log;
 using Koromo_Copy.Framework.Network;
+using Koromo_Copy.Framework.Setting;
+using Koromo_Copy.Framework.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Koromo_Copy.Framework.Extractor
@@ -18,7 +21,7 @@ namespace Koromo_Copy.Framework.Extractor
     {
         public enum ExtratorType
         {
-            Images = 0, // Default
+            Works = 0, // Default
         }
 
         public ExtratorType Type;
@@ -31,6 +34,29 @@ namespace Koromo_Copy.Framework.Extractor
 
         public override Tuple<List<NetTask>, object> Extract(string url, PixivExtractorOption option = null)
         {
+            if (!PixivAPI.Auth(Settings.Instance.Model.PixivSettings.Id, Settings.Instance.Model.PixivSettings.Password))
+            {
+                throw new ExtractorException("Authentication error! Check setting.json/PixivSetting.");
+            }
+
+            var regex = new Regex(ValidUrl());
+            var match = regex.Match(url).Groups;
+
+            if (option == null)
+                option = new PixivExtractorOption { Type = PixivExtractorOption.ExtratorType.Works };
+
+            if (match[1].Value.StartsWith("member"))
+            {
+                var works = PixivAPI.GetUsersWorksAsync(match[2].Value.ToInt()).Result;
+                return new Tuple<List<NetTask>, object>(works.Select(x => {
+                    var task = NetTask.MakeDefault(x.ImageUrls.Large);
+                    task.Filename = x.ImageUrls.Large.Split('/').Last();
+                    task.SaveFile = true;
+                    task.Referer = url;
+                    return task;
+                }).ToList(), null);
+            }
+
             return null;
         }
 
@@ -356,6 +382,12 @@ namespace Koromo_Copy.Framework.Extractor
             /// <returns></returns>
             public static bool Auth(string username, string password)
             {
+                if (!string.IsNullOrEmpty(AccessToken))
+                    return true;
+
+                if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+                    return false;
+
                 Logs.Instance.Push("[PixivAPI] Try auth...");
 
                 const string client_id = "MOBrBDS8blbauoSck0ZfDbtuzpyT";
@@ -393,6 +425,11 @@ namespace Koromo_Copy.Framework.Extractor
                 Logs.Instance.Push("[PixivAPI] Success auth - " + AccessToken);
 
                 return true;
+            }
+
+            public static async Task<List<User>> GetUsersAsync(long authorId)
+            {
+                throw new Exception();
             }
 
             /// <summary>

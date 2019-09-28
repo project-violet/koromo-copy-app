@@ -151,8 +151,23 @@ namespace Koromo_Copy.Console
 
                 case "pixiv":
                     {
-                        PixivExtractor.PixivAPI.Auth("", "");
-                        var r = PixivExtractor.PixivAPI.GetUsersWorksAsync(312852).Result;
+                        PixivExtractor extractor = new PixivExtractor();
+                        var imgs = extractor.Extract("https://www.pixiv.net/member.php?id=312852").Item1;
+                        int count = imgs.Count;
+                        Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), "312852"));
+                        imgs.ForEach(x => {
+                            x.Filename = Path.Combine(Directory.GetCurrentDirectory(), "312852", x.Filename);
+                            x.CompleteCallback = () =>
+                            {
+                                Interlocked.Decrement(ref count);
+                            };
+                        });
+                        imgs.ForEach(x => AppProvider.Scheduler.Add(x));
+
+                        while (count != 0)
+                        {
+                            Thread.Sleep(500);
+                        }
                     }
                     break;
             }

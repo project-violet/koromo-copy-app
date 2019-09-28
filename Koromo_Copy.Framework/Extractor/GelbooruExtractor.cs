@@ -51,9 +51,10 @@ namespace Koromo_Copy.Framework.Extractor
             while (true)
             {
                 var durl = "https://gelbooru.com/index.php?page=dapi&s=post&q=index&limit=100&tags=" + tags + "&pid=" + page.ToString();
-                var data = NetTools.DownloadString(durl);
 
                 option.PageReadCallback?.Invoke(durl);
+
+                var data = NetTools.DownloadString(durl);
 
                 var document = new HtmlDocument();
                 document.LoadHtml(data);

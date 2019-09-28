@@ -156,6 +156,8 @@ namespace Koromo_Copy.Framework.Extractor
                                 task.Referer = url;
                                 result.Add(task);
                             }
+
+                            return new Tuple<List<NetTask>, object>(result, article);
                         }
                         else if (option.Type == DCInsideExtractorOption.ExtratorType.ArticleInformation)
                         {
@@ -216,7 +218,6 @@ namespace Koromo_Copy.Framework.Extractor
                             throw new Exception("You cannot do that with this URL." + url);
                         }
                     }
-                    
                 }
                 catch (Exception e)
                 {
@@ -226,7 +227,7 @@ namespace Koromo_Copy.Framework.Extractor
             else
             {
                 // Not support mobile page.
-                throw new ExtractorException();
+                throw new ExtractorException("[DCInside Extractor] Not support mobile page yet.");
             }
 
             return new Tuple<List<NetTask>, object>(result, null);

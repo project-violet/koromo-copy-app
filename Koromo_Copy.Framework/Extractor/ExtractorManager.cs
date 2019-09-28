@@ -11,6 +11,8 @@ namespace Koromo_Copy.Framework.Extractor
 {
     public class ExtractorException : Exception
     {
+        public ExtractorException(string msg)
+            : base(msg) { }
     }
 
     public interface IExtractorOption

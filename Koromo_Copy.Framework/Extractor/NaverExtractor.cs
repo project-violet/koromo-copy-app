@@ -3,6 +3,7 @@
 
 using HtmlAgilityPack;
 using Koromo_Copy.Framework.Network;
+using Koromo_Copy.Framework.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -94,7 +95,7 @@ namespace Koromo_Copy.Framework.Extractor
 
                 var cinfo = new ComicInformation
                 {
-                    Title = string.Join("", node.SelectSingleNode("/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/h2[1]").ChildNodes.Where(x => x.Name == "#text").Select(x => x.InnerText.Trim())) +
+                    Title = node.SelectSingleNode("/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/h2[1]").MyText() +
                             " - " +
                             node.SelectSingleNode("/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[2]/div[1]/h3[1]").InnerText.Trim(),
                     Author = node.SelectSingleNode("/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/h2[1]/span[1]").InnerText.Trim()

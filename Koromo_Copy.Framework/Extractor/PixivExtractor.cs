@@ -19,12 +19,12 @@ namespace Koromo_Copy.Framework.Extractor
 {
     public class PixivExtractorOption : IExtractorOption
     {
-        public enum ExtratorType
+        public enum ExtractorType
         {
             Works = 0, // Default
         }
 
-        public ExtratorType Type;
+        public ExtractorType Type;
     }
 
     public class PixivExtractor : ExtractorModel<PixivExtractorOption>
@@ -47,7 +47,7 @@ namespace Koromo_Copy.Framework.Extractor
             var match = ValidUrl.Match(url).Groups;
 
             if (option == null)
-                option = new PixivExtractorOption { Type = PixivExtractorOption.ExtratorType.Works };
+                option = new PixivExtractorOption { Type = PixivExtractorOption.ExtractorType.Works };
 
             if (match[1].Value.StartsWith("member"))
             {

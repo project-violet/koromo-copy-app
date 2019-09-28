@@ -13,11 +13,14 @@ namespace Koromo_Copy.Framework.Extractor
 {
     public class NaverExtractorOption : IExtractorOption
     {
-        public enum ExtratorType
+        public enum ExtractorType
         {
             Images = 0, // Default
+            EpisodeImages = 1,
+            ComicIndex = 2,
         }
 
+        public ExtractorType Type;
     }
 
     public class NaverExtractor : ExtractorModel<NaverExtractorOption>
@@ -33,11 +36,6 @@ namespace Koromo_Copy.Framework.Extractor
 
         public override NaverExtractorOption RecommendOption(string url)
         {
-            throw new NotImplementedException();
-        }
-
-        public override Tuple<List<NetTask>, object> Extract(string url, NaverExtractorOption option = null)
-        {
             var match = ValidUrl.Match(url).Groups;
 
             //
@@ -52,33 +50,7 @@ namespace Koromo_Copy.Framework.Extractor
 
                 if (match[4].Value == "detail")
                 {
-                    var html = NetTools.DownloadString(url);
-
-                    var document = new HtmlDocument();
-                    document.LoadHtml(html);
-                    var node = document.DocumentNode;
-
-                    var cinfo = new ComicInformation
-                    {
-                        Title = string.Join("", node.SelectSingleNode("/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/h2[1]").ChildNodes.Where(x => x.Name == "#text").Select(x => x.InnerText.Trim())) +
-                                " - " +
-                                node.SelectSingleNode("/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[2]/div[1]/h3[1]").InnerText.Trim(),
-                        Author = node.SelectSingleNode("/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/h2[1]/span[1]").InnerText.Trim()
-                    };
-
-                    var imgs = node.SelectNodes("/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[3]/div[1]/img");
-                    var result = new List<NetTask>();
-
-                    foreach (var img in imgs)
-                    {
-                        var durl = img.GetAttributeValue("src", "");
-                        var task = NetTask.MakeDefault(durl);
-                        task.SaveFile = true;
-                        task.Filename = durl.Split('/').Last();
-                        result.Add(task);
-                    }
-
-                    return new Tuple<List<NetTask>, object>(result, cinfo);
+                    return new NaverExtractorOption { Type = NaverExtractorOption.ExtractorType.EpisodeImages };
                 }
 
                 //
@@ -87,7 +59,7 @@ namespace Koromo_Copy.Framework.Extractor
 
                 else if (match[4].Value == "list")
                 {
-
+                    return new NaverExtractorOption { Type = NaverExtractorOption.ExtractorType.ComicIndex };
                 }
             }
 
@@ -97,7 +69,50 @@ namespace Koromo_Copy.Framework.Extractor
 
             else if (match[1].Value == "blog")
             {
+                return new NaverExtractorOption { Type = NaverExtractorOption.ExtractorType.Images };
+            }
 
+            return new NaverExtractorOption { Type = NaverExtractorOption.ExtractorType.Images };
+        }
+
+        public override Tuple<List<NetTask>, object> Extract(string url, NaverExtractorOption option = null)
+        {
+            if (option == null)
+                option = RecommendOption(url);
+
+            //
+            //  Extract Webtoon
+            //
+
+            if (option.Type == NaverExtractorOption.ExtractorType.EpisodeImages)
+            {
+                var html = NetTools.DownloadString(url);
+
+                var document = new HtmlDocument();
+                document.LoadHtml(html);
+                var node = document.DocumentNode;
+
+                var cinfo = new ComicInformation
+                {
+                    Title = string.Join("", node.SelectSingleNode("/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/h2[1]").ChildNodes.Where(x => x.Name == "#text").Select(x => x.InnerText.Trim())) +
+                            " - " +
+                            node.SelectSingleNode("/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[2]/div[1]/h3[1]").InnerText.Trim(),
+                    Author = node.SelectSingleNode("/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/h2[1]/span[1]").InnerText.Trim()
+                };
+
+                var imgs = node.SelectNodes("/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[3]/div[1]/img");
+                var result = new List<NetTask>();
+
+                foreach (var img in imgs)
+                {
+                    var durl = img.GetAttributeValue("src", "");
+                    var task = NetTask.MakeDefault(durl);
+                    task.SaveFile = true;
+                    task.Filename = durl.Split('/').Last();
+                    result.Add(task);
+                }
+
+                return new Tuple<List<NetTask>, object>(result, cinfo);
             }
 
             return null;

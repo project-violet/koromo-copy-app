@@ -14,12 +14,12 @@ namespace Koromo_Copy.Framework.Extractor
 {
     public class GelbooruExtractorOption : IExtractorOption
     {
-        public enum ExtratorType
+        public enum ExtractorType
         {
             Images = 0, // Default
         }
 
-        public ExtratorType Type;
+        public ExtractorType Type;
 
         public int StartPage = 0;
         public int EndPage = int.MaxValue;
@@ -42,7 +42,7 @@ namespace Koromo_Copy.Framework.Extractor
             var match = ValidUrl.Match(url).Groups;
 
             if (option == null)
-                option = new GelbooruExtractorOption { Type = GelbooruExtractorOption.ExtratorType.Images };
+                option = new GelbooruExtractorOption { Type = GelbooruExtractorOption.ExtractorType.Images };
 
             var tags = match[1].Value;
             var result = new List<NetTask>();

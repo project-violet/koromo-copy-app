@@ -105,7 +105,7 @@ namespace Koromo_Copy.Framework.Extractor
 
     public class DCInsideExtractorOption : IExtractorOption
     {
-        public enum ExtratorType
+        public enum ExtractorType
         {
             Images = 0, // Default
             Comments = 1,
@@ -113,7 +113,7 @@ namespace Koromo_Copy.Framework.Extractor
             ArticleInformation = 3,
         }
 
-        public ExtratorType Type;
+        public ExtractorType Type;
     }
 
     public class DCInsideExtractor : ExtractorModel<DCInsideExtractorOption>
@@ -136,7 +136,7 @@ namespace Koromo_Copy.Framework.Extractor
                 return new Tuple<List<NetTask>, object> (result, null);
 
             if (option == null)
-                option = new DCInsideExtractorOption { Type = DCInsideExtractorOption.ExtratorType.Images };
+                option = new DCInsideExtractorOption { Type = DCInsideExtractorOption.ExtractorType.Images };
 
             if (match[1].Value == "gall")
             {
@@ -150,7 +150,7 @@ namespace Koromo_Copy.Framework.Extractor
                     {
                         var article = ParseBoardView(html, match[2].Value != "");
 
-                        if (option.Type == DCInsideExtractorOption.ExtratorType.Images)
+                        if (option.Type == DCInsideExtractorOption.ExtractorType.Images)
                         {
                             for (int i = 0; i < article.ImagesLink.Count; i++)
                             {
@@ -163,11 +163,11 @@ namespace Koromo_Copy.Framework.Extractor
 
                             return new Tuple<List<NetTask>, object>(result, article);
                         }
-                        else if (option.Type == DCInsideExtractorOption.ExtratorType.ArticleInformation)
+                        else if (option.Type == DCInsideExtractorOption.ExtractorType.ArticleInformation)
                         {
                             return new Tuple<List<NetTask>, object>(null, article);
                         }
-                        else if (option.Type == DCInsideExtractorOption.ExtratorType.Comments)
+                        else if (option.Type == DCInsideExtractorOption.ExtractorType.Comments)
                         {
                             var cc = new List<DCComment>();
                             var comments = GetComments(article, "1");
@@ -213,7 +213,7 @@ namespace Koromo_Copy.Framework.Extractor
                         else
                             gallery = ParseMinorGallery(html);
 
-                        if (option.Type == DCInsideExtractorOption.ExtratorType.GalleryInformation)
+                        if (option.Type == DCInsideExtractorOption.ExtractorType.GalleryInformation)
                         {
                             return new Tuple<List<NetTask>, object>(null, gallery);
                         }

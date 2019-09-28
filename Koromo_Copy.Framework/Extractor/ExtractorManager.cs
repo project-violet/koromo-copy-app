@@ -25,6 +25,7 @@ namespace Koromo_Copy.Framework.Extractor
     {
         public static Regex ValidUrl { get; protected set; }
 
+        public abstract T RecommendOption(string url);
         public abstract Tuple<List<NetTask>, object> Extract(string url, T option);
     }
 

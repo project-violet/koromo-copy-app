@@ -35,6 +35,7 @@ namespace Koromo_Copy.Console
             catch (Exception e)
             {
                 System.Console.WriteLine("An error occured! " + e.Message);
+                System.Console.WriteLine(e.StackTrace);
                 System.Console.WriteLine("Please, check log.txt file.");
             }
 

@@ -35,7 +35,7 @@ namespace Koromo_Copy.Framework.Extractor
             public string Author;
         }
 
-        public override NaverExtractorOption RecommendOption(string url)
+        public new static NaverExtractorOption RecommendOption(string url)
         {
             var match = ValidUrl.Match(url).Groups;
 
@@ -76,7 +76,7 @@ namespace Koromo_Copy.Framework.Extractor
             return new NaverExtractorOption { Type = NaverExtractorOption.ExtractorType.Images };
         }
 
-        public override Tuple<List<NetTask>, object> Extract(string url, NaverExtractorOption option = null)
+        public new static Tuple<List<NetTask>, object> Extract(string url, NaverExtractorOption option = null)
         {
             if (option == null)
                 option = RecommendOption(url);

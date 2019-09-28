@@ -32,12 +32,12 @@ namespace Koromo_Copy.Framework.Extractor
         static GelbooruExtractor()
             => ValidUrl = new Regex(@"^https?://gelbooru\.com/index\.php\?.*?tags\=(.*?)(\&.*?)?$");
 
-        public override GelbooruExtractorOption RecommendOption(string url)
+        public new static GelbooruExtractorOption RecommendOption(string url)
         {
             throw new NotImplementedException();
         }
 
-        public override Tuple<List<NetTask>, object> Extract(string url, GelbooruExtractorOption option = null)
+        public new static Tuple<List<NetTask>, object> Extract(string url, GelbooruExtractorOption option = null)
         {
             var match = ValidUrl.Match(url).Groups;
 

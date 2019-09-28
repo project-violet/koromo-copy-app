@@ -25,15 +25,21 @@ namespace Koromo_Copy.Framework.Extractor
     {
         public static Regex ValidUrl { get; protected set; }
 
-        public abstract T RecommendOption(string url);
-        public abstract Tuple<List<NetTask>, object> Extract(string url, T option);
+        public static T RecommendOption(string url)
+            => throw new NotImplementedException();
+        public static Tuple<List<NetTask>, object> Extract(string url, T option)
+            => throw new NotImplementedException();
     }
 
     public class ExtractorManager : ILazy<ExtractorManager>
     {
         public static Type[] Extractors =
         {
-            typeof(DCInsideExtractor)
+            typeof(DCInsideExtractor),
+            typeof(PixivExtractor),
+            typeof(GelbooruExtractor),
+            typeof(NaverExtractor),
+            typeof(EHentaiExtractor)
         };
 
 

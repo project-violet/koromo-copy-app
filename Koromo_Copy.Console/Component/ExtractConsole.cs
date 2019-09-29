@@ -15,6 +15,9 @@ namespace Koromo_Copy.Console.Component
         [CommandLine("--help", CommandType.OPTION, Default = true)]
         public bool Help;
 
+        [CommandLine("--list-extractor", CommandType.OPTION, Info = "Enumerate all implemented extractor.")]
+        public bool ListExtractor;
+
         [CommandLine("--url", CommandType.ARGUMENTS, ArgumentsCount = 1,
             Info = "Set extracting target.", Help = "use --url <URL>")]
         public string[] Url;
@@ -59,7 +62,7 @@ namespace Koromo_Copy.Console.Component
                     System.Console.WriteLine($"'{option.Url[0]}' is not correct url format or not supported scheme.");
                 }
 
-                var t = ExtractorManager.Instance.GetExtractor(option.Url[0]);
+                ProcessExtract(option.Url[0]);
             }
         }
 
@@ -80,5 +83,29 @@ namespace Koromo_Copy.Console.Component
             System.Console.WriteLine(builder.ToString());
         }
 
+        static void ProcessExtract(string url)
+        {
+            var extractor = ExtractorManager.Instance.GetExtractor(url);
+
+            if (extractor == null)
+            {
+                extractor = ExtractorManager.Instance.GetExtractorFromHostName(url);
+
+                if (extractor == null)
+                {
+                    System.Console.WriteLine($"[Error] Cannot find a suitable extractor for '{url}'.");
+                    return;
+                }
+                else
+                {
+                    System.Console.WriteLine("[Warning] Found an extractor for that url, but the url is not in the proper format to continue.");
+                    System.Console.WriteLine("[Warning] Please refer to the following for proper conversion.");
+                    System.Console.WriteLine($"[Input URL] {url}");
+                    System.Console.WriteLine($"[Extractor Name] {t.GetType().Name}");
+                    System.Console.WriteLine(t.ExtractorInfo);
+                    return;
+                }
+            }
+        }
     }
 }

@@ -124,12 +124,12 @@ namespace Koromo_Copy.Framework.Extractor
             ValidUrl = new Regex(@"^https?://(gall|m)\.dcinside\.com/(mgallery/)?board/(lists|view)\?(.*?)$");
         }
 
-        public new DCInsideExtractorOption RecommendOption(string url)
+        public override IExtractorOption RecommendOption(string url)
         {
             throw new NotImplementedException();
         }
 
-        public new Tuple<List<NetTask>, object> Extract(string url, IExtractorOption option = null)
+        public override Tuple<List<NetTask>, object> Extract(string url, IExtractorOption option = null)
         {
             var match = ValidUrl.Match(url).Groups;
             var result = new List<NetTask>();

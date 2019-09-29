@@ -35,12 +35,12 @@ namespace Koromo_Copy.Framework.Extractor
             ValidUrl = new Regex(@"^https?://www\.pixiv\.net/(member\.php\?id\=|artworks/)(.*?)$");
         }
 
-        public new PixivExtractorOption RecommendOption(string url)
+        public override IExtractorOption RecommendOption(string url)
         {
             throw new NotImplementedException();
         }
 
-        public new Tuple<List<NetTask>, object> Extract(string url, IExtractorOption option = null)
+        public override Tuple<List<NetTask>, object> Extract(string url, IExtractorOption option = null)
         {
             if (!PixivAPI.Auth(Settings.Instance.Model.PixivSettings.Id, Settings.Instance.Model.PixivSettings.Password))
             {

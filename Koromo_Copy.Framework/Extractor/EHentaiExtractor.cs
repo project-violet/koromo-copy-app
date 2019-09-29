@@ -71,7 +71,7 @@ namespace Koromo_Copy.Framework.Extractor
             ValidUrl = new Regex(@"^https?://e-hentai\.org/g/(\d+)/(.*?)/?$");
         }
 
-        public new EHentaiExtractorOption RecommendOption(string url)
+        public override IExtractorOption RecommendOption(string url)
         {
             return new EHentaiExtractorOption { Type = EHentaiExtractorOption.ExtractorType.Images };
         }
@@ -86,7 +86,7 @@ namespace Koromo_Copy.Framework.Extractor
             "ipb_member_id=1715959;ipb_pass_hash=67e57ed90cfc3b391c8a32e920a31cf0",
         };
 
-        public new Tuple<List<NetTask>, object> Extract(string url, IExtractorOption option = null)
+        public override Tuple<List<NetTask>, object> Extract(string url, IExtractorOption option = null)
         {
             var html = NetTools.DownloadString(url);
             var data = ParseArticleData(html);

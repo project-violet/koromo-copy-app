@@ -23,6 +23,11 @@ namespace Koromo_Copy.Framework.Postprocessor
 
         public override void Run(NetTask task)
         {
+            ugoira2gif(task);
+        }
+
+        private void ugoira2gif(NetTask task)
+        {
             using (var file = File.OpenRead(task.Filename))
             using (var zip = new ZipArchive(file, ZipArchiveMode.Read))
             using (var entry = zip.GetEntry(Frames[0].File).Open())
@@ -45,6 +50,11 @@ namespace Koromo_Copy.Framework.Postprocessor
 
             File.Delete(task.Filename);
             GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+        }
+
+        private void ugoira2webp(NetTask task)
+        {
+
         }
     }
 }

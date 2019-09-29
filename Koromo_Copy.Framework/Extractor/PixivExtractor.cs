@@ -34,7 +34,7 @@ namespace Koromo_Copy.Framework.Extractor
         public PixivExtractor()
         {
             HostName = new Regex(@"www\.pixiv\.net");
-            ValidUrl = new Regex(@"^https?://www\.pixiv\.net/(member\.php\?id\=|member_illust\.php\?id\=|artworks/)(.*?)$");
+            ValidUrl = new Regex(@"^https?://www\.pixiv\.net/(member(?:_illust)?\.php\?id\=|artworks/)(?<id>.*?)$");
         }
 
         public override IExtractorOption RecommendOption(string url)
@@ -56,8 +56,8 @@ namespace Koromo_Copy.Framework.Extractor
 
             if (match[1].Value.StartsWith("member") && option.ExtractInformation == false)
             {
-                var user = PixivAPI.GetUsersAsync(match[2].Value.ToInt()).Result;
-                var works = PixivAPI.GetUsersWorksAsync(match[2].Value.ToInt(), 1, 10000000).Result;
+                var user = PixivAPI.GetUsersAsync(match["id"].Value.ToInt()).Result;
+                var works = PixivAPI.GetUsersWorksAsync(match["id"].Value.ToInt(), 1, 10000000).Result;
 
                 var result = new List<NetTask>();
 
@@ -74,7 +74,9 @@ namespace Koromo_Copy.Framework.Extractor
                     else if (work.Type == "ugoira")
                     {
                         var ugoira_uri = $"https://www.pixiv.net/ajax/illust/{work.Id}/ugoira_meta";
+
                         (option as PixivExtractorOption).PageReadCallback?.Invoke(ugoira_uri);
+
                         var ugoira_data = JToken.Parse(NetTools.DownloadString(ugoira_uri)).SelectToken("body").ToObject<PixivAPI.Ugoira>();
                         var task = NetTask.MakeDefault(ugoira_data.OriginalSource);
                         task.Filename = ugoira_data.OriginalSource.Split('/').Last();
@@ -89,7 +91,7 @@ namespace Koromo_Copy.Framework.Extractor
             }
             else if (option.ExtractInformation == true)
             {
-                var user = PixivAPI.GetUsersAsync(match[2].Value.ToInt()).Result;
+                var user = PixivAPI.GetUsersAsync(match["id"].Value.ToInt()).Result;
                 return new Tuple<List<NetTask>, object>(null, user);
             }
 

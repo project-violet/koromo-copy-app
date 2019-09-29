@@ -4,6 +4,7 @@
 using Koromo_Copy.Framework.Crypto;
 using Koromo_Copy.Framework.Log;
 using Koromo_Copy.Framework.Network;
+using Koromo_Copy.Framework.Postprocessor;
 using Koromo_Copy.Framework.Setting;
 using Koromo_Copy.Framework.Utils;
 using Newtonsoft.Json;
@@ -79,6 +80,7 @@ namespace Koromo_Copy.Framework.Extractor
                         task.Filename = ugoira_data.OriginalSource.Split('/').Last();
                         task.SaveFile = true;
                         task.Referer = url;
+                        task.PostProcess = new UgoiraPostprocessor { Frames = ugoira_data.Frames };
                         result.Add(task);
                     }
                 }

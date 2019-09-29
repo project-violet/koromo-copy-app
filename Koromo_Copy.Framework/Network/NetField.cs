@@ -179,6 +179,9 @@ namespace Koromo_Copy.Framework.Network
                         ostream.Close();
                         istream.Close();
 
+                        if (content.PostProcess != null)
+                            content.PostProcess.Run(content);
+
                         return;
                     }
                 }

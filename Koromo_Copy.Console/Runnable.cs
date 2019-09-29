@@ -31,12 +31,16 @@ namespace Koromo_Copy.Console
 
         [CommandLine("net", CommandType.OPTION, Info = "Multi-commands net.", Help = "use net <Others>")]
         public bool Net;
+        [CommandLine("extract", CommandType.OPTION, Info = "Multi-commands extractor.", Help = "use extract <Others>")]
+        public bool Extract;
     }
 
     public class Runnable
     {
         public static void Start(string[] arguments)
         {
+            var origin = arguments;
+            arguments = CommandLineUtil.InsertWeirdArguments<Options>(arguments, true, "extract");
             var option = CommandLineParser<Options>.Parse(arguments);
 
             //
@@ -44,7 +48,11 @@ namespace Koromo_Copy.Console
             //
             if (option.Net)
             {
-                NetConsole.Start(arguments.Skip(1).ToArray());
+                NetConsole.Start(origin.Skip(1).ToArray());
+            }
+            else if (option.Extract)
+            {
+                ExtractConsole.Start(origin.ToList().Where(x => x != "extract").ToArray());
             }
             //
             //  Single Commands
@@ -98,7 +106,7 @@ namespace Koromo_Copy.Console
                     else
                         builder.Append($" {x.Key} [{x.Value.Item2.Help}]\r\n");
                 });
-            System.Console.WriteLine(builder.ToString());
+            System.Console.Write(builder.ToString());
         }
 
         public static void PrintVersion()
@@ -130,7 +138,8 @@ namespace Koromo_Copy.Console
 
                 case "dcinside":
                     {
-                        var imgs = DCInsideExtractor.Extract("https://gall.dcinside.com/mgallery/board/view?id=plamodels&no=22155", null).Item1;
+                        var extractor = new DCInsideExtractor();
+                        var imgs = extractor.Extract("https://gall.dcinside.com/mgallery/board/view?id=plamodels&no=22155", null).Item1;
                         int count = imgs.Count;
                         imgs.ForEach(x => {
                             x.Filename = Path.Combine(Directory.GetCurrentDirectory(), x.Filename);
@@ -150,7 +159,9 @@ namespace Koromo_Copy.Console
 
                 case "pixiv":
                     {
-                        var ext = PixivExtractor.Extract("https://www.pixiv.net/member.php?id=4462");
+                        var extractor = new PixivExtractor();
+                        //var ext = extractor.Extract("https://www.pixiv.net/member.php?id=4462");
+                        var ext = extractor.Extract("https://www.pixiv.net/member_illust.php?id=25464");
                         var imgs = ext.Item1;
                         var uinfo = $"{(ext.Item2 as List<PixivExtractor.PixivAPI.User>)[0].Name} ({(ext.Item2 as List<PixivExtractor.PixivAPI.User>)[0].Account})";
                         int count = imgs.Count;
@@ -173,7 +184,8 @@ namespace Koromo_Copy.Console
 
                 case "gelbooru":
                     {
-                        var ext = GelbooruExtractor.Extract("https://gelbooru.com/index.php?page=post&s=list&tags=kokkoro_%28princess_connect%21%29");
+                        var extractor = new GelbooruExtractor();
+                        var ext = extractor.Extract("https://gelbooru.com/index.php?page=post&s=list&tags=kokkoro_%28princess_connect%21%29");
                         var imgs = ext.Item1;
                         int count = imgs.Count;
                         Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), ext.Item2 as string));
@@ -195,7 +207,8 @@ namespace Koromo_Copy.Console
 
                 case "naver":
                     {
-                        var ext = NaverExtractor.Extract("https://comic.naver.com/webtoon/detail.nhn?titleId=318995&no=434&weekday=fri");
+                        var extractor = new NaverExtractor();
+                        var ext = extractor.Extract("https://comic.naver.com/webtoon/detail.nhn?titleId=318995&no=434&weekday=fri");
                         var imgs = ext.Item1;
                         int count = imgs.Count;
                         Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), (ext.Item2 as NaverExtractor.ComicInformation).Title));
@@ -217,7 +230,8 @@ namespace Koromo_Copy.Console
 
                 case "eh":
                     {
-                        var ext = EHentaiExtractor.Extract("https://e-hentai.org/g/1491793/45f9e85e48/");
+                        var extractor = new EHentaiExtractor();
+                        var ext = extractor.Extract("https://e-hentai.org/g/1491793/45f9e85e48/");
                         var imgs = ext.Item1;
                         int count = imgs.Count;
                         Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), (ext.Item2 as EHentaiArticle).Title));

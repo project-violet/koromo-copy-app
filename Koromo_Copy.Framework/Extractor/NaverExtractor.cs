@@ -24,9 +24,9 @@ namespace Koromo_Copy.Framework.Extractor
         public ExtractorType Type;
     }
 
-    public class NaverExtractor : ExtractorModel<NaverExtractorOption>
+    public class NaverExtractor : ExtractorModel
     {
-        static NaverExtractor()
+        public NaverExtractor()
         {
             HostName = new Regex(@"(comic|blog)\.naver\.com");
             ValidUrl = new Regex(@"^https?://(comic|blog)\.naver\.com/(webtoon|.*?)/((list|detail)\.nhn\?|.*)\??(titleId\=(\d+)\&no=(\d+))?(.*?)$");
@@ -38,7 +38,7 @@ namespace Koromo_Copy.Framework.Extractor
             public string Author;
         }
 
-        public new static NaverExtractorOption RecommendOption(string url)
+        public new NaverExtractorOption RecommendOption(string url)
         {
             var match = ValidUrl.Match(url).Groups;
 
@@ -79,7 +79,7 @@ namespace Koromo_Copy.Framework.Extractor
             return new NaverExtractorOption { Type = NaverExtractorOption.ExtractorType.Images };
         }
 
-        public new static Tuple<List<NetTask>, object> Extract(string url, NaverExtractorOption option = null)
+        public new Tuple<List<NetTask>, object> Extract(string url, IExtractorOption option = null)
         {
             if (option == null)
                 option = RecommendOption(url);
@@ -88,7 +88,7 @@ namespace Koromo_Copy.Framework.Extractor
             //  Extract Webtoon
             //
 
-            if (option.Type == NaverExtractorOption.ExtractorType.EpisodeImages)
+            if ((option as NaverExtractorOption).Type == NaverExtractorOption.ExtractorType.EpisodeImages)
             {
                 var html = NetTools.DownloadString(url);
 

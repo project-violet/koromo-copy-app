@@ -116,20 +116,20 @@ namespace Koromo_Copy.Framework.Extractor
         public ExtractorType Type;
     }
 
-    public class DCInsideExtractor : ExtractorModel<DCInsideExtractorOption>
+    public class DCInsideExtractor : ExtractorModel
     {
-        static DCInsideExtractor()
+        public DCInsideExtractor()
         {
             HostName = new Regex(@"(gall|m)\.dcinside\.com");
             ValidUrl = new Regex(@"^https?://(gall|m)\.dcinside\.com/(mgallery/)?board/(lists|view)\?(.*?)$");
         }
 
-        public new static DCInsideExtractorOption RecommendOption(string url)
+        public new DCInsideExtractorOption RecommendOption(string url)
         {
             throw new NotImplementedException();
         }
 
-        public new static Tuple<List<NetTask>, object> Extract(string url, DCInsideExtractorOption option = null)
+        public new Tuple<List<NetTask>, object> Extract(string url, IExtractorOption option = null)
         {
             var match = ValidUrl.Match(url).Groups;
             var result = new List<NetTask>();
@@ -153,7 +153,7 @@ namespace Koromo_Copy.Framework.Extractor
                     {
                         var article = ParseBoardView(html, match[2].Value != "");
 
-                        if (option.Type == DCInsideExtractorOption.ExtractorType.Images && option.ExtractInformation == false)
+                        if ((option as DCInsideExtractorOption).Type == DCInsideExtractorOption.ExtractorType.Images && option.ExtractInformation == false)
                         {
                             for (int i = 0; i < article.ImagesLink.Count; i++)
                             {
@@ -166,11 +166,11 @@ namespace Koromo_Copy.Framework.Extractor
 
                             return new Tuple<List<NetTask>, object>(result, article);
                         }
-                        else if (option.Type == DCInsideExtractorOption.ExtractorType.ArticleInformation || option.ExtractInformation == true)
+                        else if ((option as DCInsideExtractorOption).Type == DCInsideExtractorOption.ExtractorType.ArticleInformation || option.ExtractInformation == true)
                         {
                             return new Tuple<List<NetTask>, object>(null, article);
                         }
-                        else if (option.Type == DCInsideExtractorOption.ExtractorType.Comments)
+                        else if ((option as DCInsideExtractorOption).Type == DCInsideExtractorOption.ExtractorType.Comments)
                         {
                             var cc = new List<DCComment>();
                             var comments = GetComments(article, "1");
@@ -216,7 +216,7 @@ namespace Koromo_Copy.Framework.Extractor
                         else
                             gallery = ParseMinorGallery(html);
 
-                        if (option.Type == DCInsideExtractorOption.ExtractorType.GalleryInformation || option.ExtractInformation == true)
+                        if ((option as DCInsideExtractorOption).Type == DCInsideExtractorOption.ExtractorType.GalleryInformation || option.ExtractInformation == true)
                         {
                             return new Tuple<List<NetTask>, object>(null, gallery);
                         }
@@ -228,7 +228,7 @@ namespace Koromo_Copy.Framework.Extractor
                 }
                 catch (Exception e)
                 {
-                    Log.Logs.Instance.PushError("[DCInsideExtractor] Extract error - " + option.Type.ToString() + " - " + e.Message + "\r\n" + e.StackTrace);
+                    Log.Logs.Instance.PushError("[DCInsideExtractor] Extract error - " + (option as DCInsideExtractorOption).Type.ToString() + " - " + e.Message + "\r\n" + e.StackTrace);
                 }
             }
             else

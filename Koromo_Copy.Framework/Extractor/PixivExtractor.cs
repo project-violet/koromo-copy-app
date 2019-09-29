@@ -27,20 +27,20 @@ namespace Koromo_Copy.Framework.Extractor
         public ExtractorType Type;
     }
 
-    public class PixivExtractor : ExtractorModel<PixivExtractorOption>
+    public class PixivExtractor : ExtractorModel
     {
-        static PixivExtractor()
+        public PixivExtractor()
         {
             HostName = new Regex(@"www\.pixiv\.net");
             ValidUrl = new Regex(@"^https?://www\.pixiv\.net/(member\.php\?id\=|artworks/)(.*?)$");
         }
 
-        public new static PixivExtractorOption RecommendOption(string url)
+        public new PixivExtractorOption RecommendOption(string url)
         {
             throw new NotImplementedException();
         }
 
-        public new static Tuple<List<NetTask>, object> Extract(string url, PixivExtractorOption option = null)
+        public new Tuple<List<NetTask>, object> Extract(string url, IExtractorOption option = null)
         {
             if (!PixivAPI.Auth(Settings.Instance.Model.PixivSettings.Id, Settings.Instance.Model.PixivSettings.Password))
             {

@@ -5,6 +5,7 @@ using Koromo_Copy.Framework.Network;
 using Koromo_Copy.Framework.Utils;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -21,29 +22,46 @@ namespace Koromo_Copy.Framework.Extractor
         public bool ExtractInformation { get; set; }
     }
 
-    public abstract class ExtractorModel<T>
-        where T : IExtractorOption
+    public abstract class ExtractorModel
     {
-        public static Regex HostName { get; protected set; }
-        public static Regex ValidUrl { get; protected set; }
+        public Regex HostName { get; protected set; }
+        public Regex ValidUrl { get; protected set; }
 
-        public static T RecommendOption(string url)
+        public static IExtractorOption RecommendOption(string url)
             => throw new NotImplementedException();
-        public static Tuple<List<NetTask>, object> Extract(string url, T option)
+        public static Tuple<List<NetTask>, object> Extract(string url, IExtractorOption option)
             => throw new NotImplementedException();
     }
 
     public class ExtractorManager : ILazy<ExtractorManager>
     {
-        public static Type[] Extractors =
+        public static ExtractorModel[] Extractors =
         {
-            typeof(DCInsideExtractor),
-            typeof(PixivExtractor),
-            typeof(GelbooruExtractor),
-            typeof(NaverExtractor),
-            typeof(EHentaiExtractor)
+            new DCInsideExtractor(),
+            new PixivExtractor(),
+            new GelbooruExtractor(),
+            new NaverExtractor(),
+            new EHentaiExtractor()
         };
 
+        public ExtractorModel GetExtractor(string url)
+        {
+            foreach (var em in Extractors)
+            {
+                if (em.ValidUrl.IsMatch(url))
+                    return em;
+            }
+            return null;
+        }
 
+        public ExtractorModel GetExtractorFromHostName(string url)
+        {
+            foreach (var em in Extractors)
+            {
+                if (em.HostName.IsMatch(url))
+                    return em;
+            }
+            return null;
+        }
     }
 }

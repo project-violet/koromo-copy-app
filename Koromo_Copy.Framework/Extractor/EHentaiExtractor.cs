@@ -63,15 +63,15 @@ namespace Koromo_Copy.Framework.Extractor
         public Action<string> PageReadCallback;
     }
 
-    public class EHentaiExtractor : ExtractorModel<EHentaiExtractorOption>
+    public class EHentaiExtractor : ExtractorModel
     {
-        static EHentaiExtractor()
+        public EHentaiExtractor()
         {
             HostName = new Regex(@"e-hentai\.org");
-            ValidUrl = new Regex(@"^https?://e-hentai\.org/g/(\d+)/(\d+)/?$");
+            ValidUrl = new Regex(@"^https?://e-hentai\.org/g/(\d+)/(.*?)/?$");
         }
 
-        public new static EHentaiExtractorOption RecommendOption(string url)
+        public new EHentaiExtractorOption RecommendOption(string url)
         {
             return new EHentaiExtractorOption { Type = EHentaiExtractorOption.ExtractorType.Images };
         }
@@ -86,7 +86,7 @@ namespace Koromo_Copy.Framework.Extractor
             "ipb_member_id=1715959;ipb_pass_hash=67e57ed90cfc3b391c8a32e920a31cf0",
         };
 
-        public new static Tuple<List<NetTask>, object> Extract(string url, EHentaiExtractorOption option = null)
+        public new Tuple<List<NetTask>, object> Extract(string url, IExtractorOption option = null)
         {
             var html = NetTools.DownloadString(url);
             var data = ParseArticleData(html);
@@ -107,7 +107,7 @@ namespace Koromo_Copy.Framework.Extractor
 
             for (int i = 1; i < pages.Length; i++)
             {
-                option.PageReadCallback?.Invoke(pages[i]);
+                (option as EHentaiExtractorOption).PageReadCallback?.Invoke(pages[i]);
 
                 var page = NetTools.DownloadString(pages[i]);
                 image_urls.AddRange(GetImagesUri(page));

@@ -27,20 +27,20 @@ namespace Koromo_Copy.Framework.Extractor
         public Action<string> PageReadCallback;
     }
 
-    public class GelbooruExtractor : ExtractorModel<GelbooruExtractorOption>
+    public class GelbooruExtractor : ExtractorModel
     {
-        static GelbooruExtractor()
+        public GelbooruExtractor()
         {
             HostName = new Regex(@"gelbooru\.com");
             ValidUrl = new Regex(@"^https?://gelbooru\.com/index\.php\?.*?tags\=(.*?)(\&.*?)?$");
         }
 
-        public new static GelbooruExtractorOption RecommendOption(string url)
+        public new GelbooruExtractorOption RecommendOption(string url)
         {
             throw new NotImplementedException();
         }
 
-        public new static Tuple<List<NetTask>, object> Extract(string url, GelbooruExtractorOption option = null)
+        public new Tuple<List<NetTask>, object> Extract(string url, IExtractorOption option = null)
         {
             var match = ValidUrl.Match(url).Groups;
 
@@ -49,13 +49,13 @@ namespace Koromo_Copy.Framework.Extractor
 
             var tags = match[1].Value;
             var result = new List<NetTask>();
-            var page = option.StartPage;
+            var page = (option as GelbooruExtractorOption).StartPage;
 
             while (true)
             {
                 var durl = "https://gelbooru.com/index.php?page=dapi&s=post&q=index&limit=100&tags=" + tags + "&pid=" + page.ToString();
 
-                option.PageReadCallback?.Invoke(durl);
+                (option as GelbooruExtractorOption).PageReadCallback?.Invoke(durl);
 
                 var data = NetTools.DownloadString(durl);
 
@@ -77,7 +77,7 @@ namespace Koromo_Copy.Framework.Extractor
 
                 page += 1;
 
-                if (page > option.EndPage)
+                if (page > (option as GelbooruExtractorOption).EndPage)
                     break;
             }
 

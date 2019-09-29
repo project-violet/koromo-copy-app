@@ -42,35 +42,17 @@ namespace Koromo_Copy.Framework.Extractor
         {
             var match = ValidUrl.Match(url).Groups;
 
-            //
-            //  Extract Webtoon
-            //
-
             if (match[1].Value == "comic")
             {
-                //
-                //  Just One Episode
-                //
-
                 if (match[4].Value == "detail")
                 {
                     return new NaverExtractorOption { Type = NaverExtractorOption.ExtractorType.EpisodeImages };
                 }
-
-                //
-                //  All Episode
-                //
-
                 else if (match[4].Value == "list")
                 {
                     return new NaverExtractorOption { Type = NaverExtractorOption.ExtractorType.ComicIndex };
                 }
             }
-
-            //
-            //  Extract Blog
-            //
-
             else if (match[1].Value == "blog")
             {
                 return new NaverExtractorOption { Type = NaverExtractorOption.ExtractorType.Images };

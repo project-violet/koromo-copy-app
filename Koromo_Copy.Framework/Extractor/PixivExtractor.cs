@@ -25,6 +25,7 @@ namespace Koromo_Copy.Framework.Extractor
         }
 
         public ExtractorType Type;
+        public Action<string> PageReadCallback;
     }
 
     public class PixivExtractor : ExtractorModel
@@ -72,6 +73,7 @@ namespace Koromo_Copy.Framework.Extractor
                     else if (work.Type == "ugoira")
                     {
                         var ugoira_uri = $"https://www.pixiv.net/ajax/illust/{work.Id}/ugoira_meta";
+                        (option as PixivExtractorOption).PageReadCallback?.Invoke(ugoira_uri);
                         var ugoira_data = JToken.Parse(NetTools.DownloadString(ugoira_uri)).SelectToken("body").ToObject<PixivAPI.Ugoira>();
                         var task = NetTask.MakeDefault(ugoira_data.OriginalSource);
                         task.Filename = ugoira_data.OriginalSource.Split('/').Last();

@@ -32,7 +32,7 @@ namespace Koromo_Copy.Framework.Extractor
         public PixivExtractor()
         {
             HostName = new Regex(@"www\.pixiv\.net");
-            ValidUrl = new Regex(@"^https?://www\.pixiv\.net/(member\.php\?id\=|artworks/)(.*?)$");
+            ValidUrl = new Regex(@"^https?://www\.pixiv\.net/(member\.php\?id\=|member_illust\.php\?id\=|artworks/)(.*?)$");
         }
 
         public override IExtractorOption RecommendOption(string url)
@@ -56,13 +56,32 @@ namespace Koromo_Copy.Framework.Extractor
             {
                 var user = PixivAPI.GetUsersAsync(match[2].Value.ToInt()).Result;
                 var works = PixivAPI.GetUsersWorksAsync(match[2].Value.ToInt(), 1, 10000000).Result;
-                return new Tuple<List<NetTask>, object>(works.Select(x => {
-                    var task = NetTask.MakeDefault(x.ImageUrls.Large);
-                    task.Filename = x.ImageUrls.Large.Split('/').Last();
-                    task.SaveFile = true;
-                    task.Referer = url;
-                    return task;
-                }).ToList(), user);
+
+                var result = new List<NetTask>();
+
+                foreach (var work in works)
+                {
+                    if (work.Type == null || work.Type == "illustration")
+                    {
+                        var task = NetTask.MakeDefault(work.ImageUrls.Large);
+                        task.Filename = work.ImageUrls.Large.Split('/').Last();
+                        task.SaveFile = true;
+                        task.Referer = url;
+                        result.Add(task);
+                    }
+                    else if (work.Type == "ugoira")
+                    {
+                        var ugoira_uri = $"https://www.pixiv.net/ajax/illust/{work.Id}/ugoira_meta";
+                        var ugoira_data = JToken.Parse(NetTools.DownloadString(ugoira_uri)).SelectToken("body").ToObject<PixivAPI.Ugoira>();
+                        var task = NetTask.MakeDefault(ugoira_data.OriginalSource);
+                        task.Filename = ugoira_data.OriginalSource.Split('/').Last();
+                        task.SaveFile = true;
+                        task.Referer = url;
+                        result.Add(task);
+                    }
+                }
+
+                return new Tuple<List<NetTask>, object>(result, user);
             }
             else if (option.ExtractInformation == true)
             {
@@ -383,6 +402,30 @@ namespace Koromo_Copy.Framework.Extractor
 
                 [JsonProperty("sanity_level")]
                 public string SanityLevel { get; set; }
+            }
+
+            public class UgoiraFrames
+            {
+                [JsonProperty("file")]
+                public string File { get; set; }
+
+                [JsonProperty("delay")]
+                public int? Delay { get; set; }
+            }
+
+            public class Ugoira
+            {
+                [JsonProperty("src")]
+                public string Source { get; set; }
+
+                [JsonProperty("originalSrc")]
+                public string OriginalSource { get; set; }
+
+                [JsonProperty("mime_type")]
+                public string MimeType { get; set; }
+
+                [JsonProperty("frames")]
+                public List<UgoiraFrames> Frames { get; set; }
             }
 
             #endregion

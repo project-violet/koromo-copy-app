@@ -101,8 +101,8 @@ namespace Koromo_Copy.Console.Component
                     System.Console.WriteLine("[Warning] Found an extractor for that url, but the url is not in the proper format to continue.");
                     System.Console.WriteLine("[Warning] Please refer to the following for proper conversion.");
                     System.Console.WriteLine($"[Input URL] {url}");
-                    System.Console.WriteLine($"[Extractor Name] {t.GetType().Name}");
-                    System.Console.WriteLine(t.ExtractorInfo);
+                    System.Console.WriteLine($"[Extractor Name] {extractor.GetType().Name}");
+                    System.Console.WriteLine(extractor.ExtractorInfo);
                     return;
                 }
             }

@@ -16,13 +16,15 @@ namespace Koromo_Copy.Framework.Extractor
             : base(msg) { }
     }
 
-    public interface IExtractorOption
+    public class IExtractorOption
     {
+        public bool ExtractInformation { get; set; }
     }
 
     public abstract class ExtractorModel<T>
         where T : IExtractorOption
     {
+        public static Regex HostName { get; protected set; }
         public static Regex ValidUrl { get; protected set; }
 
         public static T RecommendOption(string url)

@@ -27,7 +27,10 @@ namespace Koromo_Copy.Framework.Extractor
     public class NaverExtractor : ExtractorModel<NaverExtractorOption>
     {
         static NaverExtractor()
-            => ValidUrl = new Regex(@"^https?://(comic|blog)\.naver\.com/(webtoon|.*?)/((list|detail)\.nhn\?|.*)\??(titleId\=(\d+)\&no=(\d+))?(.*?)$");
+        {
+            HostName = new Regex(@"(comic|blog)\.naver\.com");
+            ValidUrl = new Regex(@"^https?://(comic|blog)\.naver\.com/(webtoon|.*?)/((list|detail)\.nhn\?|.*)\??(titleId\=(\d+)\&no=(\d+))?(.*?)$");
+        }
 
         public class ComicInformation
         {

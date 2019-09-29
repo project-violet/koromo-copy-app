@@ -66,7 +66,10 @@ namespace Koromo_Copy.Framework.Extractor
     public class EHentaiExtractor : ExtractorModel<EHentaiExtractorOption>
     {
         static EHentaiExtractor()
-            => ValidUrl = new Regex(@"^https?://e-hentai\.org/g/(\d+)/(\d+)/?$");
+        {
+            HostName = new Regex(@"e-hentai\.org");
+            ValidUrl = new Regex(@"^https?://e-hentai\.org/g/(\d+)/(\d+)/?$");
+        }
 
         public new static EHentaiExtractorOption RecommendOption(string url)
         {
@@ -92,6 +95,9 @@ namespace Koromo_Copy.Framework.Extractor
 
             if (option == null)
                 option = RecommendOption(url);
+
+            if (option.ExtractInformation)
+                return new Tuple<List<NetTask>, object>(null, data);
 
             //
             //  Extract Image Url-Url

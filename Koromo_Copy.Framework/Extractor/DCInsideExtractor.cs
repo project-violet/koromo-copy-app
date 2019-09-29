@@ -119,7 +119,10 @@ namespace Koromo_Copy.Framework.Extractor
     public class DCInsideExtractor : ExtractorModel<DCInsideExtractorOption>
     {
         static DCInsideExtractor()
-            => ValidUrl = new Regex(@"^https?://(gall|m)\.dcinside\.com/(mgallery/)?board/(lists|view)\?(.*?)$");
+        {
+            HostName = new Regex(@"(gall|m)\.dcinside\.com");
+            ValidUrl = new Regex(@"^https?://(gall|m)\.dcinside\.com/(mgallery/)?board/(lists|view)\?(.*?)$");
+        }
 
         public new static DCInsideExtractorOption RecommendOption(string url)
         {
@@ -150,7 +153,7 @@ namespace Koromo_Copy.Framework.Extractor
                     {
                         var article = ParseBoardView(html, match[2].Value != "");
 
-                        if (option.Type == DCInsideExtractorOption.ExtractorType.Images)
+                        if (option.Type == DCInsideExtractorOption.ExtractorType.Images && option.ExtractInformation == false)
                         {
                             for (int i = 0; i < article.ImagesLink.Count; i++)
                             {
@@ -163,7 +166,7 @@ namespace Koromo_Copy.Framework.Extractor
 
                             return new Tuple<List<NetTask>, object>(result, article);
                         }
-                        else if (option.Type == DCInsideExtractorOption.ExtractorType.ArticleInformation)
+                        else if (option.Type == DCInsideExtractorOption.ExtractorType.ArticleInformation || option.ExtractInformation == true)
                         {
                             return new Tuple<List<NetTask>, object>(null, article);
                         }
@@ -213,7 +216,7 @@ namespace Koromo_Copy.Framework.Extractor
                         else
                             gallery = ParseMinorGallery(html);
 
-                        if (option.Type == DCInsideExtractorOption.ExtractorType.GalleryInformation)
+                        if (option.Type == DCInsideExtractorOption.ExtractorType.GalleryInformation || option.ExtractInformation == true)
                         {
                             return new Tuple<List<NetTask>, object>(null, gallery);
                         }

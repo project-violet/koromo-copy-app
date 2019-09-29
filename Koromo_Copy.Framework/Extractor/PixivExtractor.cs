@@ -30,7 +30,10 @@ namespace Koromo_Copy.Framework.Extractor
     public class PixivExtractor : ExtractorModel<PixivExtractorOption>
     {
         static PixivExtractor()
-            => ValidUrl = new Regex(@"^https?://www\.pixiv\.net/(member\.php\?id\=|artworks/)(.*?)$");
+        {
+            HostName = new Regex(@"www\.pixiv\.net");
+            ValidUrl = new Regex(@"^https?://www\.pixiv\.net/(member\.php\?id\=|artworks/)(.*?)$");
+        }
 
         public new static PixivExtractorOption RecommendOption(string url)
         {
@@ -49,7 +52,7 @@ namespace Koromo_Copy.Framework.Extractor
             if (option == null)
                 option = new PixivExtractorOption { Type = PixivExtractorOption.ExtractorType.Works };
 
-            if (match[1].Value.StartsWith("member"))
+            if (match[1].Value.StartsWith("member") && option.ExtractInformation == false)
             {
                 var user = PixivAPI.GetUsersAsync(match[2].Value.ToInt()).Result;
                 var works = PixivAPI.GetUsersWorksAsync(match[2].Value.ToInt(), 1, 10000000).Result;
@@ -60,6 +63,11 @@ namespace Koromo_Copy.Framework.Extractor
                     task.Referer = url;
                     return task;
                 }).ToList(), user);
+            }
+            else if (option.ExtractInformation == true)
+            {
+                var user = PixivAPI.GetUsersAsync(match[2].Value.ToInt()).Result;
+                return new Tuple<List<NetTask>, object>(null, user);
             }
 
             return null;

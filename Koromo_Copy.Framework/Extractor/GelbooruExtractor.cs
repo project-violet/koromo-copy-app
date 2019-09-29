@@ -30,7 +30,10 @@ namespace Koromo_Copy.Framework.Extractor
     public class GelbooruExtractor : ExtractorModel<GelbooruExtractorOption>
     {
         static GelbooruExtractor()
-            => ValidUrl = new Regex(@"^https?://gelbooru\.com/index\.php\?.*?tags\=(.*?)(\&.*?)?$");
+        {
+            HostName = new Regex(@"gelbooru\.com");
+            ValidUrl = new Regex(@"^https?://gelbooru\.com/index\.php\?.*?tags\=(.*?)(\&.*?)?$");
+        }
 
         public new static GelbooruExtractorOption RecommendOption(string url)
         {

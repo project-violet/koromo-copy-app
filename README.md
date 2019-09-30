@@ -1,27 +1,8 @@
 # Koromo Copy
 
-`Koromo Copy` is a cross platform image downloader, crawler collection, and file management system.
+`Koromo Copy` is a cross platform image/text/music downloader, crawler collection, and file management system.
 
-## Projects
-
-### Koromo_Copy.Framework
-
-`Koromo_Copy.Framework` project is the core library for koromo-copy that uses `.netstandard`. 
-This library implements all the major functions such as script analysis, 
-configuration, download, crawling and file management.
-
-### Koromo_Copy.Console
-
-`Koromo_Copy.Console` project is cross platform console application for `Windows`, `Linux`, and `Mac OS`.
-In this project, some command are implemented to properly use the main functions of the `Koromo_Copy.Framework`.
-Also, a dialog has implemented, so you can handle `Koromo_Copy.Framework`.
-
-### Koromo_Copy.Tool.CustomCrawler
-
-`Koromo_Copy.Framework` project supports to script embedding based html-parsing command line called `Html Toolkit`.
-This project will increases development productivity and eases maintenance.
-
-[Click here for more informations.](Document/CustomCrawler.md)
+## How to use?
 
 ## Documents
 
@@ -31,17 +12,50 @@ This project will increases development productivity and eases maintenance.
 
 ## Supports
 
+### Now support
+
 ```
 DCInside
+EHentai
+Gelbooru
+Naver
+Pixiv
+```
+
+### Plan to support
+
+```
+4Chan
+ArtsAndCulture
 Danbooru
-E-Hentai
-Ex-Hentai
-Facebook
-Gellbooru
-Hitomi.la
+Daum
+ExHentai
+Fakku
+GoogleImage
+Hitomi
+Hiyobi
 Imgur
 Instagram
-Naver Blog
-Pixiv
-...
+Manamoa
+Namuwiki
+Nozomi
+Pixabay
+Reddit
+Rule34
+SMPeople
+Tistory
+Twitter
+```
+
+## Thanks
+
+```
+dotnet: https://dotnet.microsoft.com/
+youtube-dl: https://github.com/ytdl-org/youtube-dl
+pixivpy: https://github.com/upbit/pixivpy
+Pixeez: https://github.com/cucmberium/Pixeez
+ImageSharp: https://github.com/SixLabors/ImageSharp
+HtmlAgilityPack: https://html-agility-pack.net/
+Json.NET: https://www.newtonsoft.com/json
+FFmpeg: https://www.ffmpeg.org/
 ```

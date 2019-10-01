@@ -17,14 +17,6 @@ namespace Koromo_Copy.Framework.Extractor
 
     public class HitomiExtractorOption : IExtractorOption
     {
-        public enum ExtractorType
-        {
-            Images = 0, // Default
-            ArticleInformation = 1,
-        }
-
-        public ExtractorType Type;
-        public Action<string> PageReadCallback;
     }
 
     public class HitomiExtractor : ExtractorModel

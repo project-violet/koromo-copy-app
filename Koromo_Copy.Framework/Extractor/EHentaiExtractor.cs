@@ -59,8 +59,6 @@ namespace Koromo_Copy.Framework.Extractor
         }
 
         public ExtractorType Type;
-
-        public Action<string> PageReadCallback;
     }
 
     public class EHentaiExtractor : ExtractorModel

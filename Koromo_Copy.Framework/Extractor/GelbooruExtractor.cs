@@ -14,17 +14,8 @@ namespace Koromo_Copy.Framework.Extractor
 {
     public class GelbooruExtractorOption : IExtractorOption
     {
-        public enum ExtractorType
-        {
-            Images = 0, // Default
-        }
-
-        public ExtractorType Type;
-
         public int StartPage = 0;
         public int EndPage = int.MaxValue;
-
-        public Action<string> PageReadCallback;
     }
 
     public class GelbooruExtractor : ExtractorModel

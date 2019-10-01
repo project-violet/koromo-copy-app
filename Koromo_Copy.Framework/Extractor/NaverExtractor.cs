@@ -14,14 +14,6 @@ namespace Koromo_Copy.Framework.Extractor
 {
     public class NaverExtractorOption : IExtractorOption
     {
-        public enum ExtractorType
-        {
-            Images = 0, // Default
-            EpisodeImages = 1,
-            ComicIndex = 2,
-        }
-
-        public ExtractorType Type;
     }
 
     public class NaverExtractor : ExtractorModel

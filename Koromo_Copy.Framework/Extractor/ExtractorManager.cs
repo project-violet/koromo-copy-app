@@ -21,7 +21,21 @@ namespace Koromo_Copy.Framework.Extractor
 
     public class IExtractorOption
     {
+        public enum ExtractorType
+        {
+            Images = 0, // Default
+            Comments = 1,
+            GalleryInformation = 2,
+            ArticleInformation = 3,
+            EpisodeImages = 4,
+            ComicIndex = 5,
+            Works = 6,
+        }
+
+        public ExtractorType Type;
+
         public bool ExtractInformation { get; set; }
+        public Action<string> PageReadCallback;
     }
 
     public abstract class ExtractorModel
@@ -31,6 +45,7 @@ namespace Koromo_Copy.Framework.Extractor
         public string ExtractorInfo { get; protected set; }
 
         public abstract IExtractorOption RecommendOption(string url);
+        //public abstract ExtractorFileNameFormat RecommendFormat(IExtractorOption option);
         public abstract Tuple<List<NetTask>, object> Extract(string url, IExtractorOption option);
     }
 
@@ -38,6 +53,17 @@ namespace Koromo_Copy.Framework.Extractor
     {
         public Dictionary<string, string> Format { get; set; }
             = new Dictionary<string, string>();
+
+        /// <summary>
+        /// Path Formatting based on Python String Formatting Style
+        /// https://docs.python.org/2/library/stdtypes.html#string-formatting
+        /// </summary>
+        /// <param name="raw"></param>
+        /// <returns></returns>
+        public string Formatting(string raw)
+        {
+
+        }
 
         private static string crop(string pp)
         {

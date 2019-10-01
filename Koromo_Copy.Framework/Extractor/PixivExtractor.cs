@@ -20,13 +20,6 @@ namespace Koromo_Copy.Framework.Extractor
 {
     public class PixivExtractorOption : IExtractorOption
     {
-        public enum ExtractorType
-        {
-            Works = 0, // Default
-        }
-
-        public ExtractorType Type;
-        public Action<string> PageReadCallback;
     }
 
     public class PixivExtractor : ExtractorModel

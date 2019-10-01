@@ -105,15 +105,6 @@ namespace Koromo_Copy.Framework.Extractor
 
     public class DCInsideExtractorOption : IExtractorOption
     {
-        public enum ExtractorType
-        {
-            Images = 0, // Default
-            Comments = 1,
-            GalleryInformation= 2,
-            ArticleInformation = 3,
-        }
-
-        public ExtractorType Type;
     }
 
     public class DCInsideExtractor : ExtractorModel

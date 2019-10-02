@@ -3,6 +3,7 @@
 
 using Koromo_Copy.Framework.Network;
 using Koromo_Copy.Framework.Utils;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -45,12 +46,14 @@ namespace Koromo_Copy.Framework.Extractor
         public string ExtractorInfo { get; protected set; }
 
         public abstract IExtractorOption RecommendOption(string url);
-        //public abstract ExtractorFileNameFormat RecommendFormat(IExtractorOption option);
+        public abstract string RecommendFormat(IExtractorOption option);
         public abstract Tuple<List<NetTask>, object> Extract(string url, IExtractorOption option);
     }
 
+    [JsonObject(MemberSerialization.OptIn)]
     public class ExtractorFileNameFormat
     {
+        [JsonProperty]
         public Dictionary<string, string> Format { get; set; }
             = new Dictionary<string, string>();
 
@@ -62,7 +65,84 @@ namespace Koromo_Copy.Framework.Extractor
         /// <returns></returns>
         public string Formatting(string raw)
         {
+            var builder = new StringBuilder(raw.Length);
 
+            for (int i = 0; i < raw.Length; i++)
+            {
+                if (raw[i] == '%')
+                {
+                    i++;
+
+                    if (raw[i] == '%')
+                    {
+                        builder.Append('%');
+                        continue;
+                    }
+
+                    if (raw[i] != '(')
+                        throw new Exception("Filename formatting error! pos=" + i);
+                    
+                    var tokenb = new StringBuilder(10);
+
+                    for (; i < raw.Length; i++) 
+                    {
+                        if (raw[i] == ')')
+                        {
+                            i++;
+                            break;
+                        }
+                        
+                        tokenb.Append(raw[i]);
+                    }
+
+                    var token = tokenb.ToString().ToLower();
+                    var literal = "";
+
+                    if (Format.ContainsKey(token))
+                        literal = Format[token];
+                    else
+                        throw new Exception($"Error token {token} not found!");
+
+                    var pp = new StringBuilder(5);
+                    var type = 's';
+                    
+                    for (; i < raw.Length; i++)
+                    {
+                        if (char.IsLetter(raw[i]))
+                        {
+                            type = raw[i];
+                            break;
+                        }
+                        pp.Append(raw[i]);
+                    }
+
+                    var pptk = pp.ToString();
+
+                    if (type == 's')
+                    {
+                        if (pptk != "")
+                            builder.Append(literal.Substring(0, pptk.ToInt()));
+                        else
+                            builder.Append(literal.ToString());
+                    }
+                    else if (type == 'd')
+                    {
+                        builder.Append(literal.ToInt().ToString(pptk));
+                    }
+                    else if (type == 'x' || type == 'X')
+                    {
+                        builder.Append(literal.ToInt().ToString(type + pptk));
+                    }
+                    else if (type == 'f')
+                    {
+                        builder.Append(float.Parse(literal).ToString(pptk));
+                    }
+                }
+                else
+                    builder.Append(raw[i]);
+            }
+
+            return builder.ToString();
         }
 
         private static string crop(string pp)
@@ -153,6 +233,13 @@ namespace Koromo_Copy.Framework.Extractor
                     return em;
             }
             return null;
+        }
+
+        public void Formatting(ExtractorModel extractor, ref List<NetTask> tasks, IExtractorOption option)
+        {
+            var ff = extractor.RecommendFormat(option);
+            foreach (var task in tasks)
+                task.Filename = task.Format.Formatting(ff);
         }
     }
 }

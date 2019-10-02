@@ -77,6 +77,8 @@ namespace Koromo_Copy.Framework.Network
         public bool SaveFile { get; set; }
         [JsonProperty]
         public string Filename { get; set; }
+        [JsonProperty]
+        public ExtractorFileNameFormat Format { get; set; }
 
         /// <summary>
         /// Set if needing only string datas.

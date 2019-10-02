@@ -2,6 +2,14 @@
 
 `Koromo Copy` is a cross platform image/text/music downloader, crawler collection, and file management system.
 
+## Release Informations
+
+```
+Project Plan
+First Console Release: 2019-10-31
+First User Release: 2020-08-01
+```
+
 ## How to use?
 
 ## Documents

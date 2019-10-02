@@ -20,6 +20,7 @@ EHentai
 Gelbooru
 Naver
 Pixiv
+Hitomi
 ```
 
 ### Plan to support
@@ -32,7 +33,6 @@ Daum
 ExHentai
 Fakku
 GoogleImage
-Hitomi
 Hiyobi
 Imgur
 Instagram

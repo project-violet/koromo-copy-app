@@ -31,7 +31,7 @@ namespace Koromo_Copy.Framework.Network
             else if (content.SaveFile)
                 Log.Logs.Instance.Push("[NetField] Start download file... " + content.Url + " to " + content.Filename);
 
-            REDIRECTION:
+        REDIRECTION:
 
             interrupt.WaitOne();
 

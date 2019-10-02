@@ -84,8 +84,6 @@ namespace Koromo_Copy.Framework.Network
             if (use_emergency_thread)
                 thread_count += 1;
 
-            ServicePointManager.DefaultConnectionLimit = int.MaxValue;
-
             for (int i = 0; i < this.capacity; i++)
             {
                 interrupt.Add(new ManualResetEvent(false));

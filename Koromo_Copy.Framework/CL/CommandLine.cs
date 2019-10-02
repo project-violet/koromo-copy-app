@@ -250,7 +250,7 @@ namespace Koromo_Copy.Framework.CL
                     if (clcast != null)
                     {
                         field.Add(clcast.Option, Tuple.Create(m.Name, clcast));
-                        if (clcast.ShortOption != "")
+                        if (!string.IsNullOrEmpty(clcast.ShortOption))
                             field.Add(clcast.ShortOption, Tuple.Create(m.Name, clcast));
                     }
                 }

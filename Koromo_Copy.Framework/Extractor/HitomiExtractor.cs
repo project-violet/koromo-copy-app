@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using static Koromo_Copy.Framework.Extractor.IExtractorOption;
 
 namespace Koromo_Copy.Framework.Extractor
 {
@@ -32,6 +33,11 @@ namespace Koromo_Copy.Framework.Extractor
             return new HitomiExtractorOption { Type = HitomiExtractorOption.ExtractorType.Images };
         }
 
+        public override string RecommendFormat(IExtractorOption option)
+        {
+            throw new NotImplementedException();
+        }
+
         public override Tuple<List<NetTask>, object> Extract(string url, IExtractorOption option = null)
         {
             var match = ValidUrl.Match(url).Groups;
@@ -39,7 +45,7 @@ namespace Koromo_Copy.Framework.Extractor
             if (option == null)
                 option = RecommendOption(url);
 
-            if ((option as HitomiExtractorOption).Type == HitomiExtractorOption.ExtractorType.Images)
+            if (option.Type == ExtractorType.Images)
             {
                 var imgs = $"https://ltn.hitomi.la/galleries/{match["id"].Value}.js";
 

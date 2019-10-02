@@ -10,6 +10,7 @@ using System.Threading;
 using HtmlAgilityPack;
 using Koromo_Copy.Framework.Network;
 using Newtonsoft.Json;
+using static Koromo_Copy.Framework.Extractor.IExtractorOption;
 
 namespace Koromo_Copy.Framework.Extractor
 {
@@ -120,6 +121,11 @@ namespace Koromo_Copy.Framework.Extractor
             throw new NotImplementedException();
         }
 
+        public override string RecommendFormat(IExtractorOption option)
+        {
+            throw new NotImplementedException();
+        }
+
         public override Tuple<List<NetTask>, object> Extract(string url, IExtractorOption option = null)
         {
             var match = ValidUrl.Match(url).Groups;
@@ -144,7 +150,7 @@ namespace Koromo_Copy.Framework.Extractor
                     {
                         var article = ParseBoardView(html, match[2].Value != "");
 
-                        if ((option as DCInsideExtractorOption).Type == DCInsideExtractorOption.ExtractorType.Images && option.ExtractInformation == false)
+                        if (option.Type == ExtractorType.Images && option.ExtractInformation == false)
                         {
                             for (int i = 0; i < article.ImagesLink.Count; i++)
                             {
@@ -157,11 +163,11 @@ namespace Koromo_Copy.Framework.Extractor
 
                             return new Tuple<List<NetTask>, object>(result, article);
                         }
-                        else if ((option as DCInsideExtractorOption).Type == DCInsideExtractorOption.ExtractorType.ArticleInformation || option.ExtractInformation == true)
+                        else if (option.Type == ExtractorType.ArticleInformation || option.ExtractInformation == true)
                         {
                             return new Tuple<List<NetTask>, object>(null, article);
                         }
-                        else if ((option as DCInsideExtractorOption).Type == DCInsideExtractorOption.ExtractorType.Comments)
+                        else if (option.Type == ExtractorType.Comments)
                         {
                             var cc = new List<DCComment>();
                             var comments = GetComments(article, "1");
@@ -207,7 +213,7 @@ namespace Koromo_Copy.Framework.Extractor
                         else
                             gallery = ParseMinorGallery(html);
 
-                        if ((option as DCInsideExtractorOption).Type == DCInsideExtractorOption.ExtractorType.GalleryInformation || option.ExtractInformation == true)
+                        if (option.Type == ExtractorType.GalleryInformation || option.ExtractInformation == true)
                         {
                             return new Tuple<List<NetTask>, object>(null, gallery);
                         }
@@ -219,7 +225,7 @@ namespace Koromo_Copy.Framework.Extractor
                 }
                 catch (Exception e)
                 {
-                    Log.Logs.Instance.PushError("[DCInsideExtractor] Extract error - " + (option as DCInsideExtractorOption).Type.ToString() + " - " + e.Message + "\r\n" + e.StackTrace);
+                    Log.Logs.Instance.PushError("[DCInsideExtractor] Extract error - " + option.Type.ToString() + " - " + e.Message + "\r\n" + e.StackTrace);
                 }
             }
             else

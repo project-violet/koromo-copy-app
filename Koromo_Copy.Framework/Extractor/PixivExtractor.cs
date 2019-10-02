@@ -15,6 +15,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using static Koromo_Copy.Framework.Extractor.IExtractorOption;
 
 namespace Koromo_Copy.Framework.Extractor
 {
@@ -35,6 +36,11 @@ namespace Koromo_Copy.Framework.Extractor
             throw new NotImplementedException();
         }
 
+        public override string RecommendFormat(IExtractorOption option)
+        {
+            throw new NotImplementedException();
+        }
+
         public override Tuple<List<NetTask>, object> Extract(string url, IExtractorOption option = null)
         {
             if (!PixivAPI.Auth(Settings.Instance.Model.PixivSettings.Id, Settings.Instance.Model.PixivSettings.Password))
@@ -45,7 +51,7 @@ namespace Koromo_Copy.Framework.Extractor
             var match = ValidUrl.Match(url).Groups;
 
             if (option == null)
-                option = new PixivExtractorOption { Type = PixivExtractorOption.ExtractorType.Works };
+                option = new PixivExtractorOption { Type = ExtractorType.Works };
 
             if (match[1].Value.StartsWith("member") && option.ExtractInformation == false)
             {
@@ -68,7 +74,7 @@ namespace Koromo_Copy.Framework.Extractor
                     {
                         var ugoira_uri = $"https://www.pixiv.net/ajax/illust/{work.Id}/ugoira_meta";
 
-                        (option as PixivExtractorOption).PageReadCallback?.Invoke(ugoira_uri);
+                        option.PageReadCallback?.Invoke(ugoira_uri);
 
                         var ugoira_data = JToken.Parse(NetTools.DownloadString(ugoira_uri)).SelectToken("body").ToObject<PixivAPI.Ugoira>();
                         var task = NetTask.MakeDefault(ugoira_data.OriginalSource);

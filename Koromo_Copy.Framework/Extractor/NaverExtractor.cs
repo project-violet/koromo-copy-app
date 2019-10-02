@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using static Koromo_Copy.Framework.Extractor.IExtractorOption;
 
 namespace Koromo_Copy.Framework.Extractor
 {
@@ -53,6 +54,11 @@ namespace Koromo_Copy.Framework.Extractor
             return new NaverExtractorOption { Type = NaverExtractorOption.ExtractorType.Images };
         }
 
+        public override string RecommendFormat(IExtractorOption option)
+        {
+            throw new NotImplementedException();
+        }
+
         public override Tuple<List<NetTask>, object> Extract(string url, IExtractorOption option = null)
         {
             if (option == null)
@@ -62,7 +68,7 @@ namespace Koromo_Copy.Framework.Extractor
             //  Extract Webtoon
             //
 
-            if ((option as NaverExtractorOption).Type == NaverExtractorOption.ExtractorType.EpisodeImages)
+            if (option.Type == ExtractorType.EpisodeImages)
             {
                 var html = NetTools.DownloadString(url);
 

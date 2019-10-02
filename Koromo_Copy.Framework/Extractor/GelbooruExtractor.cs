@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
+using static Koromo_Copy.Framework.Extractor.IExtractorOption;
 
 namespace Koromo_Copy.Framework.Extractor
 {
@@ -31,12 +32,17 @@ namespace Koromo_Copy.Framework.Extractor
             throw new NotImplementedException();
         }
 
+        public override string RecommendFormat(IExtractorOption option)
+        {
+            throw new NotImplementedException();
+        }
+
         public override Tuple<List<NetTask>, object> Extract(string url, IExtractorOption option = null)
         {
             var match = ValidUrl.Match(url).Groups;
 
             if (option == null)
-                option = new GelbooruExtractorOption { Type = GelbooruExtractorOption.ExtractorType.Images };
+                option = new GelbooruExtractorOption { Type = ExtractorType.Images };
 
             var tags = match[1].Value;
             var result = new List<NetTask>();
@@ -46,7 +52,7 @@ namespace Koromo_Copy.Framework.Extractor
             {
                 var durl = "https://gelbooru.com/index.php?page=dapi&s=post&q=index&limit=100&tags=" + tags + "&pid=" + page.ToString();
 
-                (option as GelbooruExtractorOption).PageReadCallback?.Invoke(durl);
+                option.PageReadCallback?.Invoke(durl);
 
                 var data = NetTools.DownloadString(durl);
 

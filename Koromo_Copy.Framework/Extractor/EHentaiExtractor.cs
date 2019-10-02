@@ -52,13 +52,6 @@ namespace Koromo_Copy.Framework.Extractor
 
     public class EHentaiExtractorOption : IExtractorOption
     {
-        public enum ExtractorType
-        {
-            Images = 0, // Default
-            ArticleInformation = 1,
-        }
-
-        public ExtractorType Type;
     }
 
     public class EHentaiExtractor : ExtractorModel
@@ -72,6 +65,11 @@ namespace Koromo_Copy.Framework.Extractor
         public override IExtractorOption RecommendOption(string url)
         {
             return new EHentaiExtractorOption { Type = EHentaiExtractorOption.ExtractorType.Images };
+        }
+
+        public override string RecommendFormat(IExtractorOption option)
+        {
+            throw new NotImplementedException();
         }
 
         readonly static List<string> cookies = new List<string>()

@@ -1,6 +1,7 @@
 ﻿// This source code is a part of Koromo Copy Project.
 // Copyright (C) 2019. dc-koromo. Licensed under the MIT Licence.
 
+using Koromo_Copy.Framework.Extractor;
 using Koromo_Copy.Framework.Postprocessor;
 using Koromo_Copy.Framework.Setting;
 using Newtonsoft.Json;

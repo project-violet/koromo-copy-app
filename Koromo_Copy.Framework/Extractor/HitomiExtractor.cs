@@ -50,15 +50,20 @@ namespace Koromo_Copy.Framework.Extractor
                 var imgs = $"https://ltn.hitomi.la/galleries/{match["id"].Value}.js";
 
                 // download.js
-                var number_of_frontends = 2;
+                var number_of_frontends = 3;
                 var subdomain = Convert.ToChar(97 + (Convert.ToInt32(match["id"].Value.Last()) % number_of_frontends));
-                if (match["id"].Value.Last() == '1')
+                if (match["id"].Value.Last() == '0')
                     subdomain = 'a';
 
                 var arr = JArray.Parse(imgs.Substring(imgs.IndexOf('[')));
                 var img_urls = new List<string>();
                 foreach (var obj in arr)
-                    img_urls.Add($"https://{subdomain}a.hitomi.la/galleries/{match["id"].Value}/{obj.Value<string>("name")}");
+                {
+                    if (obj.Value<int>("haswebp") == 0)
+                        img_urls.Add($"https://{subdomain}a.hitomi.la/galleries/{match["id"].Value}/{obj.Value<string>("name")}");
+                    else
+                        img_urls.Add($"https://{subdomain}a.hitomi.la/webp/{match["id"].Value}/{obj.Value<string>("name")}.webp");
+                }
 
                 var result = new List<NetTask>();
                 foreach (var img in img_urls)

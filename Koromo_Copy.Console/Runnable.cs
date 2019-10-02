@@ -19,7 +19,7 @@ namespace Koromo_Copy.Console
     {
         [CommandLine("--help", CommandType.OPTION, Default = true)]
         public bool Help;
-        [CommandLine("-v", CommandType.OPTION, Default = true, Info = "Show version information.")]
+        [CommandLine("--version", CommandType.OPTION, ShortOption = "-v", Default = true, Info = "Show version information.")]
         public bool Version;
         [CommandLine("--dialog-mode", CommandType.OPTION, Info = "Run program with dialog mode.")]
         public bool DialogMode;
@@ -29,9 +29,9 @@ namespace Koromo_Copy.Console
         public string[] Test;
 #endif
 
-        [CommandLine("net", CommandType.OPTION, Info = "Multi-commands net.", Help = "use net <Others>")]
+        [CommandLine("--net", CommandType.OPTION, Info = "Multi-commands net.", Help = "use net <Others>")]
         public bool Net;
-        [CommandLine("extract", CommandType.OPTION, Info = "Multi-commands extractor.", Help = "use extract <Others>")]
+        [CommandLine("--extract", CommandType.OPTION, Info = "Multi-commands extractor.", Help = "use extract <Others>")]
         public bool Extract;
     }
 
@@ -40,7 +40,7 @@ namespace Koromo_Copy.Console
         public static void Start(string[] arguments)
         {
             var origin = arguments;
-            arguments = CommandLineUtil.InsertWeirdArguments<Options>(arguments, true, "extract");
+            arguments = CommandLineUtil.InsertWeirdArguments<Options>(arguments, true, "--extract");
             var option = CommandLineParser<Options>.Parse(arguments);
 
             //
@@ -52,7 +52,7 @@ namespace Koromo_Copy.Console
             }
             else if (option.Extract)
             {
-                ExtractConsole.Start(origin.ToList().Where(x => x != "extract").ToArray());
+                ExtractConsole.Start(origin.ToList().Where(x => x != "--extract").ToArray());
             }
             //
             //  Single Commands
@@ -101,10 +101,13 @@ namespace Koromo_Copy.Console
             CommandLineParser<Options>.GetFields().ToList().ForEach(
                 x =>
                 {
+                    var key = x.Key;
+                    if (x.Value.Item2.ShortOption != "")
+                        key += $" ({x.Value.Item2.ShortOption})";
                     if (!string.IsNullOrEmpty(x.Value.Item2.Info))
-                        builder.Append($" {x.Key} : {x.Value.Item2.Info} [{x.Value.Item2.Help}]\r\n");
+                        builder.Append($" {key} : {x.Value.Item2.Info} [{x.Value.Item2.Help}]\r\n");
                     else
-                        builder.Append($" {x.Key} [{x.Value.Item2.Help}]\r\n");
+                        builder.Append($" {key} [{x.Value.Item2.Help}]\r\n");
                 });
             System.Console.Write(builder.ToString());
         }

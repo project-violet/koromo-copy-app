@@ -61,6 +61,11 @@ namespace Koromo_Copy.Framework.CL
         public int ArgumentsCount { get; set; } = 1;
 
         /// <summary>
+        /// One character option
+        /// </summary>
+        public string ShortOption { get; set; }
+
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="option">Option token.</param>
@@ -243,7 +248,11 @@ namespace Koromo_Copy.Framework.CL
                 {
                     var clcast = cl as CommandLine;
                     if (clcast != null)
+                    {
                         field.Add(clcast.Option, Tuple.Create(m.Name, clcast));
+                        if (clcast.ShortOption != "")
+                            field.Add(clcast.ShortOption, Tuple.Create(m.Name, clcast));
+                    }
                 }
             }
 

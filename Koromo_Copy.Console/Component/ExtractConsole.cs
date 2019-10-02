@@ -21,15 +21,15 @@ namespace Koromo_Copy.Console.Component
         [CommandLine("--url", CommandType.ARGUMENTS, ArgumentsCount = 1,
             Info = "Set extracting target.", Help = "use --url <URL>")]
         public string[] Url;
-        [CommandLine("-o", CommandType.ARGUMENTS, ArgumentsCount = 1,
+        [CommandLine("--path-format", CommandType.ARGUMENTS, ShortOption = "-o", ArgumentsCount = 1,
             Info = "Set extracting file name format.", Help = "use -o <Output Format>")]
         public string[] PathFormat;
 
-        [CommandLine("-i", CommandType.OPTION, Info = "Extract information of url.", Help = "use -i")]
+        [CommandLine("--extract-info", CommandType.OPTION, ShortOption = "-i", Info = "Extract information of url.", Help = "use -i")]
         public bool ExtractInformation;
-        [CommandLine("-l", CommandType.OPTION, Info = "Extract just links.", Help = "use -l")]
+        [CommandLine("--extract-link", CommandType.OPTION, ShortOption = "-l", Info = "Extract just links.", Help = "use -l")]
         public bool ExtractLinks;
-        [CommandLine("-p", CommandType.OPTION, Info = "Print download processing.", Help = "use -p")]
+        [CommandLine("--print-process", CommandType.OPTION, ShortOption = "-p", Info = "Print download processing.", Help = "use -p")]
         public bool PrintProcess;
     }
 
@@ -75,10 +75,13 @@ namespace Koromo_Copy.Console.Component
             CommandLineParser<ExtractConsoleOption>.GetFields().ToList().ForEach(
                 x =>
                 {
+                    var key = x.Key;
+                    if (x.Value.Item2.ShortOption != "")
+                        key += $" ({x.Value.Item2.ShortOption})";
                     if (!string.IsNullOrEmpty(x.Value.Item2.Info))
-                        builder.Append($" {x.Key} : {x.Value.Item2.Info} [{x.Value.Item2.Help}]\r\n");
+                        builder.Append($" {key} : {x.Value.Item2.Info} [{x.Value.Item2.Help}]\r\n");
                     else
-                        builder.Append($" {x.Key} [{x.Value.Item2.Help}]\r\n");
+                        builder.Append($" {key} [{x.Value.Item2.Help}]\r\n");
                 });
             System.Console.WriteLine(builder.ToString());
         }
@@ -105,6 +108,11 @@ namespace Koromo_Copy.Console.Component
                     System.Console.WriteLine(extractor.ExtractorInfo);
                     return;
                 }
+            }
+            else
+            {
+                var extractor_name = extractor.GetType().Name;
+
             }
         }
     }

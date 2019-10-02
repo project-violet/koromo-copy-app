@@ -57,6 +57,35 @@ namespace Koromo_Copy.Framework.Extractor
         public Dictionary<string, string> Format { get; set; }
             = new Dictionary<string, string>();
 
+        static Dictionary<string, string> ShortTerm;
+
+        public ExtractorFileNameFormat()
+        {
+            if (ShortTerm == null)
+            {
+                ShortTerm = new Dictionary<string, string>();
+
+                Type type = typeof(ExtractorFileNameFormat);
+                PropertyInfo[] fields = type.GetProperties();
+
+                foreach (var p in fields)
+                {
+                    object[] attrs = p.GetCustomAttributes(false);
+
+                    foreach (var at in attrs)
+                    {
+                        var atcast = at as attr;
+                        if (atcast != null)
+                        {
+                            if (atcast.ShortOption != "")
+                                ShortTerm.Add(atcast.ShortOption, p.Name);
+                        }
+                    }
+                }
+
+            }
+        }
+
         /// <summary>
         /// Path Formatting based on Python String Formatting Style
         /// https://docs.python.org/2/library/stdtypes.html#string-formatting
@@ -96,10 +125,12 @@ namespace Koromo_Copy.Framework.Extractor
                     }
 
                     var token = tokenb.ToString().ToLower();
-                    var literal = "";
+                    string literal;
 
                     if (Format.ContainsKey(token))
                         literal = Format[token];
+                    else if (ShortTerm.ContainsKey(token) && Format.ContainsKey(ShortTerm[token]))
+                        literal = Format[ShortTerm[token]];
                     else
                         throw new Exception($"Error token {token} not found!");
 
@@ -181,6 +212,12 @@ namespace Koromo_Copy.Framework.Extractor
                 Format.Add(cc, value);
         }
 
+        [AttributeUsage(AttributeTargets.Property)]
+        class attr : Attribute
+        {
+            public string ShortOption { get; set; }
+        }
+
         public string Title { get { return check_getter(MethodBase.GetCurrentMethod().Name); } set { check_setter(MethodBase.GetCurrentMethod().Name, value); } }
         public string OriginalTitle { get { return check_getter(MethodBase.GetCurrentMethod().Name); } set { check_setter(MethodBase.GetCurrentMethod().Name, value); } }
         public string Id { get { return check_getter(MethodBase.GetCurrentMethod().Name); } set { check_setter(MethodBase.GetCurrentMethod().Name, value); } }
@@ -198,6 +235,9 @@ namespace Koromo_Copy.Framework.Extractor
         public string Season { get { return check_getter(MethodBase.GetCurrentMethod().Name); } set { check_setter(MethodBase.GetCurrentMethod().Name, value); } }
         public string Episode { get { return check_getter(MethodBase.GetCurrentMethod().Name); } set { check_setter(MethodBase.GetCurrentMethod().Name, value); } }
         public string EpisodeNumber { get { return check_getter(MethodBase.GetCurrentMethod().Name); } set { check_setter(MethodBase.GetCurrentMethod().Name, value); } }
+        [attr(ShortOption = "file")]
+        public string FilenameWithoutExtension { get { return check_getter(MethodBase.GetCurrentMethod().Name); } set { check_setter(MethodBase.GetCurrentMethod().Name, value); } }
+        [attr(ShortOption = "ext")]
         public string Extension { get { return check_getter(MethodBase.GetCurrentMethod().Name); } set { check_setter(MethodBase.GetCurrentMethod().Name, value); } }
         public string Url { get { return check_getter(MethodBase.GetCurrentMethod().Name); } set { check_setter(MethodBase.GetCurrentMethod().Name, value); } }
         public string License { get { return check_getter(MethodBase.GetCurrentMethod().Name); } set { check_setter(MethodBase.GetCurrentMethod().Name, value); } }

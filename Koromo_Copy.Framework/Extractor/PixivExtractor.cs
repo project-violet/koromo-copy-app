@@ -81,7 +81,9 @@ namespace Koromo_Copy.Framework.Extractor
                         task.Filename = ugoira_data.OriginalSource.Split('/').Last();
                         task.SaveFile = true;
                         task.Referer = url;
-                        task.PostProcess = new UgoiraPostprocessor { Frames = ugoira_data.Frames };
+                        var pptask = new PostprocessorTask();
+                        pptask.Postprocessor = new UgoiraPostprocessor { Frames = ugoira_data.Frames };
+                        task.PostProcess = pptask;
                         result.Add(task);
                     }
                 }

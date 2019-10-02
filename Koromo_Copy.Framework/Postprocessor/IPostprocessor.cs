@@ -14,8 +14,5 @@ namespace Koromo_Copy.Framework.Postprocessor
     public abstract class IPostprocessor
     {
         public abstract void Run(NetTask task);
-
-        public Action StartPostprocessor;
-        public Action CompletePostprocessor;
     }
 }

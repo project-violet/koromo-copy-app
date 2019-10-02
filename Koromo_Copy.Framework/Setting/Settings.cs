@@ -37,6 +37,11 @@ namespace Koromo_Copy.Framework.Setting
         public int ThreadCount;
 
         /// <summary>
+        /// Postprocessor Scheduler Thread Count
+        /// </summary>
+        public int PostprocessorThreadCount;
+
+        /// <summary>
         /// Provider Language
         /// </summary>
         public string Language;
@@ -79,13 +84,14 @@ namespace Koromo_Copy.Framework.Setting
                 {
                     Language = language,
                     ThreadCount = Environment.ProcessorCount,
+                    PostprocessorThreadCount = 3,
 
                     NetworkSettings = new SettingModel.NetworkSetting
                     {
                         TimeoutInfinite = false,
                         TimeoutMillisecond = 10000,
                         DownloadBufferSize = 131072,
-                        RetryCount = 10
+                        RetryCount = 10,
                     },
 
                     PixivSettings = new SettingModel.PixivSetting()

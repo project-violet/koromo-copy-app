@@ -180,7 +180,10 @@ namespace Koromo_Copy.Framework.Network
                         istream.Close();
 
                         if (content.PostProcess != null)
-                            content.PostProcess.Run(content);
+                        {
+                            content.PostProcess.DownloadTask = content;
+                            AppProvider.PPScheduler.Add(content.PostProcess);
+                        }
 
                         return;
                     }

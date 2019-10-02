@@ -4,10 +4,12 @@
 using Koromo_Copy.Framework.Cache;
 using Koromo_Copy.Framework.Log;
 using Koromo_Copy.Framework.Network;
+using Koromo_Copy.Framework.Postprocessor;
 using Koromo_Copy.Framework.Setting;
 using Koromo_Copy.Framework.Utils;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Runtime;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -23,6 +25,8 @@ namespace Koromo_Copy.Framework
             InstanceMonitor.Instances;
 
         public static NetScheduler Scheduler { get; set; }
+
+        public static PostprocessorScheduler PPScheduler { get; set; }
 
         public static bool Initialize()
         {
@@ -47,8 +51,14 @@ namespace Koromo_Copy.Framework
             RuntimeHelpers.PrepareConstrainedRegions();
             GCSettings.LatencyMode = GCLatencyMode.Batch;
 
+            // Extends Connteion Limit
+            ServicePointManager.DefaultConnectionLimit = int.MaxValue;
+
             // Initialize Scheduler
             Scheduler = new NetScheduler(Settings.Instance.Model.ThreadCount);
+
+            // Initialize Postprocessor Scheduler
+            PPScheduler = new PostprocessorScheduler(Settings.Instance.Model.PostprocessorThreadCount);
 
 
             Logs.Instance.Push("App provider starts.");

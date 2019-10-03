@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,6 +12,38 @@ namespace Koromo_Copy.Framework.Network
 {
     public class NetTools
     {
+        public static List<string> DownloadStrings(List<string> urls)
+        {
+            var interrupt = new ManualResetEvent(false);
+            var result = new string[urls.Count];
+            var count = urls.Count;
+            int iter = 0;
+
+            foreach (var url in urls)
+            {
+                var itertmp = iter;
+                var task = NetTask.MakeDefault(url);
+                task.DownloadString = true;
+                task.CompleteCallbackString = (str) =>
+                {
+                    result[itertmp] = str;
+                    if (Interlocked.Decrement(ref count) == 0)
+                        interrupt.Set();
+                };
+                task.ErrorCallback = (int code) =>
+                {
+                    if (Interlocked.Decrement(ref count) == 0)
+                        interrupt.Set();
+                };
+                AppProvider.Scheduler.Add(task);
+                iter++;
+            }
+
+            interrupt.WaitOne();
+
+            return result.ToList();
+        }
+
         public static string DownloadString(string url)
         {
             return DownloadStringAsync(NetTask.MakeDefault(url)).Result;

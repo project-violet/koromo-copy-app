@@ -167,6 +167,11 @@ namespace Koromo_Copy.Framework.Extractor
 
                         if (option.Type == ExtractorType.Images && option.ExtractInformation == false)
                         {
+                            if (article.ImagesLink == null || article.ImagesLink.Count == 0)
+                            {
+                                throw new Exception("Nothing to download!");
+                            }
+
                             for (int i = 0; i < article.ImagesLink.Count; i++)
                             {
                                 var task = NetTask.MakeDefault(article.ImagesLink[i]);

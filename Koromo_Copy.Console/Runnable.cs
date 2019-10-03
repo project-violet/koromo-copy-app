@@ -22,9 +22,9 @@ namespace Koromo_Copy.Console
 {
     public class Options : IConsoleOption
     {
-        [CommandLine("--help", CommandType.OPTION, Default = true)]
+        [CommandLine("--help", CommandType.OPTION)]
         public bool Help;
-        [CommandLine("--version", CommandType.OPTION, ShortOption = "-v", Default = true, Info = "Show version information.")]
+        [CommandLine("--version", CommandType.OPTION, ShortOption = "-v", Info = "Show version information.")]
         public bool Version;
         [CommandLine("--dialog-mode", CommandType.OPTION, Info = "Run program with dialog mode.")]
         public bool DialogMode;
@@ -53,6 +53,11 @@ namespace Koromo_Copy.Console
         public bool ExtractLinks;
         [CommandLine("--print-process", CommandType.OPTION, ShortOption = "-p", Info = "Print download processing.", Help = "use -p")]
         public bool PrintProcess;
+
+        [CommandLine("--page-start", CommandType.OPTION, Info = "Specify a start page when crawling a multi-page bulletin board.", Help = "use --page-start <Number>")]
+        public string[] PageStart;
+        [CommandLine("--page-end", CommandType.OPTION, Info = "Specify a end page when crawling a multi-page bulletin board.", Help = "use --page-end <Number>")]
+        public string[] PageEnd;
     }
 
     public class Runnable
@@ -111,6 +116,11 @@ namespace Koromo_Copy.Console
 
                 ProcessExtract(option.Url[0], option.PathFormat, option.ExtractInformation, option.ExtractLinks, option.PrintProcess);
             }
+            else
+            {
+                System.Console.WriteLine("Nothing to work on.");
+                System.Console.WriteLine("Enter './Koromo_Copy.Console --help' to get more information");
+            }
 
             return;
         }
@@ -128,12 +138,17 @@ namespace Koromo_Copy.Console
                 x =>
                 {
                     var key = x.Key;
-                    if (x.Value.Item2.ShortOption != "")
-                        key += $" ({x.Value.Item2.ShortOption})";
+                    if (!key.StartsWith("--"))
+                        return;
+                    if (!string.IsNullOrEmpty(x.Value.Item2.ShortOption))
+                        key = $"{x.Value.Item2.ShortOption}, " + key;
+                    var help = "";
+                    if (!string.IsNullOrEmpty(x.Value.Item2.Help))
+                        help = $"[{x.Value.Item2.Help}]";
                     if (!string.IsNullOrEmpty(x.Value.Item2.Info))
-                        builder.Append($" {key} : {x.Value.Item2.Info} [{x.Value.Item2.Help}]\r\n");
+                        builder.Append($"   {key}".PadRight(30) + $" {x.Value.Item2.Info} {help}\r\n");
                     else
-                        builder.Append($" {key} [{x.Value.Item2.Help}]\r\n");
+                        builder.Append($"   {key}".PadRight(30) + $" {help}\r\n");
                 });
             System.Console.Write(builder.ToString());
         }
@@ -314,11 +329,9 @@ namespace Koromo_Copy.Console
                     if (PrintProcess)
                     {
                         Logs.Instance.AddLogNotify((s, e) => {
-                            lock (Logs.Instance.Log)
-                            {
-                                CultureInfo en = new CultureInfo("en-US");
-                                System.Console.Error.WriteLine($"[{Logs.Instance.Log.Last().Item1.ToString(en)}] {Logs.Instance.Log.Last().Item2}");
-                            }
+                            var tuple = s as Tuple<DateTime, string, bool>;
+                            CultureInfo en = new CultureInfo("en-US");
+                            System.Console.WriteLine($"[{tuple.Item1.ToString(en)}] {tuple.Item2}");
                         });
                     }
 

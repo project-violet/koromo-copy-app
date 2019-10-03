@@ -50,15 +50,10 @@ namespace Koromo_Copy.Framework.Log
             }
         }
 
-        public delegate void NotifyEvent(object sender, NotifyCollectionChangedEventArgs e);
-        public ObservableCollection<Tuple<DateTime, string, bool>> Log { get; } = new ObservableCollection<Tuple<DateTime, string, bool>>();
-        public ObservableCollection<Tuple<DateTime, string, bool>> LogError { get; } = new ObservableCollection<Tuple<DateTime, string, bool>>();
-
-        public Logs()
-        {
-            AddLogNotify(Logs_Notify);
-            AddLogErrorNotify(LogsError_Notify);
-        }
+        public delegate void NotifyEvent(object sender, EventArgs e);
+        event EventHandler LogCollectionChange;
+        event EventHandler LogErrorCollectionChange;
+        object event_lock = new object();
 
         /// <summary>
         /// Attach your own notify event.
@@ -66,7 +61,7 @@ namespace Koromo_Copy.Framework.Log
         /// <param name="notify_event"></param>
         public void AddLogNotify(NotifyEvent notify_event)
         {
-            Log.CollectionChanged += new NotifyCollectionChangedEventHandler(notify_event);
+            LogCollectionChange += new EventHandler(notify_event);
         }
 
         /// <summary>
@@ -75,7 +70,7 @@ namespace Koromo_Copy.Framework.Log
         /// <param name="notify_event"></param>
         public void AddLogErrorNotify(NotifyEvent notify_event)
         {
-            LogError.CollectionChanged += new NotifyCollectionChangedEventHandler(notify_event);
+            LogErrorCollectionChange += new EventHandler(notify_event);
         }
 
         /// <summary>
@@ -84,10 +79,8 @@ namespace Koromo_Copy.Framework.Log
         /// <param name="str"></param>
         public void Push(string str)
         {
-            lock (Log)
-            {
-                Log.Add(Tuple.Create(DateTime.Now, str, false));
-            }
+            write_log(DateTime.Now, str);
+            lock (event_lock) LogCollectionChange?.Invoke(Tuple.Create(DateTime.Now, str, false), null);
         }
 
         /// <summary>
@@ -96,11 +89,10 @@ namespace Koromo_Copy.Framework.Log
         /// <param name="obj"></param>
         public void Push(object obj)
         {
-            lock (Log)
-            {
-                Log.Add(Tuple.Create(DateTime.Now, obj.ToString(), false));
-                Log.Add(Tuple.Create(DateTime.Now, SerializeObject(obj), true));
-            }
+            write_log(DateTime.Now, obj.ToString());
+            write_log(DateTime.Now, SerializeObject(obj));
+            lock (event_lock) LogCollectionChange?.Invoke(Tuple.Create(DateTime.Now, obj.ToString(), false), null);
+            lock (event_lock) LogCollectionChange?.Invoke(Tuple.Create(DateTime.Now, SerializeObject(obj), true), null);
         }
 
         /// <summary>
@@ -109,10 +101,8 @@ namespace Koromo_Copy.Framework.Log
         /// <param name="str"></param>
         public void PushError(string str)
         {
-            lock (Log)
-            {
-                LogError.Add(Tuple.Create(DateTime.Now, str, false));
-            }
+            write_error_log(DateTime.Now, str);
+            lock (event_lock) LogErrorCollectionChange?.Invoke(Tuple.Create(DateTime.Now, str, false), null);
         }
 
         /// <summary>
@@ -121,28 +111,29 @@ namespace Koromo_Copy.Framework.Log
         /// <param name="obj"></param>
         public void PushError(object obj)
         {
-            lock (Log)
+            write_error_log(DateTime.Now, obj.ToString());
+            write_error_log(DateTime.Now, SerializeObject(obj));
+            lock (event_lock) LogErrorCollectionChange?.Invoke(Tuple.Create(DateTime.Now, obj.ToString(), false), null);
+            lock (event_lock) LogErrorCollectionChange?.Invoke(Tuple.Create(DateTime.Now, SerializeObject(obj), true), null);
+        }
+
+        object log_lock = new object();
+
+        private void write_log(DateTime dt, string message)
+        {
+            CultureInfo en = new CultureInfo("en-US");
+            lock (log_lock)
             {
-                LogError.Add(Tuple.Create(DateTime.Now, obj.ToString(), false));
-                LogError.Add(Tuple.Create(DateTime.Now, SerializeObject(obj), true));
+                File.AppendAllText("log.txt", $"[{dt.ToString(en)}] {message}\r\n");
             }
         }
 
-        private void Logs_Notify(object sender, NotifyCollectionChangedEventArgs e)
+        private void write_error_log(DateTime dt, string message)
         {
-            lock (Log)
+            CultureInfo en = new CultureInfo("en-US");
+            lock (log_lock)
             {
-                CultureInfo en = new CultureInfo("en-US");
-                File.AppendAllText("log.txt", $"[{Log.Last().Item1.ToString(en)}] {Log.Last().Item2}\r\n");
-            }
-        }
-
-        private void LogsError_Notify(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            lock (Log)
-            {
-                CultureInfo en = new CultureInfo("en-US");
-                File.AppendAllText("log.txt", $"[{LogError.Last().Item1.ToString(en)}] [Error] {LogError.Last().Item2}\r\n");
+                File.AppendAllText("log.txt", $"[{dt.ToString(en)}] [Error] {message}\r\n");
             }
         }
     }

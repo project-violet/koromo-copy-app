@@ -152,7 +152,7 @@ namespace Koromo_Copy.Framework.Extractor
                     {
                         Title = data.Title,
                         FilenameWithoutExtension = Path.GetFileNameWithoutExtension(tt.Filename),
-                        Extension = Path.GetExtension(tt.Filename),
+                        Extension = Path.GetExtension(tt.Filename).Replace(".", ""),
                         OriginalTitle = data.SubTitle,
                         Artist = artist,
                         Group = group,

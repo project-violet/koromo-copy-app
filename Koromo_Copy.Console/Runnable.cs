@@ -107,6 +107,17 @@ namespace Koromo_Copy.Console
                 ProcessTest(option.Test);
             }
 #endif
+            else if (option.ListExtractor)
+            {
+                foreach (var extractor in ExtractorManager.Extractors)
+                {
+                    System.Console.WriteLine($"[{extractor.GetType().Name}]");
+                    System.Console.WriteLine($"[HostName] {extractor.HostName}");
+                    System.Console.WriteLine($"[Checker] {extractor.ValidUrl}");
+                    System.Console.WriteLine($"[Information] {extractor.ExtractorInfo}");
+                    System.Console.WriteLine($"");
+                }
+            }
             else if (option.Url != null)
             {
                 if (!(option.Url[0].StartsWith("https://") || option.Url[0].StartsWith("http://")))

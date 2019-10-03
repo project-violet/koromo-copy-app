@@ -6,12 +6,17 @@ using Koromo_Copy.Framework;
 using Koromo_Copy.Framework.CL;
 using Koromo_Copy.Framework.Crypto;
 using Koromo_Copy.Framework.Extractor;
+using Koromo_Copy.Framework.Log;
 using Koromo_Copy.Framework.Network;
+using Koromo_Copy.Framework.Setting;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using Version = Koromo_Copy.Framework.Version;
 
 namespace Koromo_Copy.Console
 {
@@ -31,8 +36,23 @@ namespace Koromo_Copy.Console
 
         [CommandLine("--net", CommandType.OPTION, Info = "Multi-commands net.", Help = "use --net <Others>")]
         public bool Net;
-        [CommandLine("--extract", CommandType.OPTION, ShortOption = "-e", Info = "Multi-commands extractor.", Help = "use --extract <Others>")]
-        public bool Extract;
+
+        [CommandLine("--list-extractor", CommandType.OPTION, Info = "Enumerate all implemented extractor.")]
+        public bool ListExtractor;
+
+        [CommandLine("--url", CommandType.ARGUMENTS, ArgumentsCount = 1,
+            Info = "Set extracting target.", Help = "use --url <URL>")]
+        public string[] Url;
+        [CommandLine("--path-format", CommandType.ARGUMENTS, ShortOption = "-o", ArgumentsCount = 1,
+            Info = "Set extracting file name format.", Help = "use -o <Output Format>")]
+        public string[] PathFormat;
+
+        [CommandLine("--extract-info", CommandType.OPTION, ShortOption = "-i", Info = "Extract information of url.", Help = "use -i")]
+        public bool ExtractInformation;
+        [CommandLine("--extract-link", CommandType.OPTION, ShortOption = "-l", Info = "Extract just links.", Help = "use -l")]
+        public bool ExtractLinks;
+        [CommandLine("--print-process", CommandType.OPTION, ShortOption = "-p", Info = "Print download processing.", Help = "use -p")]
+        public bool PrintProcess;
     }
 
     public class Runnable
@@ -40,7 +60,8 @@ namespace Koromo_Copy.Console
         public static void Start(string[] arguments)
         {
             var origin = arguments;
-            arguments = CommandLineUtil.InsertWeirdArguments<Options>(arguments, true, "--extract");
+            arguments = CommandLineUtil.SplitCombinedOptions(arguments);
+            arguments = CommandLineUtil.InsertWeirdArguments<Options>(arguments, true, "--url");
             var option = CommandLineParser<Options>.Parse(arguments);
 
             //
@@ -49,10 +70,6 @@ namespace Koromo_Copy.Console
             if (option.Net)
             {
                 NetConsole.Start(origin.Skip(1).ToArray());
-            }
-            else if (option.Extract)
-            {
-                ExtractConsole.Start(origin.ToList().Where(x => x != "--extract").ToArray());
             }
             //
             //  Single Commands
@@ -85,6 +102,15 @@ namespace Koromo_Copy.Console
                 ProcessTest(option.Test);
             }
 #endif
+            else if (option.Url != null)
+            {
+                if (!(option.Url[0].StartsWith("https://") || option.Url[0].StartsWith("http://")))
+                {
+                    System.Console.WriteLine($"'{option.Url[0]}' is not correct url format or not supported scheme.");
+                }
+
+                ProcessExtract(option.Url[0], option.PathFormat, option.ExtractInformation, option.ExtractLinks, option.PrintProcess);
+            }
 
             return;
         }
@@ -257,6 +283,94 @@ namespace Koromo_Copy.Console
             }
         }
 #endif
+
+        static void ProcessExtract(string url, string[] PathFormat, bool ExtractInformation, bool ExtractLinks, bool PrintProcess)
+        {
+            var extractor = ExtractorManager.Instance.GetExtractor(url);
+
+            if (extractor == null)
+            {
+                extractor = ExtractorManager.Instance.GetExtractorFromHostName(url);
+
+                if (extractor == null)
+                {
+                    System.Console.WriteLine($"[Error] Cannot find a suitable extractor for '{url}'.");
+                    return;
+                }
+                else
+                {
+                    System.Console.WriteLine("[Warning] Found an extractor for that url, but the url is not in the proper format to continue.");
+                    System.Console.WriteLine("[Warning] Please refer to the following for proper conversion.");
+                    System.Console.WriteLine($"[Input URL] {url}");
+                    System.Console.WriteLine($"[Extractor Name] {extractor.GetType().Name}");
+                    System.Console.WriteLine(extractor.ExtractorInfo);
+                    return;
+                }
+            }
+            else
+            {
+                try
+                {
+                    if (PrintProcess)
+                    {
+                        Logs.Instance.AddLogNotify((s, e) => {
+                            lock (Logs.Instance.Log)
+                            {
+                                CultureInfo en = new CultureInfo("en-US");
+                                System.Console.Error.WriteLine($"[{Logs.Instance.Log.Last().Item1.ToString(en)}] {Logs.Instance.Log.Last().Item2}");
+                            }
+                        });
+                    }
+
+                    var tasks = extractor.Extract(url, null);
+
+                    if (ExtractLinks)
+                    {
+                        foreach (var uu in tasks.Item1)
+                            System.Console.WriteLine(uu.Url);
+                        return;
+                    }
+
+                    var option = extractor.RecommendOption(url);
+                    string format;
+
+                    if (PathFormat != null)
+                        format = PathFormat[0];
+                    else
+                        format = extractor.RecommendFormat(option);
+
+                    if (ExtractInformation)
+                    {
+                        System.Console.WriteLine($"[Input URL] {url}");
+                        System.Console.WriteLine($"[Extractor Name] {extractor.GetType().Name}");
+                        System.Console.WriteLine($"[Information] {extractor.ExtractorInfo}");
+                        System.Console.WriteLine($"[Format] {format}");
+                        return;
+                    }
+
+                    int task_count = tasks.Item1.Count;
+                    tasks.Item1.ForEach(task => {
+                        task.Filename = Path.Combine(Settings.Instance.Model.SuperPath, task.Format.Formatting(format));
+                        if (!Directory.Exists(Path.GetDirectoryName(task.Filename)))
+                            Directory.CreateDirectory(Path.GetDirectoryName(task.Filename));
+                        task.CompleteCallback = () =>
+                        {
+                            Interlocked.Decrement(ref task_count);
+                        };
+                    });
+                    tasks.Item1.ForEach(task => AppProvider.Scheduler.Add(task));
+
+                    while (task_count != 0)
+                    {
+                        Thread.Sleep(500);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Logs.Instance.PushError("[Extractor] Unhandled Exception - " + e.Message + "\r\n" + e.StackTrace);
+                }
+            }
+        }
     }
 
 }

@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -113,17 +114,31 @@ namespace Koromo_Copy.Framework.Extractor
         public DCInsideExtractor()
         {
             HostName = new Regex(@"(gall|m)\.dcinside\.com");
-            ValidUrl = new Regex(@"^https?://(gall|m)\.dcinside\.com/(mgallery/)?board/(lists|view)\?(.*?)$");
+            ValidUrl = new Regex(@"^https?://(gall|m)\.dcinside\.com/(mgallery/)?board/(lists|view)/?\?(.*?)$");
         }
 
         public override IExtractorOption RecommendOption(string url)
         {
-            throw new NotImplementedException();
+            var match = ValidUrl.Match(url).Groups;
+
+            if (match[1].Value == "gall")
+            {
+                if (match[3].Value == "view")
+                {
+                    return new DCInsideExtractorOption { Type = ExtractorType.Images };
+                }
+                else if (match[3].Value == "lists")
+                {
+                    return new DCInsideExtractorOption { Type = ExtractorType.ArticleInformation };
+                }
+            }
+
+            return new DCInsideExtractorOption { Type = ExtractorType.Images };
         }
 
         public override string RecommendFormat(IExtractorOption option)
         {
-            throw new NotImplementedException();
+            return "%(gallery)s/%(title)s/%(file)s.%(ext)s";
         }
 
         public override Tuple<List<NetTask>, object> Extract(string url, IExtractorOption option = null)
@@ -136,7 +151,7 @@ namespace Koromo_Copy.Framework.Extractor
                 return new Tuple<List<NetTask>, object> (result, null);
 
             if (option == null)
-                option = new DCInsideExtractorOption { Type = DCInsideExtractorOption.ExtractorType.Images };
+                option = new DCInsideExtractorOption { Type = ExtractorType.Images };
 
             if (match[1].Value == "gall")
             {
@@ -158,6 +173,14 @@ namespace Koromo_Copy.Framework.Extractor
                                 task.Filename = article.FilesName[i];
                                 task.SaveFile = true;
                                 task.Referer = url;
+                                task.Format = new ExtractorFileNameFormat
+                                {
+                                    Id = article.Id,
+                                    Gallery = article.GalleryName,
+                                    Title = article.Title,
+                                    FilenameWithoutExtension = Path.GetFileNameWithoutExtension(article.FilesName[i]),
+                                    Extension = Path.GetExtension(article.FilesName[i]),
+                                };
                                 result.Add(task);
                             }
 

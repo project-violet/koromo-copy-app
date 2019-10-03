@@ -28,6 +28,8 @@ namespace Koromo_Copy.Framework.Postprocessor
 
         private void ugoira2gif(NetTask task)
         {
+            Log.Logs.Instance.Push("[Postprocessor] Start ugoira to gif... " + task.Filename);
+
             using (var file = File.OpenRead(task.Filename))
             using (var zip = new ZipArchive(file, ZipArchiveMode.Read))
             using (var entry = zip.GetEntry(Frames[0].File).Open())
@@ -49,7 +51,6 @@ namespace Koromo_Copy.Framework.Postprocessor
             }
 
             File.Delete(task.Filename);
-            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
         }
 
         private void ugoira2webp(NetTask task)

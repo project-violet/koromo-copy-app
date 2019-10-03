@@ -147,5 +147,6 @@ namespace Koromo_Copy.Framework.Network
         /* Post Processor */
 
         public PostprocessorTask PostProcess;
+        public Action StartPostprocessorCallback;
     }
 }

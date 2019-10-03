@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -173,7 +174,12 @@ namespace Koromo_Copy.Framework.Extractor
                     builder.Append(raw[i]);
             }
 
-            return builder.ToString();
+            var result = builder.ToString().Replace('|', 'ㅣ');
+
+            var invalid = new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars());
+            foreach (char c in invalid) if (c != '/' && c!= '\\') result = result.Replace(c.ToString(), "");
+
+            return result;
         }
 
         private static string crop(string pp)
@@ -221,6 +227,7 @@ namespace Koromo_Copy.Framework.Extractor
         public string Title { get { return check_getter(MethodBase.GetCurrentMethod().Name); } set { check_setter(MethodBase.GetCurrentMethod().Name, value); } }
         public string OriginalTitle { get { return check_getter(MethodBase.GetCurrentMethod().Name); } set { check_setter(MethodBase.GetCurrentMethod().Name, value); } }
         public string Id { get { return check_getter(MethodBase.GetCurrentMethod().Name); } set { check_setter(MethodBase.GetCurrentMethod().Name, value); } }
+        public string Account { get { return check_getter(MethodBase.GetCurrentMethod().Name); } set { check_setter(MethodBase.GetCurrentMethod().Name, value); } }
         public string Author { get { return check_getter(MethodBase.GetCurrentMethod().Name); } set { check_setter(MethodBase.GetCurrentMethod().Name, value); } }
         public string EnglishAuthor { get { return check_getter(MethodBase.GetCurrentMethod().Name); } set { check_setter(MethodBase.GetCurrentMethod().Name, value); } }
         public string Artist { get { return check_getter(MethodBase.GetCurrentMethod().Name); } set { check_setter(MethodBase.GetCurrentMethod().Name, value); } }
@@ -243,6 +250,7 @@ namespace Koromo_Copy.Framework.Extractor
         public string Url { get { return check_getter(MethodBase.GetCurrentMethod().Name); } set { check_setter(MethodBase.GetCurrentMethod().Name, value); } }
         public string License { get { return check_getter(MethodBase.GetCurrentMethod().Name); } set { check_setter(MethodBase.GetCurrentMethod().Name, value); } }
         public string Genre { get { return check_getter(MethodBase.GetCurrentMethod().Name); } set { check_setter(MethodBase.GetCurrentMethod().Name, value); } }
+        public string Language { get { return check_getter(MethodBase.GetCurrentMethod().Name); } set { check_setter(MethodBase.GetCurrentMethod().Name, value); } }
     }
 
     public class ExtractorManager : ILazy<ExtractorManager>
@@ -253,7 +261,8 @@ namespace Koromo_Copy.Framework.Extractor
             new PixivExtractor(),
             new GelbooruExtractor(),
             new NaverExtractor(),
-            new EHentaiExtractor()
+            new EHentaiExtractor(),
+            new HitomiExtractor(),
         };
 
         public ExtractorModel GetExtractor(string url)

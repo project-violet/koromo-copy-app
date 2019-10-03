@@ -181,6 +181,12 @@ namespace Koromo_Copy.Framework.Network
 
                         if (content.PostProcess != null)
                         {
+                            interrupt.WaitOne();
+
+                            content.StartPostprocessorCallback?.Invoke();
+
+                            interrupt.WaitOne();
+
                             content.PostProcess.DownloadTask = content;
                             AppProvider.PPScheduler.Add(content.PostProcess);
                         }
@@ -204,8 +210,11 @@ namespace Koromo_Copy.Framework.Network
                     }
                 }
 
-                Log.Logs.Instance.PushError("[NetField] Web Excpetion - " + e.Message + "\r\n" + e.StackTrace);
-                Log.Logs.Instance.PushError(content);
+                lock (Log.Logs.Instance)
+                {
+                    Log.Logs.Instance.PushError("[NetField] Web Excpetion - " + e.Message + "\r\n" + e.StackTrace);
+                    Log.Logs.Instance.PushError(content);
+                }
 
                 if ((response != null && (
                     response.StatusCode == HttpStatusCode.NotFound ||
@@ -224,8 +233,11 @@ namespace Koromo_Copy.Framework.Network
 
                     if (e.Status == WebExceptionStatus.UnknownError)
                     {
-                        Log.Logs.Instance.PushError("[NetField] Check your Firewall, Router or DPI settings.");
-                        Log.Logs.Instance.PushError("[NetField] If you continue to receive this error, please contact developer.");
+                        lock (Log.Logs.Instance)
+                        {
+                            Log.Logs.Instance.PushError("[NetField] Check your Firewall, Router or DPI settings.");
+                            Log.Logs.Instance.PushError("[NetField] If you continue to receive this error, please contact developer.");
+                        }
                     }
 
                     return;
@@ -233,8 +245,11 @@ namespace Koromo_Copy.Framework.Network
             }
             catch (UriFormatException e)
             {
-                Log.Logs.Instance.PushError("[NetField] URI Exception - " + e.Message + "\r\n" + e.StackTrace);
-                Log.Logs.Instance.PushError(content);
+                lock (Log.Logs.Instance)
+                {
+                    Log.Logs.Instance.PushError("[NetField] URI Exception - " + e.Message + "\r\n" + e.StackTrace);
+                    Log.Logs.Instance.PushError(content);
+                }
 
                 //
                 //  Cannot continue
@@ -245,8 +260,11 @@ namespace Koromo_Copy.Framework.Network
             }
             catch (Exception e)
             {
-                Log.Logs.Instance.PushError("[NetField] Unhandled Excpetion - " + e.Message + "\r\n" + e.StackTrace);
-                Log.Logs.Instance.PushError(content);
+                lock (Log.Logs.Instance)
+                {
+                    Log.Logs.Instance.PushError("[NetField] Unhandled Excpetion - " + e.Message + "\r\n" + e.StackTrace);
+                    Log.Logs.Instance.PushError(content);
+                }
             }
 
             //
@@ -268,8 +286,11 @@ namespace Koromo_Copy.Framework.Network
 
                     content.RetryCallback?.Invoke(retry_count);
 
-                    Log.Logs.Instance.Push($"[NetField] Retry [{retry_count}/{content.RetryCount}]");
-                    Log.Logs.Instance.Push(content);
+                    lock (Log.Logs.Instance)
+                    {
+                        Log.Logs.Instance.Push($"[NetField] Retry [{retry_count}/{content.RetryCount}]");
+                        Log.Logs.Instance.Push(content);
+                    }
                     goto RETRY_PROCEDURE;
                 }
 
@@ -277,8 +298,11 @@ namespace Koromo_Copy.Framework.Network
                 //  Many retry
                 //
 
-                Log.Logs.Instance.Push($"[NetField] Many Retry");
-                Log.Logs.Instance.Push(content);
+                lock (Log.Logs.Instance)
+                {
+                    Log.Logs.Instance.Push($"[NetField] Many Retry");
+                    Log.Logs.Instance.Push(content);
+                }
                 content.ErrorCallback?.Invoke(2);
             }
 

@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -33,12 +34,12 @@ namespace Koromo_Copy.Framework.Extractor
 
         public override IExtractorOption RecommendOption(string url)
         {
-            throw new NotImplementedException();
+            return new PixivExtractorOption { Type = ExtractorType.Works };
         }
 
         public override string RecommendFormat(IExtractorOption option)
         {
-            throw new NotImplementedException();
+            return "%(artist)s (%(account)s)/%(file)s.%(ext)s";
         }
 
         public override Tuple<List<NetTask>, object> Extract(string url, IExtractorOption option = null)
@@ -68,6 +69,14 @@ namespace Koromo_Copy.Framework.Extractor
                         task.Filename = work.ImageUrls.Large.Split('/').Last();
                         task.SaveFile = true;
                         task.Referer = url;
+                        task.Format = new ExtractorFileNameFormat
+                        {
+                            Artist = user[0].Name,
+                            Account = user[0].Account,
+                            Id = user[0].Id.Value.ToString(),
+                            FilenameWithoutExtension = Path.GetFileNameWithoutExtension(work.ImageUrls.Large.Split('/').Last()),
+                            Extension = Path.GetExtension(work.ImageUrls.Large.Split('/').Last()).Replace(".", "")
+                        };
                         result.Add(task);
                     }
                     else if (work.Type == "ugoira")
@@ -84,6 +93,14 @@ namespace Koromo_Copy.Framework.Extractor
                         var pptask = new PostprocessorTask();
                         pptask.Postprocessor = new UgoiraPostprocessor { Frames = ugoira_data.Frames };
                         task.PostProcess = pptask;
+                        task.Format = new ExtractorFileNameFormat
+                        {
+                            Artist = user[0].Name,
+                            Account = user[0].Account,
+                            Id = user[0].Id.Value.ToString(),
+                            FilenameWithoutExtension = Path.GetFileNameWithoutExtension(ugoira_data.OriginalSource.Split('/').Last()),
+                            Extension = Path.GetExtension(ugoira_data.OriginalSource.Split('/').Last()).Replace(".", "")
+                        };
                         result.Add(task);
                     }
                 }

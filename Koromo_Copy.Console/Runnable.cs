@@ -361,19 +361,14 @@ namespace Koromo_Copy.Console
                         return;
                     }
 
-                    int task_count = tasks.Item1.Count;
                     tasks.Item1.ForEach(task => {
                         task.Filename = Path.Combine(Settings.Instance.Model.SuperPath, task.Format.Formatting(format));
                         if (!Directory.Exists(Path.GetDirectoryName(task.Filename)))
                             Directory.CreateDirectory(Path.GetDirectoryName(task.Filename));
-                        task.CompleteCallback = () =>
-                        {
-                            Interlocked.Decrement(ref task_count);
-                        };
+                        AppProvider.Scheduler.Add(task);
                     });
-                    tasks.Item1.ForEach(task => AppProvider.Scheduler.Add(task));
 
-                    while (task_count != 0)
+                    while (AppProvider.Scheduler.busy_thread != 0 || AppProvider.PPScheduler.busy_thread != 0)
                     {
                         Thread.Sleep(500);
                     }

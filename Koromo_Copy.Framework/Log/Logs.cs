@@ -91,8 +91,11 @@ namespace Koromo_Copy.Framework.Log
         {
             write_log(DateTime.Now, obj.ToString());
             write_log(DateTime.Now, SerializeObject(obj));
-            lock (event_lock) LogCollectionChange?.Invoke(Tuple.Create(DateTime.Now, obj.ToString(), false), null);
-            lock (event_lock) LogCollectionChange?.Invoke(Tuple.Create(DateTime.Now, SerializeObject(obj), true), null);
+            lock (event_lock)
+            {
+                LogCollectionChange?.Invoke(Tuple.Create(DateTime.Now, obj.ToString(), false), null);
+                LogCollectionChange?.Invoke(Tuple.Create(DateTime.Now, SerializeObject(obj), true), null);
+            }
         }
 
         /// <summary>
@@ -113,8 +116,11 @@ namespace Koromo_Copy.Framework.Log
         {
             write_error_log(DateTime.Now, obj.ToString());
             write_error_log(DateTime.Now, SerializeObject(obj));
-            lock (event_lock) LogErrorCollectionChange?.Invoke(Tuple.Create(DateTime.Now, obj.ToString(), false), null);
-            lock (event_lock) LogErrorCollectionChange?.Invoke(Tuple.Create(DateTime.Now, SerializeObject(obj), true), null);
+            lock (event_lock)
+            {
+                LogErrorCollectionChange?.Invoke(Tuple.Create(DateTime.Now, obj.ToString(), false), null);
+                LogErrorCollectionChange?.Invoke(Tuple.Create(DateTime.Now, SerializeObject(obj), true), null);
+            }
         }
 
         object log_lock = new object();

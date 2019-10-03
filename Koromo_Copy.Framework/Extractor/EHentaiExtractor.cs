@@ -5,6 +5,7 @@ using HtmlAgilityPack;
 using Koromo_Copy.Framework.Network;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -60,6 +61,12 @@ namespace Koromo_Copy.Framework.Extractor
         {
             HostName = new Regex(@"e-hentai\.org");
             ValidUrl = new Regex(@"^https?://e-hentai\.org/g/(\d+)/(.*?)/?$");
+            ExtractorInfo = "e-henati extactor info\r\n" + 
+                "title: English title.\r\n" +
+                "original_title: Japanes title\r\n" + 
+                "artist: Artist name (if not exists N/A)\r\n" +
+                "group: Group name (if not exists N/A)\r\n" + 
+                "series: Parody name (if not exists N/A)\r\n";
         }
 
         public override IExtractorOption RecommendOption(string url)
@@ -69,7 +76,7 @@ namespace Koromo_Copy.Framework.Extractor
 
         public override string RecommendFormat(IExtractorOption option)
         {
-            throw new NotImplementedException();
+            return "%(title)s/%(file)s.%(ext)s";
         }
 
         readonly static List<string> cookies = new List<string>()
@@ -122,6 +129,17 @@ namespace Koromo_Copy.Framework.Extractor
                 var task = NetTask.MakeDefault(image_urls[i]);
                 var j = i;
 
+                var artist = "N/A";
+                var group = "N/A";
+                var series = "N/A";
+
+                if (data.artist != null && data.artist.Length > 0)
+                    artist = data.artist[0];
+                if (data.group != null && data.group.Length > 0)
+                    group = data.group[0];
+                if (data.parody != null && data.parody.Length > 0)
+                    series = data.parody[0];
+
                 task.Priority = new NetPriority { Type = NetPriorityType.Trivial, TaskPriority = i };
                 task.DownloadString = true;
                 task.CompleteCallbackString = (string str) =>
@@ -130,6 +148,16 @@ namespace Koromo_Copy.Framework.Extractor
                     var tt = NetTask.MakeDefault(durl);
                     tt.SaveFile = true;
                     tt.Filename = durl.Split('/').Last();
+                    tt.Format = new ExtractorFileNameFormat
+                    {
+                        Title = data.Title,
+                        FilenameWithoutExtension = Path.GetFileNameWithoutExtension(tt.Filename),
+                        Extension = Path.GetExtension(tt.Filename),
+                        OriginalTitle = data.SubTitle,
+                        Artist = artist,
+                        Group = group,
+                        Series = series
+                    };
                     result[j] = tt;
                     if (Interlocked.Decrement(ref count) == 0)
                         wait.Set();

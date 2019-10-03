@@ -68,7 +68,7 @@ namespace Koromo_Copy.Console.Component
                     System.Console.WriteLine($"'{option.Url[0]}' is not correct url format or not supported scheme.");
                 }
 
-                ProcessExtract(option.Url[0], option.ExtractInformation, option.ExtractLinks, option.PrintProcess);
+                ProcessExtract(option.Url[0], option.PathFormat, option.ExtractInformation, option.ExtractLinks, option.PrintProcess);
             }
         }
 
@@ -92,7 +92,7 @@ namespace Koromo_Copy.Console.Component
             System.Console.WriteLine(builder.ToString());
         }
 
-        static void ProcessExtract(string url, bool ExtractInformation, bool ExtractLinks, bool PrintProcess)
+        static void ProcessExtract(string url, string[] PathFormat, bool ExtractInformation, bool ExtractLinks, bool PrintProcess)
         {
             var extractor = ExtractorManager.Instance.GetExtractor(url);
 
@@ -117,12 +117,6 @@ namespace Koromo_Copy.Console.Component
             }
             else
             {
-                if (ExtractInformation)
-                {
-                    var extractor_name = extractor.GetType().Name;
-                    return;
-                }
-
                 try
                 {
                     if (PrintProcess)
@@ -146,7 +140,21 @@ namespace Koromo_Copy.Console.Component
                     }
 
                     var option = extractor.RecommendOption(url);
-                    var format = extractor.RecommendFormat(option);
+                    string format;
+
+                    if (PathFormat != null)
+                        format = PathFormat[0];
+                    else
+                        format = extractor.RecommendFormat(option);
+
+                    if (ExtractInformation)
+                    {
+                        System.Console.WriteLine($"[Input URL] {url}");
+                        System.Console.WriteLine($"[Extractor Name] {extractor.GetType().Name}");
+                        System.Console.WriteLine($"[Information] {extractor.ExtractorInfo}");
+                        System.Console.WriteLine($"[Format] {format}");
+                        return;
+                    }
 
                     int task_count = tasks.Item1.Count;
                     tasks.Item1.ForEach(task => {

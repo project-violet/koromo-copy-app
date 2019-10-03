@@ -29,9 +29,9 @@ namespace Koromo_Copy.Console
         public string[] Test;
 #endif
 
-        [CommandLine("--net", CommandType.OPTION, Info = "Multi-commands net.", Help = "use net <Others>")]
+        [CommandLine("--net", CommandType.OPTION, Info = "Multi-commands net.", Help = "use --net <Others>")]
         public bool Net;
-        [CommandLine("--extract", CommandType.OPTION, Info = "Multi-commands extractor.", Help = "use extract <Others>")]
+        [CommandLine("--extract", CommandType.OPTION, ShortOption = "-e", Info = "Multi-commands extractor.", Help = "use --extract <Others>")]
         public bool Extract;
     }
 

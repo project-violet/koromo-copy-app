@@ -1,12 +1,18 @@
 ﻿// This source code is a part of Koromo Copy Project.
 // Copyright (C) 2019. dc-koromo. Licensed under the MIT Licence.
 
+using Koromo_Copy.Framework;
 using Koromo_Copy.Framework.CL;
 using Koromo_Copy.Framework.Extractor;
+using Koromo_Copy.Framework.Log;
+using Koromo_Copy.Framework.Setting;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace Koromo_Copy.Console.Component
 {
@@ -62,7 +68,7 @@ namespace Koromo_Copy.Console.Component
                     System.Console.WriteLine($"'{option.Url[0]}' is not correct url format or not supported scheme.");
                 }
 
-                ProcessExtract(option.Url[0]);
+                ProcessExtract(option.Url[0], option.ExtractInformation, option.ExtractLinks, option.PrintProcess);
             }
         }
 
@@ -86,7 +92,7 @@ namespace Koromo_Copy.Console.Component
             System.Console.WriteLine(builder.ToString());
         }
 
-        static void ProcessExtract(string url)
+        static void ProcessExtract(string url, bool ExtractInformation, bool ExtractLinks, bool PrintProcess)
         {
             var extractor = ExtractorManager.Instance.GetExtractor(url);
 
@@ -111,8 +117,58 @@ namespace Koromo_Copy.Console.Component
             }
             else
             {
-                var extractor_name = extractor.GetType().Name;
+                if (ExtractInformation)
+                {
+                    var extractor_name = extractor.GetType().Name;
+                    return;
+                }
 
+                try
+                {
+                    if (PrintProcess)
+                    {
+                        Logs.Instance.AddLogNotify((s, e) => {
+                            lock (Logs.Instance.Log)
+                            {
+                                CultureInfo en = new CultureInfo("en-US");
+                                System.Console.Error.WriteLine($"[{Logs.Instance.Log.Last().Item1.ToString(en)}] {Logs.Instance.Log.Last().Item2}");
+                            }
+                        });
+                    }
+
+                    var tasks = extractor.Extract(url, null);
+
+                    if (ExtractLinks)
+                    {
+                        foreach (var uu in tasks.Item1)
+                            System.Console.WriteLine(uu.Url);
+                        return;
+                    }
+
+                    var option = extractor.RecommendOption(url);
+                    var format = extractor.RecommendFormat(option);
+
+                    int task_count = tasks.Item1.Count;
+                    tasks.Item1.ForEach(task => {
+                        task.Filename = Path.Combine(Settings.Instance.Model.SuperPath, task.Format.Formatting(format));
+                        if (!Directory.Exists(Path.GetDirectoryName(task.Filename)))
+                            Directory.CreateDirectory(Path.GetDirectoryName(task.Filename));
+                        task.CompleteCallback = () =>
+                        {
+                            Interlocked.Decrement(ref task_count);
+                        };
+                    });
+                    tasks.Item1.ForEach(task => AppProvider.Scheduler.Add(task));
+
+                    while (task_count != 0)
+                    {
+                        Thread.Sleep(500);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Logs.Instance.PushError("[Extractor] Unhandled Exception - " + e.Message + "\r\n" + e.StackTrace);
+                }
             }
         }
     }

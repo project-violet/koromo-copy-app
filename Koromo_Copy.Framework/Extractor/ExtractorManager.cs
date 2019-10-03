@@ -78,7 +78,7 @@ namespace Koromo_Copy.Framework.Extractor
                         if (atcast != null)
                         {
                             if (atcast.ShortOption != "")
-                                ShortTerm.Add(atcast.ShortOption, p.Name);
+                                ShortTerm.Add(atcast.ShortOption, crop(p.Name));
                         }
                     }
                 }
@@ -108,7 +108,7 @@ namespace Koromo_Copy.Framework.Extractor
                         continue;
                     }
 
-                    if (raw[i] != '(')
+                    if (raw[i++] != '(')
                         throw new Exception("Filename formatting error! pos=" + i);
                     
                     var tokenb = new StringBuilder(10);
@@ -197,7 +197,7 @@ namespace Koromo_Copy.Framework.Extractor
 
         private string check_getter(string pp)
         {
-            var cc = crop(pp);
+            var cc = crop(pp.Replace("get_", ""));
             if (Format.ContainsKey(cc))
                 return Format[cc];
             return null;
@@ -205,7 +205,7 @@ namespace Koromo_Copy.Framework.Extractor
 
         private void check_setter(string pp, string value)
         {
-            var cc = crop(pp);
+            var cc = crop(pp.Replace("set_", ""));
             if (Format.ContainsKey(cc))
                 Format[cc] = value;
             else
@@ -230,6 +230,7 @@ namespace Koromo_Copy.Framework.Extractor
         public string Uploader { get { return check_getter(MethodBase.GetCurrentMethod().Name); } set { check_setter(MethodBase.GetCurrentMethod().Name, value); } }
         public string UploaderId { get { return check_getter(MethodBase.GetCurrentMethod().Name); } set { check_setter(MethodBase.GetCurrentMethod().Name, value); } }
         public string Character { get { return check_getter(MethodBase.GetCurrentMethod().Name); } set { check_setter(MethodBase.GetCurrentMethod().Name, value); } }
+        public string Gallery { get { return check_getter(MethodBase.GetCurrentMethod().Name); } set { check_setter(MethodBase.GetCurrentMethod().Name, value); } }
         public string Series { get { return check_getter(MethodBase.GetCurrentMethod().Name); } set { check_setter(MethodBase.GetCurrentMethod().Name, value); } }
         public string SeasonNumber { get { return check_getter(MethodBase.GetCurrentMethod().Name); } set { check_setter(MethodBase.GetCurrentMethod().Name, value); } }
         public string Season { get { return check_getter(MethodBase.GetCurrentMethod().Name); } set { check_setter(MethodBase.GetCurrentMethod().Name, value); } }

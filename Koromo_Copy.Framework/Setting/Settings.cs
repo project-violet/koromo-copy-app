@@ -45,6 +45,11 @@ namespace Koromo_Copy.Framework.Setting
         /// Provider Language
         /// </summary>
         public string Language;
+
+        /// <summary>
+        /// Parent Path for Downloading
+        /// </summary>
+        public string SuperPath;
     }
 
     public class Settings : ILazy<Settings>
@@ -85,6 +90,7 @@ namespace Koromo_Copy.Framework.Setting
                     Language = language,
                     ThreadCount = Environment.ProcessorCount,
                     PostprocessorThreadCount = 3,
+                    SuperPath = Directory.GetCurrentDirectory(),
 
                     NetworkSettings = new SettingModel.NetworkSetting
                     {

@@ -233,6 +233,7 @@ namespace Koromo_Copy.Framework.Extractor
         public string Title { get { return check_getter(MethodBase.GetCurrentMethod().Name); } set { check_setter(MethodBase.GetCurrentMethod().Name, value); } }
         public string OriginalTitle { get { return check_getter(MethodBase.GetCurrentMethod().Name); } set { check_setter(MethodBase.GetCurrentMethod().Name, value); } }
         public string Id { get { return check_getter(MethodBase.GetCurrentMethod().Name); } set { check_setter(MethodBase.GetCurrentMethod().Name, value); } }
+        public string User { get { return check_getter(MethodBase.GetCurrentMethod().Name); } set { check_setter(MethodBase.GetCurrentMethod().Name, value); } }
         public string Account { get { return check_getter(MethodBase.GetCurrentMethod().Name); } set { check_setter(MethodBase.GetCurrentMethod().Name, value); } }
         public string Author { get { return check_getter(MethodBase.GetCurrentMethod().Name); } set { check_setter(MethodBase.GetCurrentMethod().Name, value); } }
         public string EnglishAuthor { get { return check_getter(MethodBase.GetCurrentMethod().Name); } set { check_setter(MethodBase.GetCurrentMethod().Name, value); } }
@@ -269,6 +270,7 @@ namespace Koromo_Copy.Framework.Extractor
             new NaverExtractor(),
             new EHentaiExtractor(),
             new HitomiExtractor(),
+            new InstagramExtractor(),
         };
 
         public ExtractorModel GetExtractor(string url)

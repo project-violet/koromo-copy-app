@@ -29,6 +29,8 @@ Gelbooru
 Naver
 Pixiv
 Hitomi
+Imgur
+Instagram
 ```
 
 ### Plan to support
@@ -42,8 +44,6 @@ ExHentai
 Fakku
 GoogleImage
 Hiyobi
-Imgur
-Instagram
 Manamoa
 Namuwiki
 Nozomi

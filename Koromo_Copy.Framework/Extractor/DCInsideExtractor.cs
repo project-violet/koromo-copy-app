@@ -110,6 +110,11 @@ namespace Koromo_Copy.Framework.Extractor
     {
         [CommandLine("--gaenyum", CommandType.OPTION, Info = "Extract only gaenyum articles.")]
         public bool OnlyRecommend;
+
+        public override void CLParse(ref IExtractorOption model, string[] args)
+        {
+            model = CommandLineParser.Parse(model as DCInsideExtractorOption, args);
+        }
     }
 
     public class DCInsideExtractor : ExtractorModel

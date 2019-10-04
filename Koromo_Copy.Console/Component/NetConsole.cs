@@ -28,7 +28,7 @@ namespace Koromo_Copy.Console.Component
     {
         public static void Start(string[] arguments)
         {
-            var option = CommandLineParser<NetConsoleOption>.Parse(arguments);
+            var option = CommandLineParser.Parse<NetConsoleOption>(arguments);
 
             if (option.Error)
             {
@@ -53,7 +53,7 @@ namespace Koromo_Copy.Console.Component
             System.Console.WriteLine("Net - Network component\r\n");
 
             var builder = new StringBuilder();
-            CommandLineParser<NetConsoleOption>.GetFields().ToList().ForEach(
+            CommandLineParser.GetFields(typeof(NetConsoleOption)).ToList().ForEach(
                 x =>
                 {
                     if (!string.IsNullOrEmpty(x.Value.Item2.Info))

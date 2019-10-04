@@ -160,7 +160,7 @@ namespace Koromo_Copy.Framework.CL
         public static List<int> GetWeirdArguments<T>(string[] argv)
             where T : IConsoleOption, new()
         {
-            var field = CommandLineParser<T>.GetFields();
+            var field = CommandLineParser.GetFields(typeof(T));
             List<int> result = new List<int>();
 
             for (int i = 0; i < argv.Length; i++)
@@ -227,16 +227,14 @@ namespace Koromo_Copy.Framework.CL
     /// The command line parser.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class CommandLineParser<T>
-        where T : IConsoleOption, new()
+    public class CommandLineParser
     {
         /// <summary>
         /// Get field information that contains Attribute information.
         /// </summary>
         /// <returns></returns>
-        public static Dictionary<string, Tuple<string, CommandLine>> GetFields()
+        public static Dictionary<string, Tuple<string, CommandLine>> GetFields(Type type)
         {
-            Type type = typeof(T);
             FieldInfo[] fields = type.GetFields();
             var field = new Dictionary<string, Tuple<string, CommandLine>>();
 
@@ -246,8 +244,7 @@ namespace Koromo_Copy.Framework.CL
 
                 foreach (var cl in attrs)
                 {
-                    var clcast = cl as CommandLine;
-                    if (clcast != null)
+                    if (cl is CommandLine clcast)
                     {
                         field.Add(clcast.Option, Tuple.Create(m.Name, clcast));
                         if (!string.IsNullOrEmpty(clcast.ShortOption))
@@ -265,10 +262,9 @@ namespace Koromo_Copy.Framework.CL
         /// <param name="argv"></param>
         /// <param name="pipe"></param>
         /// <returns></returns>
-        public static T Parse(string[] argv, bool pipe = false, string contents = "")
+        public static T Parse<T>(T model, string[] argv, bool pipe = false, string contents = "") where T : IConsoleOption, new()
         {
-            var field = GetFields();
-            T result = new T();
+            var field = GetFields(typeof(T));
 
             //
             // This flag is enabled if there is no option
@@ -286,7 +282,7 @@ namespace Koromo_Copy.Framework.CL
                         //
                         // In the case of the OPTION type, the variable must be set to true.
                         //
-                        typeof(T).GetField(cl.Item1).SetValue(result, true);
+                        typeof(T).GetField(cl.Item1).SetValue(model, true);
                     }
                     else if (cl.Item2.CType == CommandType.ARGUMENTS)
                     {
@@ -304,10 +300,10 @@ namespace Koromo_Copy.Framework.CL
                         {
                             if (i + j == argv.Length)
                             {
-                                typeof(T).GetField("Error").SetValue(result, true);
-                                typeof(T).GetField("ErrorMessage").SetValue(result, $"'{argv[i]}' require {arguments_count - j + 1} more sub arguments.");
-                                typeof(T).GetField("HelpMessage").SetValue(result, cl.Item2.Help);
-                                return result;
+                                typeof(T).GetField("Error").SetValue(model, true);
+                                typeof(T).GetField("ErrorMessage").SetValue(model, $"'{argv[i]}' require {arguments_count - j + 1} more sub arguments.");
+                                typeof(T).GetField("HelpMessage").SetValue(model, cl.Item2.Help);
+                                return model;
                             }
 
                             sub_args.Add(argv[i + j]);
@@ -315,7 +311,7 @@ namespace Koromo_Copy.Framework.CL
 
                         i += cl.Item2.ArgumentsCount;
 
-                        typeof(T).GetField(cl.Item1).SetValue(result, sub_args.ToArray());
+                        typeof(T).GetField(cl.Item1).SetValue(model, sub_args.ToArray());
                     }
                     else if (cl.Item2.CType == CommandType.EQUAL)
                     {
@@ -323,21 +319,21 @@ namespace Koromo_Copy.Framework.CL
 
                         if (split.Length == 1)
                         {
-                            typeof(T).GetField("Error").SetValue(result, true);
-                            typeof(T).GetField("ErrorMessage").SetValue(result, $"'{split[0]}' must have equal delimiter.");
-                            typeof(T).GetField("HelpMessage").SetValue(result, cl.Item2.Help);
-                            return result;
+                            typeof(T).GetField("Error").SetValue(model, true);
+                            typeof(T).GetField("ErrorMessage").SetValue(model, $"'{split[0]}' must have equal delimiter.");
+                            typeof(T).GetField("HelpMessage").SetValue(model, cl.Item2.Help);
+                            return model;
                         }
 
-                        typeof(T).GetField(cl.Item1).SetValue(result, split[1]);
+                        typeof(T).GetField(cl.Item1).SetValue(model, split[1]);
                     }
                     any_option = false;
                 }
                 else
                 {
-                    typeof(T).GetField("Error").SetValue(result, true);
-                    typeof(T).GetField("ErrorMessage").SetValue(result, $"'{argv[i]}' is not correct arguments.");
-                    return result;
+                    typeof(T).GetField("Error").SetValue(model, true);
+                    typeof(T).GetField("ErrorMessage").SetValue(model, $"'{argv[i]}' is not correct arguments.");
+                    return model;
                 }
             }
 
@@ -350,18 +346,29 @@ namespace Koromo_Copy.Framework.CL
                 {
                     if (!pipe && kv.Value.Item2.Default)
                     {
-                        typeof(T).GetField(kv.Value.Item1).SetValue(result, true);
+                        typeof(T).GetField(kv.Value.Item1).SetValue(model, true);
                         break;
                     }
                     else if (pipe && kv.Value.Item2.PipeDefault)
                     {
-                        typeof(T).GetField(kv.Value.Item1).SetValue(result, new[] { contents });
+                        typeof(T).GetField(kv.Value.Item1).SetValue(model, new[] { contents });
                         break;
                     }
                 }
             }
 
-            return result;
+            return model;
+        }
+
+        /// <summary>
+        /// Parse command lines based on attributes.
+        /// </summary>
+        /// <param name="argv"></param>
+        /// <param name="pipe"></param>
+        /// <returns></returns>
+        public static T Parse<T>(string[] argv, bool pipe = false, string contents = "") where T : IConsoleOption, new()
+        {
+            return Parse(new T(), argv, pipe, contents);
         }
     }
 }

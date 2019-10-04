@@ -5,6 +5,7 @@ using HtmlAgilityPack;
 using Koromo_Copy.Framework.Network;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -27,12 +28,12 @@ namespace Koromo_Copy.Framework.Extractor
 
         public override IExtractorOption RecommendOption(string url)
         {
-            throw new NotImplementedException();
+            return new GelbooruExtractorOption { Type = ExtractorType.Images };
         }
 
         public override string RecommendFormat(IExtractorOption option)
         {
-            throw new NotImplementedException();
+            return "%(search)s/%(file)s.%(ext)s";
         }
 
         public override Tuple<List<NetTask>, object> Extract(string url, IExtractorOption option = null)
@@ -67,6 +68,12 @@ namespace Koromo_Copy.Framework.Extractor
                     var task = NetTask.MakeDefault(imgurl);
                     task.SaveFile = true;
                     task.Filename = imgurl.Split('/').Last();
+                    task.Format = new ExtractorFileNameFormat
+                    {
+                        Search = HttpUtility.UrlDecode(tags),
+                        FilenameWithoutExtension = Path.GetFileNameWithoutExtension(imgurl.Split('/').Last()),
+                        Extension = Path.GetExtension(imgurl.Split('/').Last()).Replace(".", "")
+                    };
                     result.Add(task);
                 }
 

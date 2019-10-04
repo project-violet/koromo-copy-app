@@ -67,7 +67,7 @@ namespace Koromo_Copy.Console
             var origin = arguments;
             arguments = CommandLineUtil.SplitCombinedOptions(arguments);
             arguments = CommandLineUtil.InsertWeirdArguments<Options>(arguments, true, "--url");
-            var option = CommandLineParser<Options>.Parse(arguments);
+            var option = CommandLineParser.Parse<Options>(arguments);
 
             //
             //  Multi Commands
@@ -79,13 +79,6 @@ namespace Koromo_Copy.Console
             //
             //  Single Commands
             //
-            else if (option.Error)
-            {
-                System.Console.WriteLine(option.ErrorMessage);
-                if (option.HelpMessage != null)
-                    System.Console.WriteLine(option.HelpMessage);
-                return;
-            }
             else if (option.Help)
             {
                 PrintHelp();
@@ -115,7 +108,30 @@ namespace Koromo_Copy.Console
                     System.Console.WriteLine($"[HostName] {extractor.HostName}");
                     System.Console.WriteLine($"[Checker] {extractor.ValidUrl}");
                     System.Console.WriteLine($"[Information] {extractor.ExtractorInfo}");
-                    System.Console.WriteLine($"");
+                    System.Console.WriteLine($"[Options]");
+                    var builder = new StringBuilder();
+                    CommandLineParser.GetFields(extractor.RecommendOption("").GetType()).ToList().ForEach(
+                        x =>
+                        {
+                            var key = x.Key;
+                            if (!key.StartsWith("--"))
+                                return;
+                            if (!string.IsNullOrEmpty(x.Value.Item2.ShortOption))
+                                key = $"{x.Value.Item2.ShortOption}, " + key;
+                            var help = "";
+                            if (!string.IsNullOrEmpty(x.Value.Item2.Help))
+                                help = $"[{x.Value.Item2.Help}]";
+                            if (!string.IsNullOrEmpty(x.Value.Item2.Info))
+                                builder.Append($"   {key}".PadRight(30) + $" {x.Value.Item2.Info} {help}\r\n");
+                            else
+                                builder.Append($"   {key}".PadRight(30) + $" {help}\r\n");
+                        });
+                    if (builder.ToString() != "")
+                    {
+                        System.Console.WriteLine($"[Options]");
+                        System.Console.Write(builder.ToString());
+                    }
+                    System.Console.WriteLine($"-------------------------------------------------------------");
                 }
             }
             else if (option.Url != null)
@@ -125,7 +141,19 @@ namespace Koromo_Copy.Console
                     System.Console.WriteLine($"'{option.Url[0]}' is not correct url format or not supported scheme.");
                 }
 
-                ProcessExtract(option.Url[0], option.PathFormat, option.ExtractInformation, option.ExtractLinks, option.PrintProcess);
+                var weird = CommandLineUtil.GetWeirdArguments<Options>(arguments);
+                var n_args = new List<string>();
+
+                weird.ForEach(x => n_args.Add(arguments[x]));
+
+                ProcessExtract(option.Url[0], n_args.ToArray(), option.PathFormat, option.ExtractInformation, option.ExtractLinks, option.PrintProcess);
+            }
+            else if (option.Error)
+            {
+                System.Console.WriteLine(option.ErrorMessage);
+                if (option.HelpMessage != null)
+                    System.Console.WriteLine(option.HelpMessage);
+                return;
             }
             else
             {
@@ -145,7 +173,7 @@ namespace Koromo_Copy.Console
             System.Console.WriteLine($"");
 
             var builder = new StringBuilder();
-            CommandLineParser<Options>.GetFields().ToList().ForEach(
+            CommandLineParser.GetFields(typeof(Options)).ToList().ForEach(
                 x =>
                 {
                     var key = x.Key;
@@ -310,7 +338,7 @@ namespace Koromo_Copy.Console
         }
 #endif
 
-        static void ProcessExtract(string url, string[] PathFormat, bool ExtractInformation, bool ExtractLinks, bool PrintProcess)
+        static void ProcessExtract(string url, string[] args, string[] PathFormat, bool ExtractInformation, bool ExtractLinks, bool PrintProcess)
         {
             var extractor = ExtractorManager.Instance.GetExtractor(url);
 
@@ -347,6 +375,18 @@ namespace Koromo_Copy.Console
                     }
 
                     var option = extractor.RecommendOption(url);
+                    option.CLParse(ref option, args);
+                    
+                    if (option.Error)
+                    {
+                        System.Console.WriteLine($"[Input URL] {url}");
+                        System.Console.WriteLine($"[Extractor Name] {extractor.GetType().Name}");
+                        System.Console.WriteLine(option.ErrorMessage);
+                        if (option.HelpMessage != null)
+                            System.Console.WriteLine(option.HelpMessage);
+                        return;
+                    }
+
                     var tasks = extractor.Extract(url, option);
 
                     if (ExtractLinks)

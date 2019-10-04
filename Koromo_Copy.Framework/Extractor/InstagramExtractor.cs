@@ -131,7 +131,7 @@ namespace Koromo_Copy.Framework.Extractor
                 };
 
                 foreach (var post in (JToken.Parse(json)["entry_data"]["ProfilePage"] as JArray)[0]["graphql"]["user"]["edge_owner_to_timeline_media"]["edges"])
-                    user.FirstPost.DisplayUrls.Add(post["node"]["thumbnail_resources"].Last["src"].ToString());
+                    user.FirstPost.DisplayUrls.Add(post["node"]["display_url"].ToString());
 
                 return user;
             }

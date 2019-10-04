@@ -22,6 +22,8 @@ namespace Koromo_Copy.Framework.Extractor
         public bool OnlyImages;
         [CommandLine("--only-thumbnail", CommandType.OPTION, Info = "Extract only thumbnails.")]
         public bool OnlyThumbnail;
+        [CommandLine("--include-thumbnail", CommandType.OPTION, Info = "Include thumbnail extracting video.")]
+        public bool IncludeThumbnail;
 
         public override void CLParse(ref IExtractorOption model, string[] args)
         {
@@ -147,7 +149,11 @@ namespace Koromo_Copy.Framework.Extractor
                         foreach (var media in JToken.Parse(json2)["data"]["shortcode_media"]["edge_sidecar_to_children"]["edges"])
                         {
                             if ((bool)media["node"]["is_video"] && !option.OnlyImages)
+                            {
                                 user.FirstPost.DisplayUrls.Add(media["node"]["video_url"].ToString());
+                                if (option.IncludeThumbnail)
+                                    user.FirstPost.DisplayUrls.Add(media["node"]["display_url"].ToString());
+                            }
                             else
                                 user.FirstPost.DisplayUrls.Add(media["node"]["display_url"].ToString());
                         }
@@ -180,7 +186,11 @@ namespace Koromo_Copy.Framework.Extractor
                     if (post["node"]["__typename"].ToString() != "GraphSidecar" || option.OnlyThumbnail)
                     {
                         if ((bool)post["node"]["is_video"] && !option.OnlyImages)
+                        {
                             posts.DisplayUrls.Add(post["node"]["video_url"].ToString());
+                            if (option.IncludeThumbnail)
+                                posts.DisplayUrls.Add(post["node"]["display_url"].ToString());
+                        }
                         else
                             posts.DisplayUrls.Add(post["node"]["display_url"].ToString());
                     }
@@ -192,7 +202,11 @@ namespace Koromo_Copy.Framework.Extractor
                         foreach (var media in JToken.Parse(json2)["data"]["shortcode_media"]["edge_sidecar_to_children"]["edges"])
                         {
                             if ((bool)media["node"]["is_video"] && !option.OnlyImages)
+                            {
                                 posts.DisplayUrls.Add(media["node"]["video_url"].ToString());
+                                if (option.IncludeThumbnail)
+                                    posts.DisplayUrls.Add(media["node"]["display_url"].ToString());
+                            }
                             else
                                 posts.DisplayUrls.Add(media["node"]["display_url"].ToString());
                         }

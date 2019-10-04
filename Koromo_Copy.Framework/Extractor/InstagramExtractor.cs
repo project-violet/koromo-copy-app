@@ -20,6 +20,8 @@ namespace Koromo_Copy.Framework.Extractor
     {
         [CommandLine("--only-images", CommandType.OPTION, Info = "Extract only images.")]
         public bool OnlyImages;
+        [CommandLine("--only-thumbnail", CommandType.OPTION, Info = "Extract only thumbnails.")]
+        public bool OnlyThumbnail;
 
         public override void CLParse(ref IExtractorOption model, string[] args)
         {
@@ -51,14 +53,14 @@ namespace Koromo_Copy.Framework.Extractor
                 option = RecommendOption(url);
 
             var html = NetTools.DownloadString(url);
-            var user = InstaApi.get_user(html);
+            var user = InstaApi.get_user(option as InstagramExtractorOption, html);
             var urls = new List<string>();
             urls.AddRange(user.FirstPost.DisplayUrls);
 
             var pp = user.FirstPost;
             while (pp.HasNext)
             {
-                var posts = InstaApi.query_next(option as InstagramExtractorOption, InstaApi.query_hash(), user.UserId, "50", pp.EndCursor);
+                var posts = InstaApi.query_next(option as InstagramExtractorOption, InstaApi.posts_query_hash(), user.UserId, "50", pp.EndCursor);
                 urls.AddRange(posts.DisplayUrls);
                 pp = posts;
             }
@@ -87,8 +89,11 @@ namespace Koromo_Copy.Framework.Extractor
 
         public class InstaApi
         {
-            public static string query_hash()
+            public static string posts_query_hash()
                 => "58b6785bea111c67129decbe6a448951";
+
+            public static string sidecar_query_hash()
+                => "865589822932d1b43dfe312121dd353a";
 
             public static string get_sharedData(string html)
                 => Regex.Match(html, @"window\._sharedData = (.*);</script>").Value;
@@ -113,7 +118,7 @@ namespace Koromo_Copy.Framework.Extractor
             /// </summary>
             /// <param name="html">https://www.instagram.com/(.*?)/</param>
             /// <returns></returns>
-            public static User get_user(string html)
+            public static User get_user(InstagramExtractorOption option, string html)
             {
                 var json = Regex.Match(html, @"window\._sharedData = (.*);</script>").Groups[1].Value;
 
@@ -131,12 +136,28 @@ namespace Koromo_Copy.Framework.Extractor
                 };
 
                 foreach (var post in (JToken.Parse(json)["entry_data"]["ProfilePage"] as JArray)[0]["graphql"]["user"]["edge_owner_to_timeline_media"]["edges"])
-                    user.FirstPost.DisplayUrls.Add(post["node"]["display_url"].ToString());
+                {
+                    if (post["node"]["__typename"].ToString() != "GraphSidecar" || option.OnlyThumbnail)
+                        user.FirstPost.DisplayUrls.Add(post["node"]["display_url"].ToString());
+                    else
+                    {
+                        var short_code = post["node"]["shortcode"].ToString();
+                        var json2 = graphql_qurey(option, sidecar_query_hash(), new Dictionary<string, string> { { "shortcode", short_code } });
+
+                        foreach (var media in JToken.Parse(json2)["data"]["shortcode_media"]["edge_sidecar_to_children"]["edges"])
+                        {
+                            if ((bool)media["node"]["is_video"] && !option.OnlyImages)
+                                user.FirstPost.DisplayUrls.Add(media["node"]["video_url"].ToString());
+                            else
+                                user.FirstPost.DisplayUrls.Add(media["node"]["display_url"].ToString());
+                        }
+                    }
+                }
 
                 return user;
             }
 
-            public static string graphql_qurey(InstagramExtractorOption option, string query_hash, Dictionary<string, string> param)
+            private static string graphql_qurey(InstagramExtractorOption option, string query_hash, Dictionary<string, string> param)
             {
                 var url = $"https://www.instagram.com/graphql/query/?query_hash=" + query_hash + "&variables=" +
                     HttpUtility.UrlEncode(JsonConvert.SerializeObject(param));
@@ -156,10 +177,26 @@ namespace Koromo_Copy.Framework.Extractor
 
                 foreach (var post in JToken.Parse(json)["data"]["user"]["edge_owner_to_timeline_media"]["edges"])
                 {
-                    if ((bool)post["node"]["is_video"] && !option.OnlyImages)
-                        posts.DisplayUrls.Add(post["node"]["video_url"].ToString());
+                    if (post["node"]["__typename"].ToString() != "GraphSidecar" || option.OnlyThumbnail)
+                    {
+                        if ((bool)post["node"]["is_video"] && !option.OnlyImages)
+                            posts.DisplayUrls.Add(post["node"]["video_url"].ToString());
+                        else
+                            posts.DisplayUrls.Add(post["node"]["display_url"].ToString());
+                    }
                     else
-                        posts.DisplayUrls.Add(post["node"]["display_url"].ToString());
+                    {
+                        var short_code = post["node"]["shortcode"].ToString();
+                        var json2 = graphql_qurey(option, sidecar_query_hash(), new Dictionary<string, string> { { "shortcode", short_code } });
+
+                        foreach (var media in JToken.Parse(json2)["data"]["shortcode_media"]["edge_sidecar_to_children"]["edges"])
+                        {
+                            if ((bool)media["node"]["is_video"] && !option.OnlyImages)
+                                posts.DisplayUrls.Add(media["node"]["video_url"].ToString());
+                            else
+                                posts.DisplayUrls.Add(media["node"]["display_url"].ToString());
+                        }
+                    }
                 }
 
                 return posts;

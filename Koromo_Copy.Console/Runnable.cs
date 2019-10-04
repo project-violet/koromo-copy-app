@@ -108,7 +108,6 @@ namespace Koromo_Copy.Console
                     System.Console.WriteLine($"[HostName] {extractor.HostName}");
                     System.Console.WriteLine($"[Checker] {extractor.ValidUrl}");
                     System.Console.WriteLine($"[Information] {extractor.ExtractorInfo}");
-                    System.Console.WriteLine($"[Options]");
                     var builder = new StringBuilder();
                     CommandLineParser.GetFields(extractor.RecommendOption("").GetType()).ToList().ForEach(
                         x =>

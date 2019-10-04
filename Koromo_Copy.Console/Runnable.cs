@@ -168,7 +168,7 @@ namespace Koromo_Copy.Console
             PrintVersion();
             System.Console.WriteLine($"Copyright (C) 2019. Koromo Copy Developer");
             System.Console.WriteLine($"E-Mail: koromo.software@gmail.com");
-            System.Console.WriteLine($"Source-code: https://github.com/dc-koromo/koromo-copy2");
+            System.Console.WriteLine($"Source-code: https://github.com/koromo-copy/koromo-copy");
             System.Console.WriteLine($"");
 
             var builder = new StringBuilder();

@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using HtmlAgilityPack;
+using Koromo_Copy.Framework.CL;
 using Koromo_Copy.Framework.Network;
 using Newtonsoft.Json;
 using static Koromo_Copy.Framework.Extractor.IExtractorOption;
@@ -107,6 +108,8 @@ namespace Koromo_Copy.Framework.Extractor
 
     public class DCInsideExtractorOption : IExtractorOption
     {
+        [CommandLine("--gaenyum", CommandType.OPTION, Info = "Extract only gaenyum articles.")]
+        public bool OnlyRecommend;
     }
 
     public class DCInsideExtractor : ExtractorModel
@@ -129,7 +132,7 @@ namespace Koromo_Copy.Framework.Extractor
                 }
                 else if (match[3].Value == "lists")
                 {
-                    return new DCInsideExtractorOption { Type = ExtractorType.ArticleInformation };
+                    return new DCInsideExtractorOption { Type = ExtractorType.ArticleInformation, ExtractInformation = true };
                 }
             }
 
@@ -143,15 +146,18 @@ namespace Koromo_Copy.Framework.Extractor
 
         public override Tuple<List<NetTask>, object> Extract(string url, IExtractorOption option = null)
         {
+            if (option == null)
+                option = new DCInsideExtractorOption { Type = ExtractorType.Images };
+
+            if ((option as DCInsideExtractorOption).OnlyRecommend)
+                url += "&exception_mode=recommend";
+
             var match = ValidUrl.Match(url).Groups;
             var result = new List<NetTask>();
             var html = NetTools.DownloadString(url);
 
             if (html == null)
-                return new Tuple<List<NetTask>, object> (result, null);
-
-            if (option == null)
-                option = new DCInsideExtractorOption { Type = ExtractorType.Images };
+                return new Tuple<List<NetTask>, object>(result, null);
 
             if (match[1].Value == "gall")
             {
@@ -236,7 +242,7 @@ namespace Koromo_Copy.Framework.Extractor
                     {
                         DCGallery gallery;
 
-                        if (match[2].Value != "")
+                        if (match[2].Value == "")
                             gallery = ParseGallery(html);
                         else
                             gallery = ParseMinorGallery(html);

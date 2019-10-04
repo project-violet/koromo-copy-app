@@ -38,6 +38,9 @@ namespace Koromo_Copy.Framework.Extractor
 
         public bool ExtractInformation { get; set; }
         public Action<string> PageReadCallback;
+
+        public int StartPage = 0;
+        public int EndPage = int.MaxValue;
     }
 
     public abstract class ExtractorModel

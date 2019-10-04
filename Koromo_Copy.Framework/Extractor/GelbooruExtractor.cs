@@ -15,8 +15,6 @@ namespace Koromo_Copy.Framework.Extractor
 {
     public class GelbooruExtractorOption : IExtractorOption
     {
-        public int StartPage = 0;
-        public int EndPage = int.MaxValue;
     }
 
     public class GelbooruExtractor : ExtractorModel

@@ -20,7 +20,8 @@ namespace Koromo_Copy.Console
             //args = new string[] { "https://e-hentai.org/g/1491793/45f9e85e48/", "--extract-info", "--print-process" };
             //args = new string[] { "https://e-hentai.org/g/1491793/45f9e85e48/",  };
             //args = new string[] { "https://gall.dcinside.com/board/view/?id=programming&no=1132197&page=1", "--print-process" };
-            args = new string[] { "https://hitomi.la/galleries/1344592.html", "--print-process" };
+            //args = new string[] { "https://hitomi.la/galleries/1344592.html", "--print-process" };
+            args = new string[] { "https://gall.dcinside.com/mgallery/board/lists?id=purikone_redive" };
 #endif
             AppProvider.Initialize();
 

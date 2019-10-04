@@ -346,7 +346,8 @@ namespace Koromo_Copy.Console
                         });
                     }
 
-                    var tasks = extractor.Extract(url, null);
+                    var option = extractor.RecommendOption(url);
+                    var tasks = extractor.Extract(url, option);
 
                     if (ExtractLinks)
                     {
@@ -355,7 +356,6 @@ namespace Koromo_Copy.Console
                         return;
                     }
 
-                    var option = extractor.RecommendOption(url);
                     string format;
 
                     if (PathFormat != null)
@@ -369,6 +369,20 @@ namespace Koromo_Copy.Console
                         System.Console.WriteLine($"[Extractor Name] {extractor.GetType().Name}");
                         System.Console.WriteLine($"[Information] {extractor.ExtractorInfo}");
                         System.Console.WriteLine($"[Format] {format}");
+                        return;
+                    }
+
+                    if (tasks.Item1 == null)
+                    {
+                        if (tasks.Item2 == null)
+                        {
+                            System.Console.WriteLine($"[Input URL] {url}");
+                            System.Console.WriteLine($"[Extractor Name] {extractor.GetType().Name}");
+                            System.Console.WriteLine("Nothing to work on.");
+                            return;
+                        }
+
+                        System.Console.WriteLine(Logs.SerializeObject(tasks.Item2));
                         return;
                     }
 

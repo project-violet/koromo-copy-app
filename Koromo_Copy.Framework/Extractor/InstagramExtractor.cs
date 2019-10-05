@@ -12,6 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Web;
 using static Koromo_Copy.Framework.Extractor.IExtractorOption;
 
@@ -200,30 +201,39 @@ namespace Koromo_Copy.Framework.Extractor
 
             public static Posts query_next(InstagramExtractorOption option, string query_hash, string id, string first, string after)
             {
-                var json = graphql_qurey(option, query_hash, new Dictionary<string, string> { { "id", id }, { "first", first }, { "after", after } });
-                var jmedia = JToken.Parse(json)["data"]["user"]["edge_owner_to_timeline_media"];
-
-                var posts = new Posts
+            RETRY:
+                try
                 {
-                    HasNext = (bool)jmedia["page_info"]["has_next_page"],
-                    EndCursor = jmedia["page_info"]["end_cursor"].ToString(),
-                    DisplayUrls = new List<string>()
-                };
+                    var json = graphql_qurey(option, query_hash, new Dictionary<string, string> { { "id", id }, { "first", first }, { "after", after } });
+                    var jmedia = JToken.Parse(json)["data"]["user"]["edge_owner_to_timeline_media"];
 
-                foreach (var post in jmedia["edges"])
-                {
-                    if (post["node"]["__typename"].ToString() != "GraphSidecar" || option.OnlyThumbnail)
+                    var posts = new Posts
                     {
-                        extract_url(post["node"], option, posts.DisplayUrls);
-                    }
-                    else
+                        HasNext = (bool)jmedia["page_info"]["has_next_page"],
+                        EndCursor = jmedia["page_info"]["end_cursor"].ToString(),
+                        DisplayUrls = new List<string>()
+                    };
+
+                    foreach (var post in jmedia["edges"])
                     {
-                        foreach (var media in post["node"]["edge_sidecar_to_children"]["edges"])
-                            extract_url(media["node"], option, posts.DisplayUrls);
+                        if (post["node"]["__typename"].ToString() != "GraphSidecar" || option.OnlyThumbnail)
+                        {
+                            extract_url(post["node"], option, posts.DisplayUrls);
+                        }
+                        else
+                        {
+                            foreach (var media in post["node"]["edge_sidecar_to_children"]["edges"])
+                                extract_url(media["node"], option, posts.DisplayUrls);
+                        }
                     }
+
+                    return posts;
                 }
-
-                return posts;
+                catch
+                {
+                    Thread.Sleep(2000);
+                    goto RETRY;
+                }
             }
         }
     }

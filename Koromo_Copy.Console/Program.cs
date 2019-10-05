@@ -24,6 +24,7 @@ namespace Koromo_Copy.Console
             //args = new string[] { "https://gall.dcinside.com/mgallery/board/lists?id=purikone_redive", "--gaenyum" };
             args = new string[] { "https://www.instagram.com/parlovetati/" };
             args = new string[] { "https://www.instagram.com/zennyrt/", "-p" };
+            args = new string[] { "https://www.instagram.com/haneul__haneul/", "-p" };
 #endif
             AppProvider.Initialize();
 

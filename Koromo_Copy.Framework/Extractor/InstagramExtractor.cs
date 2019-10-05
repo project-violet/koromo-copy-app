@@ -3,6 +3,7 @@
 
 using Koromo_Copy.Framework.CL;
 using Koromo_Copy.Framework.Network;
+using Koromo_Copy.Framework.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -24,6 +25,8 @@ namespace Koromo_Copy.Framework.Extractor
         public bool OnlyThumbnail;
         [CommandLine("--include-thumbnail", CommandType.OPTION, Info = "Include thumbnail extracting video.")]
         public bool IncludeThumbnail;
+        [CommandLine("--limit-posts", CommandType.ARGUMENTS, Info = "Limit read posts count.")]
+        public string[] LimitPosts;
 
         public override void CLParse(ref IExtractorOption model, string[] args)
         {
@@ -54,16 +57,25 @@ namespace Koromo_Copy.Framework.Extractor
             if (option == null)
                 option = RecommendOption(url);
 
+            var limit = int.MaxValue;
+            if ((option as InstagramExtractorOption).LimitPosts != null)
+                limit = (option as InstagramExtractorOption).LimitPosts[0].ToInt();
+
             var html = NetTools.DownloadString(url);
             var user = InstaApi.get_user(option as InstagramExtractorOption, html);
             var urls = new List<string>();
             urls.AddRange(user.FirstPost.DisplayUrls);
 
+            var count = 0;
             var pp = user.FirstPost;
             while (pp.HasNext)
             {
+                if (count >= limit)
+                    break;
+
                 var posts = InstaApi.query_next(option as InstagramExtractorOption, InstaApi.posts_query_hash(), user.UserId, "50", pp.EndCursor);
                 urls.AddRange(posts.DisplayUrls);
+                count += 50;
                 pp = posts;
             }
 
@@ -139,28 +151,39 @@ namespace Koromo_Copy.Framework.Extractor
 
                 foreach (var post in (JToken.Parse(json)["entry_data"]["ProfilePage"] as JArray)[0]["graphql"]["user"]["edge_owner_to_timeline_media"]["edges"])
                 {
-                    if (post["node"]["__typename"].ToString() != "GraphSidecar" || option.OnlyThumbnail)
+                    if (post["node"]["__typename"].ToString() == "GraphImage" || option.OnlyThumbnail)
                         user.FirstPost.DisplayUrls.Add(post["node"]["display_url"].ToString());
                     else
                     {
                         var short_code = post["node"]["shortcode"].ToString();
                         var json2 = graphql_qurey(option, sidecar_query_hash(), new Dictionary<string, string> { { "shortcode", short_code } });
 
-                        foreach (var media in JToken.Parse(json2)["data"]["shortcode_media"]["edge_sidecar_to_children"]["edges"])
+                        if (post["node"]["__typename"].ToString() == "GraphVideo")
                         {
-                            if ((bool)media["node"]["is_video"] && !option.OnlyImages)
-                            {
-                                user.FirstPost.DisplayUrls.Add(media["node"]["video_url"].ToString());
-                                if (option.IncludeThumbnail)
-                                    user.FirstPost.DisplayUrls.Add(media["node"]["display_url"].ToString());
-                            }
-                            else
-                                user.FirstPost.DisplayUrls.Add(media["node"]["display_url"].ToString());
+                            var media = JToken.Parse(json2)["data"]["shortcode_media"];
+                            extract_url(media, option, user.FirstPost.DisplayUrls);
+                        }
+                        else
+                        {
+                            foreach (var media in JToken.Parse(json2)["data"]["shortcode_media"]["edge_sidecar_to_children"]["edges"])
+                                extract_url(media["node"], option, user.FirstPost.DisplayUrls);
                         }
                     }
                 }
 
                 return user;
+            }
+
+            private static void extract_url(JToken media, InstagramExtractorOption option, List<string> urls)
+            {
+                if ((bool)media["is_video"] && !option.OnlyImages)
+                {
+                    urls.Add(media["video_url"].ToString());
+                    if (option.IncludeThumbnail)
+                        urls.Add(media["display_url"].ToString());
+                }
+                else
+                    urls.Add(media["display_url"].ToString());
             }
 
             private static string graphql_qurey(InstagramExtractorOption option, string query_hash, Dictionary<string, string> param)
@@ -185,31 +208,12 @@ namespace Koromo_Copy.Framework.Extractor
                 {
                     if (post["node"]["__typename"].ToString() != "GraphSidecar" || option.OnlyThumbnail)
                     {
-                        if ((bool)post["node"]["is_video"] && !option.OnlyImages)
-                        {
-                            posts.DisplayUrls.Add(post["node"]["video_url"].ToString());
-                            if (option.IncludeThumbnail)
-                                posts.DisplayUrls.Add(post["node"]["display_url"].ToString());
-                        }
-                        else
-                            posts.DisplayUrls.Add(post["node"]["display_url"].ToString());
+                        extract_url(post["node"], option, posts.DisplayUrls);
                     }
                     else
                     {
-                        var short_code = post["node"]["shortcode"].ToString();
-                        var json2 = graphql_qurey(option, sidecar_query_hash(), new Dictionary<string, string> { { "shortcode", short_code } });
-
-                        foreach (var media in JToken.Parse(json2)["data"]["shortcode_media"]["edge_sidecar_to_children"]["edges"])
-                        {
-                            if ((bool)media["node"]["is_video"] && !option.OnlyImages)
-                            {
-                                posts.DisplayUrls.Add(media["node"]["video_url"].ToString());
-                                if (option.IncludeThumbnail)
-                                    posts.DisplayUrls.Add(media["node"]["display_url"].ToString());
-                            }
-                            else
-                                posts.DisplayUrls.Add(media["node"]["display_url"].ToString());
-                        }
+                        foreach (var media in post["node"]["edge_sidecar_to_children"]["edges"])
+                            extract_url(media["node"], option, posts.DisplayUrls);
                     }
                 }
 

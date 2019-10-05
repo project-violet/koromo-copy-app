@@ -1,6 +1,6 @@
 # Custom Crawler - Ultimate Crawling Supporter Maximizes Productivity
 
-![](Images/cc-1.png)
+![](Images/cc-1.PNG)
 
 This program is a tool for analyzing static web pages.
 

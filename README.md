@@ -94,9 +94,9 @@ First User Release: 2020-08-01
 
 ## Contribution
 
-Any form of contribution is welcome!
+Welcome to any form of contribution!
 
-If you are interested in the project or have any suggestions, feel free to open the issue!
+If you are interested in this project or have any suggestions, feel free to open the issue!
 
 ## Thanks
 

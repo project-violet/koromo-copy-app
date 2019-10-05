@@ -45,6 +45,8 @@ If you want to format the download path, enter `--list-extractor` to see the sup
 
 [Apply to my project](Document/Embedding.md)
 
+[Custom Crawler](Document/CustomCrawler.md)
+
 ## Supports
 
 ### Now support

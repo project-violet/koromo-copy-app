@@ -1,6 +1,6 @@
 # Koromo Copy
 
-`Koromo Copy` is a cross platform image/text/music downloader, crawler collection, and file management system.
+`Koromo Copy` is a cross platform image downloader.
 
 ## Release Informations
 
@@ -32,8 +32,8 @@ Naver
 Pixiv
 Hitomi
 Imgur
-Instagram
-Twitter
+Instagram (supports Video)
+Twitter (supports Video)
 ```
 
 ### Plan to support

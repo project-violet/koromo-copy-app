@@ -117,6 +117,9 @@ namespace Koromo_Copy.Framework.Extractor
                     else
                         task.Format.Character = "N/A";
 
+                    if (task.Format.Artist == "N/A" && task.Format.Group != "N/A")
+                        task.Format.Artist = task.Format.Group;
+
                     result.Add(task);
                 }
 

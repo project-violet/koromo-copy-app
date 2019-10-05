@@ -125,6 +125,9 @@ namespace Koromo_Copy.Framework.Extractor
             if (data.parody != null && data.parody.Length > 0)
                 series = data.parody[0];
 
+            if (artist == "N/A" && group != "N/A")
+                artist = group;
+
             for (int i = 0; i < image_urls.Count; i++)
             {
                 var task = NetTask.MakeDefault(image_urls[i]);

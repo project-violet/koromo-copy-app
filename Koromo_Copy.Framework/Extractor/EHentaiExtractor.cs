@@ -61,12 +61,12 @@ namespace Koromo_Copy.Framework.Extractor
         {
             HostName = new Regex(@"e-hentai\.org");
             ValidUrl = new Regex(@"^https?://e-hentai\.org/g/(\d+)/(.*?)/?$");
-            ExtractorInfo = "e-henati extactor info\r\n" + 
-                "title: English title.\r\n" +
-                "original_title: Japanes title\r\n" + 
-                "artist: Artist name (if not exists N/A)\r\n" +
-                "group: Group name (if not exists N/A)\r\n" + 
-                "series: Parody name (if not exists N/A)\r\n";
+            ExtractorInfo = "e-henati extactor info\r\n" +
+                "   title:            English title.\r\n" +
+                "   original_title:   Japanes title\r\n" +
+                "   artist:           Artist name (if not exists N/A)\r\n" +
+                "   group:            Group name (if not exists N/A)\r\n" +
+                "   series:           Parody name (if not exists N/A)";
         }
 
         public override IExtractorOption RecommendOption(string url)

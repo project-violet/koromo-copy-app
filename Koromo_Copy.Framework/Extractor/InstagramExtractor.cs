@@ -40,6 +40,9 @@ namespace Koromo_Copy.Framework.Extractor
         {
             HostName = new Regex(@"www\.instagram\.com");
             ValidUrl = new Regex(@"^https?://www\.instagram\.com/(?:p\/)?(?<id>.*?)/?.*?$");
+            ExtractorInfo = "Instagram extactor info\r\n" +
+                "   user:             Full-name.\r\n" +
+                "   account:          User-name";
         }
 
         public override IExtractorOption RecommendOption(string url)

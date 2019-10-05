@@ -25,7 +25,7 @@ namespace Koromo_Copy.Framework.Extractor
         public bool OnlyThumbnail;
         [CommandLine("--include-thumbnail", CommandType.OPTION, Info = "Include thumbnail extracting video.")]
         public bool IncludeThumbnail;
-        [CommandLine("--limit-posts", CommandType.ARGUMENTS, Info = "Limit read posts count.")]
+        [CommandLine("--limit-posts", CommandType.ARGUMENTS, Info = "Limit read posts count.", Help = "use --limit-posts <Number of post>")]
         public string[] LimitPosts;
 
         public override void CLParse(ref IExtractorOption model, string[] args)

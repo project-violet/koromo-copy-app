@@ -170,6 +170,7 @@ namespace Koromo_Copy.Console
             System.Console.WriteLine($"E-Mail: koromo.software@gmail.com");
             System.Console.WriteLine($"Source-code: https://github.com/koromo-copy/koromo-copy");
             System.Console.WriteLine($"");
+            System.Console.WriteLine("Usage: ./Koromo_Copy.Console [OPTIONS...] <URL> [URL OPTIONS ...]");
 
             var builder = new StringBuilder();
             CommandLineParser.GetFields(typeof(Options)).ToList().ForEach(
@@ -189,6 +190,9 @@ namespace Koromo_Copy.Console
                         builder.Append($"   {key}".PadRight(30) + $" {help}\r\n");
                 });
             System.Console.Write(builder.ToString());
+
+            System.Console.WriteLine($"");
+            System.Console.WriteLine("Enter './Koromo_Copy.Console --list-extractor' to get more url options.");
         }
 
         public static void PrintVersion()

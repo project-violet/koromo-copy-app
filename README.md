@@ -33,7 +33,7 @@ Pixiv
 Hitomi
 Imgur
 Instagram
-Twitter (Not supports video yet)
+Twitter
 ```
 
 ### Plan to support

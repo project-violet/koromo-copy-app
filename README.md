@@ -25,7 +25,9 @@ First User Release: 2020-08-01
 ```
 DCInside
 EHentai
+ExHentai
 Gelbooru
+Manamoa
 Naver
 Pixiv
 Hitomi
@@ -40,11 +42,9 @@ Instagram
 ArtsAndCulture
 Danbooru
 Daum
-ExHentai
 Fakku
 GoogleImage
 Hiyobi
-Manamoa
 Namuwiki
 Nozomi
 Pixabay

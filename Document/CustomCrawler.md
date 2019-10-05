@@ -1,4 +1,4 @@
-# Custom Crawler - Ultimate Crawling Supporter Maximizes Productivity
+# Custom Crawler - Ultimate Crawling Supporter
 
 ![](Images/cc-1.PNG)
 

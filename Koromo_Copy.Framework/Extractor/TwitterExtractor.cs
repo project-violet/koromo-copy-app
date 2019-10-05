@@ -2,6 +2,7 @@
 // Copyright (C) 2019. dc-koromo. Licensed under the MIT Licence.
 
 using HtmlAgilityPack;
+using Koromo_Copy.Framework.CL;
 using Koromo_Copy.Framework.Network;
 using Koromo_Copy.Framework.Utils;
 using Newtonsoft.Json.Linq;
@@ -18,6 +19,13 @@ namespace Koromo_Copy.Framework.Extractor
 {
     public class TwitterExtractorOption : IExtractorOption
     {
+        [CommandLine("--limit-posts", CommandType.ARGUMENTS, Info = "Limit read posts count.", Help = "use --limit-posts <Number of post>")]
+        public string[] LimitPosts;
+
+        public override void CLParse(ref IExtractorOption model, string[] args)
+        {
+            model = CommandLineParser.Parse(model as TwitterExtractorOption, args);
+        }
     }
 
     public class TwitterExtractor : ExtractorModel
@@ -48,9 +56,14 @@ namespace Koromo_Copy.Framework.Extractor
 
             var match = ValidUrl.Match(url).Groups;
 
+            var limit = int.MaxValue;
+
+            if ((option as TwitterExtractorOption).LimitPosts != null)
+                limit = (option as TwitterExtractorOption).LimitPosts[0].ToInt();
+
             if (match["id"].Value == "hashtag")
             {
-#if DEBUG
+#if DEBUG && false
                 var html = NetTools.DownloadString(url);
                 var search = HttpUtility.UrlDecode(match["search"].Value);
                 var position = Regex.Match(html, @"data-max-position""(.*?)""").Groups[1].Value;
@@ -113,11 +126,13 @@ namespace Koromo_Copy.Framework.Extractor
                 var tweets = node.SelectNodes("./html[1]/body[1]/div[1]/div[2]/div[1]/div[2]/div[1]/div[1]/div[2]/div[1]/div[2]/div[2]/div[1]/div[2]/ol[1]/li[@data-item-type='tweet']");
                 var urls = new List<string>();
                 var user = node.SelectSingleNode("/html[1]/body[1]/div[1]/div[2]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/h1[1]/a[1]").InnerText;
+                var videos = new List<(string, List<string>)>();
+                var post_count = tweets.Count;
 
                 foreach (var tweet in tweets)
-                    urls.AddRange(parse_tweet_hashtag(option as TwitterExtractorOption, tweet));
+                    urls.AddRange(parse_tweet_hashtag(option as TwitterExtractorOption, tweet, videos));
 
-                while (true)
+                while (post_count < limit)
                 {
                     var next = profile_query(option as TwitterExtractorOption, name, min_position);
                     var html2 = JToken.Parse(next)["items_html"].ToString();
@@ -125,7 +140,8 @@ namespace Koromo_Copy.Framework.Extractor
                     if (tweets2 == null)
                         break;
                     foreach (var tweet in tweets2)
-                        urls.AddRange(parse_tweet_hashtag(option as TwitterExtractorOption, tweet));
+                        urls.AddRange(parse_tweet_hashtag(option as TwitterExtractorOption, tweet, videos));
+                    post_count += tweets2.Count;
                     min_position = JToken.Parse(next)["min_position"].ToString();
                     if (!(bool)JToken.Parse(next)["has_more_items"])
                         break;
@@ -150,13 +166,33 @@ namespace Koromo_Copy.Framework.Extractor
                     result.Add(task);
                 }
 
+                foreach (var video in videos)
+                {
+                    var count = 0;
+                    foreach (var ts in video.Item2)
+                    {
+                        var task = NetTask.MakeDefault(ts);
+                        task.SaveFile = true;
+
+                        var fn = ts.Split('/').Last();
+                        task.Filename = fn;
+                        task.Format = new ExtractorFileNameFormat
+                        {
+                            FilenameWithoutExtension = video.Item1 + "/" + count++.ToString("000"),
+                            Extension = Path.GetExtension(fn).Replace(".", ""),
+                            Account = name,
+                            User = user,
+                        };
+
+                        result.Add(task);
+                    }
+                }
+
                 return new Tuple<List<NetTask>, object>(result, null);
             }
-
-            return null;
         }
 
-        private List<string> parse_tweet_hashtag(TwitterExtractorOption option, HtmlNode tweet)
+        private List<string> parse_tweet_hashtag(TwitterExtractorOption option, HtmlNode tweet, List<(string, List<string>)> video)
         {
             var result = new List<string>();
             var media_img = tweet.SelectNodes("./div[1]/div[2]/div[@class='AdaptiveMediaOuterContainer']//img");
@@ -182,6 +218,20 @@ namespace Koromo_Copy.Framework.Extractor
 
                 if (JToken.Parse(data)["track"]["contentType"].ToString() == "gif")
                     result.Add(JToken.Parse(data)["track"]["playbackUrl"].ToString());
+                else
+                {
+                    // m3u8
+                    var m3u8m3u8_url = JToken.Parse(data)["track"]["playbackUrl"].ToString();
+                    var m3u8_url = NetTools.DownloadString(m3u8m3u8_url).Trim().Split('\n').Last().Trim();
+                    var m3u8 = NetTools.DownloadString("https://video.twimg.com" + m3u8_url);
+
+                    var ts_urls = new List<string>();
+                    foreach (var line in m3u8.Split('\n'))
+                        if (!line.Trim().StartsWith("#") && line.Contains("ext_tw_video"))
+                            ts_urls.Add("https://video.twimg.com" + line);
+
+                    video.Add((m3u8_url.Split('/').Last().Split('.')[0], ts_urls));
+                }
             }
 
             return result;

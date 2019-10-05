@@ -271,6 +271,7 @@ namespace Koromo_Copy.Framework.Extractor
             new EHentaiExtractor(),
             new HitomiExtractor(),
             new InstagramExtractor(),
+            new ExHentaiExtractor(),
         };
 
         public ExtractorModel GetExtractor(string url)

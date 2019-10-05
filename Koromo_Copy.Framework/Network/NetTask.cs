@@ -18,7 +18,7 @@ namespace Koromo_Copy.Framework.Network
     [JsonObject(MemberSerialization.OptIn)]
     public class NetTask : ISchedulerContents<NetTask, NetPriority>
     {
-        public static NetTask MakeDefault(string url)
+        public static NetTask MakeDefault(string url, string cookie = "")
             => new NetTask
             {
                 Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
@@ -29,10 +29,11 @@ namespace Koromo_Copy.Framework.Network
                 RetryCount = Settings.Instance.Network.RetryCount,
                 DownloadBufferSize = Settings.Instance.Network.DownloadBufferSize,
                 Priority = new NetPriority() { Type = NetPriorityType.Trivial },
+                Cookie = cookie,
                 Url = url
             };
 
-        public static NetTask MakeDefaultMobile(string url)
+        public static NetTask MakeDefaultMobile(string url, string cookie = "")
             => new NetTask
             {
                 Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
@@ -43,6 +44,7 @@ namespace Koromo_Copy.Framework.Network
                 RetryCount = Settings.Instance.Network.RetryCount,
                 DownloadBufferSize = Settings.Instance.Network.DownloadBufferSize,
                 Priority = new NetPriority() { Type = NetPriorityType.Trivial },
+                Cookie = cookie,
                 Url = url
             };
 

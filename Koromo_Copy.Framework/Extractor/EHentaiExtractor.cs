@@ -61,7 +61,7 @@ namespace Koromo_Copy.Framework.Extractor
         {
             HostName = new Regex(@"e-hentai\.org");
             ValidUrl = new Regex(@"^https?://e-hentai\.org/g/(\d+)/(.*?)/?$");
-            ExtractorInfo = "e-henati extactor info\r\n" +
+            ExtractorInfo = "e-hentai extactor info\r\n" +
                 "   title:            English title.\r\n" +
                 "   original_title:   Japanes title\r\n" +
                 "   artist:           Artist name (if not exists N/A)\r\n" +
@@ -78,16 +78,6 @@ namespace Koromo_Copy.Framework.Extractor
         {
             return "%(title)s/%(file)s.%(ext)s";
         }
-
-        readonly static List<string> cookies = new List<string>()
-        {
-            "igneous=30e0c0a66;ipb_member_id=2742770;ipb_pass_hash=6042be35e994fed920ee7dd11180b65f;sl=dm_2",
-            "igneous=5676ef9eb21f775ab55895d02b30e2805d616aaed60eb5f9e7e5bddeb018be5596a971e6ad5947c4c1f2cb02ef069779db694b2649da1b0bfb5a7b2a23767fa4;ipb_member_id=2263496;ipb_pass_hash=6d94181101e10c5e8497c22bcfdf49e5;sl=dm_2",
-            "ipb_member_id=1885095;ipb_pass_hash=c09d537c4eb19c406aca61fedc525eef",
-            "ipb_member_id=1804967;ipb_pass_hash=1f3cf1b418ad112a234aea89d04ab7a8",
-            "ipb_member_id=2195218;ipb_pass_hash=55e08b8e81a8c93f41c14bafb38e4d0a",
-            "ipb_member_id=1715959;ipb_pass_hash=67e57ed90cfc3b391c8a32e920a31cf0",
-        };
 
         public override Tuple<List<NetTask>, object> Extract(string url, IExtractorOption option = null)
         {
@@ -124,21 +114,21 @@ namespace Koromo_Copy.Framework.Extractor
             var count = image_urls.Count;
             var wait = new ManualResetEvent(false);
 
+            var artist = "N/A";
+            var group = "N/A";
+            var series = "N/A";
+
+            if (data.artist != null && data.artist.Length > 0)
+                artist = data.artist[0];
+            if (data.group != null && data.group.Length > 0)
+                group = data.group[0];
+            if (data.parody != null && data.parody.Length > 0)
+                series = data.parody[0];
+
             for (int i = 0; i < image_urls.Count; i++)
             {
                 var task = NetTask.MakeDefault(image_urls[i]);
                 var j = i;
-
-                var artist = "N/A";
-                var group = "N/A";
-                var series = "N/A";
-
-                if (data.artist != null && data.artist.Length > 0)
-                    artist = data.artist[0];
-                if (data.group != null && data.group.Length > 0)
-                    group = data.group[0];
-                if (data.parody != null && data.parody.Length > 0)
-                    series = data.parody[0];
 
                 task.Priority = new NetPriority { Type = NetPriorityType.Trivial, TaskPriority = i };
                 task.DownloadString = true;
@@ -173,7 +163,7 @@ namespace Koromo_Copy.Framework.Extractor
 
         #region Parse for EHentai Web Site
 
-        public static EHentaiArticle ParseArticleData(string source)
+        public static EHentaiArticle ParseArticleData(string source, string thumbnail = @"https://ehgt.org/.*?(?=\))")
         {
             EHentaiArticle article = new EHentaiArticle();
 
@@ -181,7 +171,7 @@ namespace Koromo_Copy.Framework.Extractor
             document.LoadHtml(source);
             HtmlNode nodes = document.DocumentNode.SelectNodes("//div[@class='gm']")[0];
 
-            article.Thumbnail = Regex.Match(nodes.SelectSingleNode(".//div[@id='gleft']//div//div").GetAttributeValue("style", ""), @"https://ehgt.org/.*?(?=\))").Groups[0].Value;
+            article.Thumbnail = Regex.Match(nodes.SelectSingleNode(".//div[@id='gleft']//div//div").GetAttributeValue("style", ""), thumbnail).Groups[0].Value;
 
             article.Title = nodes.SelectSingleNode(".//div[@id='gd2']//h1[@id='gn']").InnerText;
             article.SubTitle = nodes.SelectSingleNode(".//div[@id='gd2']//h1[@id='gj']").InnerText;

@@ -22,9 +22,10 @@ namespace Koromo_Copy.Console
             //args = new string[] { "https://gall.dcinside.com/board/view/?id=programming&no=1132197&page=1", "--print-process" };
             //args = new string[] { "https://hitomi.la/galleries/1344592.html", "--print-process" };
             //args = new string[] { "https://gall.dcinside.com/mgallery/board/lists?id=purikone_redive", "--gaenyum" };
-            args = new string[] { "https://www.instagram.com/parlovetati/" };
-            args = new string[] { "https://www.instagram.com/zennyrt/", "-p" };
-            args = new string[] { "https://www.instagram.com/haneul__haneul/", "-p" };
+            //args = new string[] { "https://www.instagram.com/parlovetati/" };
+            //args = new string[] { "https://www.instagram.com/zennyrt/", "-p" };
+            //args = new string[] { "https://www.instagram.com/haneul__haneul/", "-p" };
+            args = new string[] { "https://exhentai.org/g/1495578/5568045b16/", "-p" };
 #endif
             AppProvider.Initialize();
 

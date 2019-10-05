@@ -135,21 +135,22 @@ namespace Koromo_Copy.Framework.Extractor
             public static User get_user(InstagramExtractorOption option, string html)
             {
                 var json = Regex.Match(html, @"window\._sharedData = (.*);</script>").Groups[1].Value;
+                var juser = (JToken.Parse(json)["entry_data"]["ProfilePage"] as JArray)[0]["graphql"]["user"];
 
                 var user = new User
                 {
-                    UserId = (JToken.Parse(json)["entry_data"]["ProfilePage"] as JArray)[0]["graphql"]["user"]["id"].ToString(),
-                    UserName = (JToken.Parse(json)["entry_data"]["ProfilePage"] as JArray)[0]["graphql"]["user"]["username"].ToString(),
-                    FullName = (JToken.Parse(json)["entry_data"]["ProfilePage"] as JArray)[0]["graphql"]["user"]["full_name"].ToString(),
+                    UserId = juser["id"].ToString(),
+                    UserName = juser["username"].ToString(),
+                    FullName = juser["full_name"].ToString(),
                     FirstPost = new Posts
                     {
-                        HasNext = (bool)(JToken.Parse(json)["entry_data"]["ProfilePage"] as JArray)[0]["graphql"]["user"]["edge_owner_to_timeline_media"]["page_info"]["has_next_page"],
-                        EndCursor = (JToken.Parse(json)["entry_data"]["ProfilePage"] as JArray)[0]["graphql"]["user"]["edge_owner_to_timeline_media"]["page_info"]["end_cursor"].ToString(),
+                        HasNext = (bool)juser["edge_owner_to_timeline_media"]["page_info"]["has_next_page"],
+                        EndCursor = juser["edge_owner_to_timeline_media"]["page_info"]["end_cursor"].ToString(),
                         DisplayUrls = new List<string>()
                     }
                 };
 
-                foreach (var post in (JToken.Parse(json)["entry_data"]["ProfilePage"] as JArray)[0]["graphql"]["user"]["edge_owner_to_timeline_media"]["edges"])
+                foreach (var post in juser["edge_owner_to_timeline_media"]["edges"])
                 {
                     if (post["node"]["__typename"].ToString() == "GraphImage" || option.OnlyThumbnail)
                         user.FirstPost.DisplayUrls.Add(post["node"]["display_url"].ToString());
@@ -197,14 +198,16 @@ namespace Koromo_Copy.Framework.Extractor
             public static Posts query_next(InstagramExtractorOption option, string query_hash, string id, string first, string after)
             {
                 var json = graphql_qurey(option, query_hash, new Dictionary<string, string> { { "id", id }, { "first", first }, { "after", after } });
+                var jmedia = JToken.Parse(json)["data"]["user"]["edge_owner_to_timeline_media"];
+
                 var posts = new Posts
                 {
-                    HasNext = (bool)JToken.Parse(json)["data"]["user"]["edge_owner_to_timeline_media"]["page_info"]["has_next_page"],
-                    EndCursor = JToken.Parse(json)["data"]["user"]["edge_owner_to_timeline_media"]["page_info"]["end_cursor"].ToString(),
+                    HasNext = (bool)jmedia["page_info"]["has_next_page"],
+                    EndCursor = jmedia["page_info"]["end_cursor"].ToString(),
                     DisplayUrls = new List<string>()
                 };
 
-                foreach (var post in JToken.Parse(json)["data"]["user"]["edge_owner_to_timeline_media"]["edges"])
+                foreach (var post in jmedia["edges"])
                 {
                     if (post["node"]["__typename"].ToString() != "GraphSidecar" || option.OnlyThumbnail)
                     {

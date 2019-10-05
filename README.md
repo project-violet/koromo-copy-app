@@ -33,6 +33,7 @@ Pixiv
 Hitomi
 Imgur
 Instagram
+Twitter (Not supports video yet)
 ```
 
 ### Plan to support
@@ -52,7 +53,6 @@ Reddit
 Rule34
 SMPeople
 Tistory
-Twitter
 ```
 
 ## Thanks

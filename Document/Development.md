@@ -84,11 +84,18 @@ Inverse step of `Initializing Step`.
 
 `Network` namespace is collection of core utils for downloading.
 
-### Net Task
-
 ### Net Scheduler
 
+Non-preemptive scheduler that allows you to change priorities in real-time.
+
+### Net Task
+
+Data structure for `Net Field` includes `URL`, `Referer`, `Cookie`, `Postprocessor`, `Events` and many other options.
+Some useful methods is declared such as `NetTask.MakeDefault(url: string)`, `NetTask.MakeDefaultMobile(url: string)`.
+
 ### Net Field
+
+A class that implements the core logic for downloading data.
 
 ### Net Tools
 
@@ -96,9 +103,19 @@ Inverse step of `Initializing Step`.
 All network communication is handled by the scheduler,
 you should not use interfaces provided by `.Net` directly, such as `WebClient` or `HttpRequest`.
 
+## Postprocessor
+
+It is designed to perform tasks that are not related to downloads such as `FFmpeg` or `Zip`.
+So, this class is created to define the tasks required after downloading.
+
 ## Extractor
 
+`Extractor` gets a NetTask that directs the download task from a specific `URL`.
+Seperated by `Host-Name`, all `crawling operations` are implemented here.
+
 ## Log
+
+This class records all download progress.
 
 ## Cache
 

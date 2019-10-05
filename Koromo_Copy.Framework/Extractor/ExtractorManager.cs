@@ -273,7 +273,8 @@ namespace Koromo_Copy.Framework.Extractor
             new InstagramExtractor(),
             new ExHentaiExtractor(),
             new ManamoaExtractor(),
-            new ImgurExtractor()
+            new ImgurExtractor(),
+            new TwitterExtractor()
         };
 
         public ExtractorModel GetExtractor(string url)

@@ -30,7 +30,7 @@ namespace Koromo_Copy.Framework.Extractor
 
         public override string RecommendFormat(IExtractorOption option)
         {
-            throw new NotImplementedException();
+            return "%(id)s/%(file)s.%(ext)s";
         }
 
         public override Tuple<List<NetTask>, object> Extract(string url, IExtractorOption option = null)
@@ -50,7 +50,7 @@ namespace Koromo_Copy.Framework.Extractor
                 var task = NetTask.MakeDefault($"https://i.imgur.com/{hash}{ext}");
                 task.SaveFile = true;
                 task.Filename = $"{hash}{ext}";
-                task.Format = new ExtractorFileNameFormat { Extension = ext, FilenameWithoutExtension = hash, Url = url };
+                task.Format = new ExtractorFileNameFormat { Id = hash, Extension = ext, FilenameWithoutExtension = hash, Url = url };
                 result.Add(task);
             }
 

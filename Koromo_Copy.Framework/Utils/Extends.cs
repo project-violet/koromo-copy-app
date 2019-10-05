@@ -15,5 +15,12 @@ namespace Koromo_Copy.Framework.Utils
 
         public static string MyText(this HtmlNode node) =>
             string.Join("", node.ChildNodes.Where(x => x.Name == "#text").Select(x => x.InnerText.Trim()));
+
+        public static HtmlNode ToHtmlNode(this string html)
+        {
+            var document = new HtmlDocument();
+            document.LoadHtml(html);
+            return document.DocumentNode;
+        }
     }
 }

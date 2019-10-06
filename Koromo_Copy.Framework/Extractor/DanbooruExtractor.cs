@@ -22,7 +22,7 @@ namespace Koromo_Copy.Framework.Extractor
         [CommandLine("--end-page", CommandType.ARGUMENTS, Info = "Set end page.")]
         public new string[] EndPage;
         [CommandLine("--exclude-video", CommandType.OPTION, Info = "Exclude video.")]
-        public new bool ExcludeVideo;
+        public bool ExcludeVideo;
 
         public override void CLParse(ref IExtractorOption model, string[] args)
         {

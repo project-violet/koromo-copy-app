@@ -56,6 +56,7 @@ Danbooru
 DCInside
 EHentai
 ExHentai
+Funbe
 Gelbooru
 Manamoa
 Naver

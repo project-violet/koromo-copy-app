@@ -151,7 +151,7 @@ namespace Koromo_Copy.Framework.Extractor
             try { article.parody = contents.SelectNodes("./tr[1]/td[2]/ul/li").Select(node => node.SelectSingleNode(".//a").InnerText).ToArray(); } catch { }
             article.Type = contents.SelectSingleNode("./tr[2]/td[2]/a").InnerText;
             try { article.Language = LegalizeLanguage(contents.SelectSingleNode("./tr[3]/td[2]/a").InnerText); } catch { }
-            //try { article.Tags = contents.SelectNodes("./tr[4]/td[2]/ul/li").Select(node => HitomiLegalize.LegalizeTag(node.SelectSingleNode(".//a").InnerText)).ToArray(); } catch { }
+            try { article.Tags = contents.SelectNodes("./tr[4]/td[2]/ul/li").Select(node => LegalizeTag(node.SelectSingleNode(".//a").InnerText)).ToArray(); } catch { }
 
             article.Posted = nodes.SelectSingleNode("./div[2]/p").InnerText;
 

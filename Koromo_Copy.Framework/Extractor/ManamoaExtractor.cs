@@ -95,17 +95,16 @@ namespace Koromo_Copy.Framework.Extractor
 
                 foreach (var item in node.SelectNodes("/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[2]/div[1]/div[1]/div"))
                 {
-                    sub_urls.Add(item.SelectSingleNode("./a[1]").GetAttributeValue("href", ""));
+                    sub_urls.Add(match["host"] + item.SelectSingleNode("./a[1]").GetAttributeValue("href", ""));
                     sub_titles.Add(item.SelectSingleNode("./a[1]/div[1]").MyText());
                 }
+
+                var htmls = NetTools.DownloadStrings(sub_urls);
 
                 var result = new List<NetTask>();
                 for (int i = 0; i < sub_urls.Count; i++)
                 {
-                    var surl = match["host"] + sub_urls[i];
-                    option.PageReadCallback?.Invoke(surl);
-                    var html2 = NetTools.DownloadString(surl);
-                    var images = get_board_images(html2);
+                    var images = get_board_images(htmls[i]);
                     int count = 1;
                     foreach (var img in images)
                     {

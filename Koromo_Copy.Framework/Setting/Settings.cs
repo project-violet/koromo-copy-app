@@ -19,6 +19,7 @@ namespace Koromo_Copy.Framework.Setting
             public int TimeoutMillisecond;
             public int DownloadBufferSize;
             public int RetryCount;
+            public string Proxy;
         }
 
         public NetworkSetting NetworkSettings;
@@ -98,6 +99,7 @@ namespace Koromo_Copy.Framework.Setting
                         TimeoutMillisecond = 10000,
                         DownloadBufferSize = 131072,
                         RetryCount = 10,
+                        Proxy = "",
                     },
 
                     PixivSettings = new SettingModel.PixivSetting()

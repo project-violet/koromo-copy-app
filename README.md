@@ -52,6 +52,7 @@ If you want to format the download path, enter `--list-extractor` to see the sup
 ### Now support
 
 ```
+Danbooru
 DCInside
 EHentai
 ExHentai
@@ -60,6 +61,7 @@ Manamoa
 Naver
 Pixiv
 Hitomi
+Hiyobi
 Imgur
 Instagram (supports Video)
 Twitter (supports Video)
@@ -70,11 +72,9 @@ Twitter (supports Video)
 ```
 4Chan
 ArtsAndCulture
-Danbooru
 Daum
 Fakku
 GoogleImage
-Hiyobi
 Namuwiki
 Nozomi
 Pixabay

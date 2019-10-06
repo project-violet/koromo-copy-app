@@ -144,11 +144,13 @@ namespace Koromo_Copy.Framework.Network
             interrupt.ForEach(x => x.Set());
         }
 
-        public void Add(T task)
+        public UpdatableHeapElements<T> Add(T task)
         {
             task.scheduler = this;
-            lock (queue) queue.Push(task);
+            UpdatableHeapElements<T> e;
+            lock (queue) e = queue.Push(task);
             lock (notify_lock) Notify();
+            return e;
         }
     }
 

@@ -276,6 +276,7 @@ namespace Koromo_Copy.Framework.Extractor
             new ImgurExtractor(),
             new TwitterExtractor(),
             new HiyobiExtractor(),
+            new DanbooruExtractor(),
         };
 
         public ExtractorModel GetExtractor(string url)

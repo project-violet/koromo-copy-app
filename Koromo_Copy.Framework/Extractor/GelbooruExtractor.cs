@@ -2,7 +2,9 @@
 // Copyright (C) 2019. dc-koromo. Licensed under the MIT Licence.
 
 using HtmlAgilityPack;
+using Koromo_Copy.Framework.CL;
 using Koromo_Copy.Framework.Network;
+using Koromo_Copy.Framework.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,6 +18,15 @@ namespace Koromo_Copy.Framework.Extractor
 {
     public class GelbooruExtractorOption : IExtractorOption
     {
+        [CommandLine("--start-page", CommandType.ARGUMENTS, Info = "Set start page.")]
+        public new string[] StartPage;
+        [CommandLine("--end-page", CommandType.ARGUMENTS, Info = "Set end page.")]
+        public new string[] EndPage;
+
+        public override void CLParse(ref IExtractorOption model, string[] args)
+        {
+            model = CommandLineParser.Parse(model as GelbooruExtractorOption, args);
+        }
     }
 
     public class GelbooruExtractor : ExtractorModel
@@ -45,7 +56,13 @@ namespace Koromo_Copy.Framework.Extractor
 
             var tags = match[1].Value;
             var result = new List<NetTask>();
-            var page = (option as GelbooruExtractorOption).StartPage;
+            var page = 1;
+            if ((option as GelbooruExtractorOption).StartPage != null)
+                page = (option as GelbooruExtractorOption).StartPage[0].ToInt();
+
+            var end_page = int.MaxValue;
+            if ((option as GelbooruExtractorOption).EndPage != null)
+                end_page = (option as GelbooruExtractorOption).EndPage[0].ToInt();
 
             while (true)
             {
@@ -79,7 +96,7 @@ namespace Koromo_Copy.Framework.Extractor
 
                 page += 1;
 
-                if (page > (option as GelbooruExtractorOption).EndPage)
+                if (page > end_page)
                     break;
             }
 

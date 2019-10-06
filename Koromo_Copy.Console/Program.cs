@@ -33,7 +33,8 @@ namespace Koromo_Copy.Console
             //args = new string[] { "https://twitter.com/priconne_redive", "-p" };
             //args = new string[] { "https://www.instagram.com/ravi.me/", "-p" };
             //args = new string[] { "https://xn--9w3b15m8vo.asia/reader/1496049#1-", "-p" };
-            args = new string[] { "https://danbooru.donmai.us/posts?tags=oryou", "-p", "--end-page", "3" };
+            //args = new string[] { "https://danbooru.donmai.us/posts?tags=oryou", "-p", "--end-page", "3" };
+            args = new string[] { "https://funbe19.com/왕의-딸로-태어났다고-합니다", "-p" };
 #endif
             AppProvider.Initialize();
 

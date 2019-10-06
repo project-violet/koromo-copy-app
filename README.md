@@ -47,6 +47,8 @@ If you want to format the download path, enter `--list-extractor` to see the sup
 
 [Custom Crawler](Document/CustomCrawler.md)
 
+[General](Document/General.md)
+
 ## Supports
 
 ### Now support

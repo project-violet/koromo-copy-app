@@ -454,7 +454,7 @@ namespace Koromo_Copy.Console
 
                     ProgressBar pb = null;
 
-                    if (!DisableDownloadProgress)
+                    if (!PrintProcess && !DisableDownloadProgress)
                     {
                         System.Console.Write("Download files... ");
                         pb = new ProgressBar();
@@ -464,7 +464,7 @@ namespace Koromo_Copy.Console
                         task.Filename = Path.Combine(Settings.Instance.Model.SuperPath, task.Format.Formatting(format));
                         if (!Directory.Exists(Path.GetDirectoryName(task.Filename)))
                             Directory.CreateDirectory(Path.GetDirectoryName(task.Filename));
-                        if (!DisableDownloadProgress)
+                        if (!PrintProcess && !DisableDownloadProgress)
                         {
                             task.DownloadCallback = (sz) =>
                                 pb.Report(tasks.Item1.Count, download_count, sz);

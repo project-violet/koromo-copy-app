@@ -76,15 +76,20 @@ Twitter (supports Video)
 4Chan
 ArtsAndCulture
 Daum
+Derpibooru
+DeviantArt
 Fakku
 GoogleImage
+Konachan
 Namuwiki
 Nozomi
 Pixabay
 Reddit
 Rule34
+SankakuComplex
 SMPeople
 Tistory
+Zerochan
 ```
 
 ## Release Informations

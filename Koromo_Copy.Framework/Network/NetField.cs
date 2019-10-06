@@ -228,6 +228,7 @@ namespace Koromo_Copy.Framework.Network
                     if (response.StatusCode == HttpStatusCode.Forbidden && response.Cookies != null)
                     {
                         content.CookieReceive?.Invoke(response.Cookies);
+                        return;
                     }
 
                     //

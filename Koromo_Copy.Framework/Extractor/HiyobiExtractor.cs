@@ -84,6 +84,10 @@ namespace Koromo_Copy.Framework.Extractor
                 }
                 return new Tuple<List<NetTask>, object>(result, null);
             }
+            else
+            {
+                throw new ExtractorException("'search' page not supports yet!");
+            }
 
             return null;
         }

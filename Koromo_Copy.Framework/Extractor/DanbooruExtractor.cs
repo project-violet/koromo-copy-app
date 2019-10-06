@@ -17,9 +17,9 @@ namespace Koromo_Copy.Framework.Extractor
 {
     public class DanbooruExtractorOption : IExtractorOption
     {
-        [CommandLine("--start-page", CommandType.ARGUMENTS, Info = "Set start page.")]
+        [CommandLine("--start-page", CommandType.ARGUMENTS, Info = "Set start page.", Help = "use --start-page <Start Page Number>")]
         public new string[] StartPage;
-        [CommandLine("--end-page", CommandType.ARGUMENTS, Info = "Set end page.")]
+        [CommandLine("--end-page", CommandType.ARGUMENTS, Info = "Set end page.", Help = "use --start-page <End Page Number>")]
         public new string[] EndPage;
         [CommandLine("--exclude-video", CommandType.OPTION, Info = "Exclude video.")]
         public bool ExcludeVideo;

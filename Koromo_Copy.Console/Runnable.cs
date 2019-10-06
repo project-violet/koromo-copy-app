@@ -54,8 +54,9 @@ namespace Koromo_Copy.Console
         [CommandLine("--print-process", CommandType.OPTION, ShortOption = "-p", Info = "Print download processing.", Help = "use -p")]
         public bool PrintProcess;
 
-        [CommandLine("--show-download-progress", CommandType.ARGUMENTS, Info = "Shot download progress per image downloding", Help = "use --show-download-progress <Term Count>")]
-        public string[] ShowDownloadProgress;
+        [CommandLine("--disable-download-progress", CommandType.OPTION, Info = "Disable download progress.", Help = "use --disable-download-progress")]
+        public bool DisableDownloadProgress;
+
 
         [CommandLine("--page-start", CommandType.OPTION, Info = "Specify a start page when crawling a multi-page bulletin board.", Help = "use --page-start <Number>")]
         public string[] PageStart;
@@ -148,7 +149,7 @@ namespace Koromo_Copy.Console
 
                 weird.ForEach(x => n_args.Add(arguments[x]));
 
-                ProcessExtract(option.Url[0], n_args.ToArray(), option.PathFormat, option.ExtractInformation, option.ExtractLinks, option.PrintProcess, option.ShowDownloadProgress);
+                ProcessExtract(option.Url[0], n_args.ToArray(), option.PathFormat, option.ExtractInformation, option.ExtractLinks, option.PrintProcess, option.DisableDownloadProgress);
             }
             else if (option.Error)
             {
@@ -344,7 +345,7 @@ namespace Koromo_Copy.Console
         }
 #endif
 
-        static void ProcessExtract(string url, string[] args, string[] PathFormat, bool ExtractInformation, bool ExtractLinks, bool PrintProcess, string[] ShowDownloadProgress)
+        static void ProcessExtract(string url, string[] args, string[] PathFormat, bool ExtractInformation, bool ExtractLinks, bool PrintProcess, bool DisableDownloadProgress)
         {
             var extractor = ExtractorManager.Instance.GetExtractor(url);
 
@@ -371,6 +372,11 @@ namespace Koromo_Copy.Console
             {
                 try
                 {
+                    System.Console.WriteLine("Extractor Selected: " + extractor.GetType().Name.Replace("Extractor", ""));
+                    System.Console.Write("Extracting urls... ");
+
+                    WaitProgress wp = null;
+
                     if (PrintProcess)
                     {
                         Logs.Instance.AddLogNotify((s, e) => {
@@ -379,12 +385,18 @@ namespace Koromo_Copy.Console
                             System.Console.WriteLine($"[{tuple.Item1.ToString(en)}] {tuple.Item2}");
                         });
                     }
+                    else
+                    {
+                        if (!DisableDownloadProgress)
+                            wp = new WaitProgress();
+                    }
 
                     var option = extractor.RecommendOption(url);
                     option.CLParse(ref option, args);
                     
                     if (option.Error)
                     {
+                        if (wp != null) wp.Dispose();
                         System.Console.WriteLine($"[Input URL] {url}");
                         System.Console.WriteLine($"[Extractor Name] {extractor.GetType().Name}");
                         System.Console.WriteLine(option.ErrorMessage);
@@ -395,6 +407,12 @@ namespace Koromo_Copy.Console
 
                     var tasks = extractor.Extract(url, option);
 
+                    if (wp != null)
+                    {
+                        wp.Dispose();
+                        System.Console.WriteLine("Done.");
+                    }
+                    
                     if (ExtractLinks)
                     {
                         foreach (var uu in tasks.Item1)
@@ -434,22 +452,37 @@ namespace Koromo_Copy.Console
 
                     int download_count = 0;
 
+                    ProgressBar pb = null;
+
+                    if (!DisableDownloadProgress)
+                    {
+                        System.Console.Write("Download files... ");
+                        pb = new ProgressBar();
+                    }
+
                     tasks.Item1.ForEach(task => {
                         task.Filename = Path.Combine(Settings.Instance.Model.SuperPath, task.Format.Formatting(format));
                         if (!Directory.Exists(Path.GetDirectoryName(task.Filename)))
                             Directory.CreateDirectory(Path.GetDirectoryName(task.Filename));
-                        if (ShowDownloadProgress != null)
+                        if (!DisableDownloadProgress)
+                        {
+                            task.DownloadCallback = (sz) =>
+                                pb.Report(tasks.Item1.Count, download_count, sz);
                             task.CompleteCallback = () =>
-                            {
-                                if (Interlocked.Increment(ref download_count) % Convert.ToInt32(ShowDownloadProgress[0]) == 0)
-                                    System.Console.WriteLine($"{download_count}/{tasks.Item1.Count} [{(download_count / (double)tasks.Item1.Count * 100).ToString("##0.#")}]");
-                            };
+                                Interlocked.Increment(ref download_count);
+                        }
                         AppProvider.Scheduler.Add(task);
                     });
 
                     while (AppProvider.Scheduler.busy_thread != 0 || AppProvider.PPScheduler.busy_thread != 0)
                     {
                         Thread.Sleep(500);
+                    }
+
+                    if (pb != null)
+                    { 
+                        pb.Dispose();
+                        System.Console.WriteLine("Done.");
                     }
                 }
                 catch (Exception e)

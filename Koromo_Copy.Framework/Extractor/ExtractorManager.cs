@@ -274,7 +274,8 @@ namespace Koromo_Copy.Framework.Extractor
             new ExHentaiExtractor(),
             new ManamoaExtractor(),
             new ImgurExtractor(),
-            new TwitterExtractor()
+            new TwitterExtractor(),
+            new HiyobiExtractor(),
         };
 
         public ExtractorModel GetExtractor(string url)

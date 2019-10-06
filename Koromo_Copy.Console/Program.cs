@@ -29,8 +29,10 @@ namespace Koromo_Copy.Console
             //args = new string[] { "https://manamoa15.net/bbs/board.php?bo_table=manga&wr_id=1994867", "-p" };
             //args = new string[] { "https://manamoa15.net/bbs/page.php?hid=manga_detail&manga_id=11000", "-p" };
             //args = new string[] { "https://twitter.com/hashtag/%EB%A1%9C%EB%A6%AC", "-p" };
-            args = new string[] { "https://twitter.com/sCQ5fV6ocBfxyQS/media", "-p" };
+            //args = new string[] { "https://twitter.com/sCQ5fV6ocBfxyQS/media", "-p" };
             //args = new string[] { "https://twitter.com/priconne_redive", "-p" };
+            //args = new string[] { "https://www.instagram.com/ravi.me/", "-p" };
+            args = new string[] { "https://xn--9w3b15m8vo.asia/reader/1496049#1-", "-p" };
 #endif
             AppProvider.Initialize();
 

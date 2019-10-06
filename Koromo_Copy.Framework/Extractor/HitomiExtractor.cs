@@ -17,6 +17,7 @@ namespace Koromo_Copy.Framework.Extractor
     public class HitomiArticle : EHentaiArticle
     {
         public string Magic { get; set; }
+        public string[] Tags { get; set; }
     }
 
     public class HitomiExtractorOption : IExtractorOption

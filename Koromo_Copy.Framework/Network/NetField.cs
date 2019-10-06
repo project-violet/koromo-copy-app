@@ -225,6 +225,11 @@ namespace Koromo_Copy.Framework.Network
                     e.Status == WebExceptionStatus.NameResolutionFailure ||
                     e.Status == WebExceptionStatus.UnknownError)
                 {
+                    if (response.StatusCode == HttpStatusCode.Forbidden && response.Cookies != null)
+                    {
+                        content.CookieReceive?.Invoke(response.Cookies);
+                    }
+
                     //
                     //  Cannot continue
                     //

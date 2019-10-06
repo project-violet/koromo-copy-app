@@ -118,12 +118,6 @@ namespace Koromo_Copy.Console
             lock (report_lock)
             {
                 total_read_bytes += read_bytes;
-                if (cycle_count == 8)
-                {
-                    cycle_count = 0;
-                    current_speed = read_bytes_cycle;
-                    read_bytes_cycle = 0;
-                }
                 current_speed += read_bytes;
             }
         }
@@ -133,8 +127,8 @@ namespace Koromo_Copy.Console
             lock (timer)
             {
                 if (disposed) return;
-                long cs = current_speed;
-                lock (report_lock) { cycle_count++; }
+                long cs = current_speed * 8;
+                lock (report_lock) { cycle_count++; current_speed = 0; }
 
                 int progressBlockCount = (int)(currentProgress * blockCount);
                 int percent = (int)(currentProgress * 100);

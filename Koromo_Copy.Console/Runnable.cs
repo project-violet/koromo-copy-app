@@ -54,6 +54,9 @@ namespace Koromo_Copy.Console
         [CommandLine("--print-process", CommandType.OPTION, ShortOption = "-p", Info = "Print download processing.", Help = "use -p")]
         public bool PrintProcess;
 
+        [CommandLine("--show-download-progress", CommandType.ARGUMENTS, Info = "Shot download progress per image downloding", Help = "use --show-download-progress <Term Count>")]
+        public string[] ShowDownloadProgress;
+
         [CommandLine("--page-start", CommandType.OPTION, Info = "Specify a start page when crawling a multi-page bulletin board.", Help = "use --page-start <Number>")]
         public string[] PageStart;
         [CommandLine("--page-end", CommandType.OPTION, Info = "Specify a end page when crawling a multi-page bulletin board.", Help = "use --page-end <Number>")]
@@ -145,7 +148,7 @@ namespace Koromo_Copy.Console
 
                 weird.ForEach(x => n_args.Add(arguments[x]));
 
-                ProcessExtract(option.Url[0], n_args.ToArray(), option.PathFormat, option.ExtractInformation, option.ExtractLinks, option.PrintProcess);
+                ProcessExtract(option.Url[0], n_args.ToArray(), option.PathFormat, option.ExtractInformation, option.ExtractLinks, option.PrintProcess, option.ShowDownloadProgress);
             }
             else if (option.Error)
             {
@@ -341,7 +344,7 @@ namespace Koromo_Copy.Console
         }
 #endif
 
-        static void ProcessExtract(string url, string[] args, string[] PathFormat, bool ExtractInformation, bool ExtractLinks, bool PrintProcess)
+        static void ProcessExtract(string url, string[] args, string[] PathFormat, bool ExtractInformation, bool ExtractLinks, bool PrintProcess, string[] ShowDownloadProgress)
         {
             var extractor = ExtractorManager.Instance.GetExtractor(url);
 
@@ -429,10 +432,18 @@ namespace Koromo_Copy.Console
                         return;
                     }
 
+                    int download_count = 0;
+
                     tasks.Item1.ForEach(task => {
                         task.Filename = Path.Combine(Settings.Instance.Model.SuperPath, task.Format.Formatting(format));
                         if (!Directory.Exists(Path.GetDirectoryName(task.Filename)))
                             Directory.CreateDirectory(Path.GetDirectoryName(task.Filename));
+                        if (ShowDownloadProgress != null)
+                            task.CompleteCallback = () =>
+                            {
+                                if (Interlocked.Increment(ref download_count) % Convert.ToInt32(ShowDownloadProgress[0]) == 0)
+                                    System.Console.WriteLine($"{download_count}/{tasks.Item1.Count} [{(download_count / (double)tasks.Item1.Count * 100).ToString("##0.#")}]");
+                            };
                         AppProvider.Scheduler.Add(task);
                     });
 

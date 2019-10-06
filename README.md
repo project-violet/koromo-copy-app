@@ -92,14 +92,6 @@ Tistory
 Zerochan
 ```
 
-## Release Informations
-
-```
-Project Plan
-First Console Release: 2019-10-31
-First User Release: 2020-08-01
-```
-
 ## Contribution
 
 Welcome to any form of contribution!

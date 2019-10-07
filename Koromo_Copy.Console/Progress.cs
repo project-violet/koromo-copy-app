@@ -2,6 +2,7 @@
 // Copyright (C) 2019. dc-koromo. Licensed under the MIT Licence.
 
 using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 
@@ -96,10 +97,10 @@ namespace Koromo_Copy.Console
         private string currentText = string.Empty;
         private bool disposed = false;
         private long total_read_bytes = 0;
-        private long read_bytes_cycle = 0;
         private long current_speed = 0;
-        private long cycle_count = 0;
+        private long tick_speed = 0;
         private object report_lock = new object();
+        private Queue<long> speed_save = new Queue<long>();
 
         public ProgressBar()
         {
@@ -119,6 +120,7 @@ namespace Koromo_Copy.Console
             {
                 total_read_bytes += read_bytes;
                 current_speed += read_bytes;
+                tick_speed += read_bytes;
             }
         }
 
@@ -127,17 +129,27 @@ namespace Koromo_Copy.Console
             lock (timer)
             {
                 if (disposed) return;
-                long cs = current_speed * 8;
-                lock (report_lock) { cycle_count++; current_speed = 0; }
+                double cs = 0;
+                lock (report_lock)
+                {
+                    speed_save.Enqueue(tick_speed);
+                    tick_speed = 0;
+                    cs = current_speed * (8 / (double)speed_save.Count);
+                    if (speed_save.Count >= 8)
+                    {
+                        current_speed -= speed_save.Peek();
+                        speed_save.Dequeue();
+                    }
+                }
 
                 int progressBlockCount = (int)(currentProgress * blockCount);
                 int percent = (int)(currentProgress * 100);
 
                 string speed;
                 if (cs > 1024 * 1024)
-                    speed = (cs / (double)(1024 * 1024)).ToString("#,0.0") + " MB/S";
+                    speed = (cs / (1024 * 1024)).ToString("#,0.0") + " MB/S";
                 else if (cs > 1024)
-                    speed = (cs / (double)1024).ToString("#,0.0") + " KB/S";
+                    speed = (cs / 1024).ToString("#,0.0") + " KB/S";
                 else
                     speed = cs.ToString("#,0") + " Byte/S";
 

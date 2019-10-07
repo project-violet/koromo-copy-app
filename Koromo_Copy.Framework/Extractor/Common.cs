@@ -46,9 +46,74 @@ namespace Koromo_Copy.Framework.Extractor
         public virtual void CLParse(ref IExtractorOption model, string[] args) { }
     }
 
+    /// <summary>
+    /// Reference: https://github.com/koromo-copy/koromo-copy/blob/master/Document/General.md
+    /// </summary>
     public class ExtractedInfo
     {
+        public class UserArtist
+        {
+            public string URL;
+            public string RealName;
+            public string NickName;
+            public string Id;
+            public string UploadCount;
+            public string FirstAccessTime;
+            public string LastAccessTime;
+            public UserArtist[] Connecitons;
+            public UserArtist[] Follows;
+            public string[] SNSLinks;
+        }
 
+        public class Group
+        {
+            public string URL;
+            public string GroupName;
+            public UserArtist[] Members;
+        }
+
+
+        public class WorksComic
+        {
+            public string URL;
+            public string Title;
+            public string[] Author;
+            public bool IsOmnibus;
+            public string FirstPublished;
+            public bool IsCompletion;
+            public string LastPublished;
+            public class Episode
+            {
+                public string URL;
+                public string EpisodeNumber;
+                public string Title;
+            }
+            public Episode[] Episodes;
+        }
+
+        public class Community
+        {
+            public string URL;
+            public class Board
+            {
+                public string URL;
+                public string BoardName;
+                public string BoardId;
+
+                public class Article
+                {
+                    public string URL;
+                    public string Title;
+                    public string Writer;
+                    public string WriteTime;
+                    public string Views;
+                    public string UpVote;
+                    public string DownVote;
+                }
+                public Article[] Articles;
+            }
+            public Board[] BoardInfo;
+        }
     }
 
     public abstract class ExtractorModel

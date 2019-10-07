@@ -87,6 +87,10 @@ Comic
 Movie
  - Information
 
+=================================================
+
+* Group
+
 Community
  - Board
    - Information

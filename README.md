@@ -2,6 +2,8 @@
 
 `Koromo Copy` is a cross platform image downloader.
 
+![](Document/Images/example.gif)
+
 ## How to use?
 
 Put the URL of the site you want to download.

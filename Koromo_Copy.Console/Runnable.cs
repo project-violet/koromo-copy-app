@@ -29,11 +29,6 @@ namespace Koromo_Copy.Console
         [CommandLine("--dialog-mode", CommandType.OPTION, Info = "Run program with dialog mode.")]
         public bool DialogMode;
 
-#if DEBUG
-        [CommandLine("--test", CommandType.ARGUMENTS, ArgumentsCount = 1, Info = "For test.", Help = "use --test <What test for>")]
-        public string[] Test;
-#endif
-
         [CommandLine("--net", CommandType.OPTION, Info = "Multi-commands net.", Help = "use --net <Others>")]
         public bool Net;
 
@@ -95,15 +90,6 @@ namespace Koromo_Copy.Console
             {
                 Dialog.StartDialog();
             }
-#if DEBUG
-            //
-            //  Test
-            //
-            else if (option.Test != null)
-            {
-                ProcessTest(option.Test);
-            }
-#endif
             else if (option.ListExtractor)
             {
                 foreach (var extractor in ExtractorManager.Extractors)
@@ -203,147 +189,6 @@ namespace Koromo_Copy.Console
         {
             System.Console.WriteLine($"{Version.Name} {Version.Text}");
         }
-
-#if DEBUG
-        static void ProcessTest(string[] args)
-        {
-            switch (args[0])
-            {
-                case "rsa":
-                    {
-                        var vpkp = RSAHelper.CreateKey();
-
-                        System.Console.WriteLine(vpkp.Item1);
-                        System.Console.WriteLine(vpkp.Item2);
-
-                        var rsa_test_text = "ABCD";
-                        var bb = Encoding.UTF8.GetBytes(rsa_test_text);
-
-                        var enc = RSAHelper.Encrypt(bb, vpkp.Item2);
-                        var dec = RSAHelper.Decrypt(enc, vpkp.Item1);
-
-                        System.Console.WriteLine(Encoding.UTF8.GetString(dec));
-                    }
-                    break;
-
-                case "dcinside":
-                    {
-                        var extractor = new DCInsideExtractor();
-                        var imgs = extractor.Extract("https://gall.dcinside.com/mgallery/board/view?id=plamodels&no=22155", null).Item1;
-                        int count = imgs.Count;
-                        imgs.ForEach(x => {
-                            x.Filename = Path.Combine(Directory.GetCurrentDirectory(), x.Filename);
-                            x.CompleteCallback = () =>
-                            {
-                                Interlocked.Decrement(ref count);
-                            };
-                        });
-                        imgs.ForEach(x => AppProvider.Scheduler.Add(x));
-
-                        while (count != 0)
-                        {
-                            Thread.Sleep(500);
-                        }
-                    }
-                    break;
-
-                case "pixiv":
-                    {
-                        var extractor = new PixivExtractor();
-                        //var ext = extractor.Extract("https://www.pixiv.net/member.php?id=4462");
-                        var ext = extractor.Extract("https://www.pixiv.net/member_illust.php?id=25464");
-                        var imgs = ext.Item1;
-                        var uinfo = $"{(ext.Item2 as List<PixivExtractor.PixivAPI.User>)[0].Name} ({(ext.Item2 as List<PixivExtractor.PixivAPI.User>)[0].Account})";
-                        int count = imgs.Count;
-                        Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), uinfo));
-                        imgs.ForEach(x => {
-                            x.Filename = Path.Combine(Directory.GetCurrentDirectory(), uinfo, x.Filename);
-                            x.CompleteCallback = () =>
-                            {
-                                Interlocked.Decrement(ref count);
-                            };
-                        });
-                        imgs.ForEach(x => AppProvider.Scheduler.Add(x));
-
-                        while (count != 0)
-                        {
-                            Thread.Sleep(500);
-                        }
-                    }
-                    break;
-
-                case "gelbooru":
-                    {
-                        var extractor = new GelbooruExtractor();
-                        var ext = extractor.Extract("https://gelbooru.com/index.php?page=post&s=list&tags=kokkoro_%28princess_connect%21%29");
-                        var imgs = ext.Item1;
-                        int count = imgs.Count;
-                        Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), ext.Item2 as string));
-                        imgs.ForEach(x => {
-                            x.Filename = Path.Combine(Directory.GetCurrentDirectory(), ext.Item2 as string, x.Filename);
-                            x.CompleteCallback = () =>
-                            {
-                                Interlocked.Decrement(ref count);
-                            };
-                        });
-                        imgs.ForEach(x => AppProvider.Scheduler.Add(x));
-
-                        while (count != 0)
-                        {
-                            Thread.Sleep(500);
-                        }
-                    }
-                    break;
-
-                case "naver":
-                    {
-                        var extractor = new NaverExtractor();
-                        var ext = extractor.Extract("https://comic.naver.com/webtoon/detail.nhn?titleId=318995&no=434&weekday=fri");
-                        var imgs = ext.Item1;
-                        int count = imgs.Count;
-                        Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), (ext.Item2 as NaverExtractor.ComicInformation).Title));
-                        imgs.ForEach(x => {
-                            x.Filename = Path.Combine(Directory.GetCurrentDirectory(), (ext.Item2 as NaverExtractor.ComicInformation).Title, x.Filename);
-                            x.CompleteCallback = () =>
-                            {
-                                Interlocked.Decrement(ref count);
-                            };
-                        });
-                        imgs.ForEach(x => AppProvider.Scheduler.Add(x));
-
-                        while (count != 0)
-                        {
-                            Thread.Sleep(500);
-                        }
-                    }
-                    break;
-
-                case "eh":
-                    {
-                        var extractor = new EHentaiExtractor();
-                        var ext = extractor.Extract("https://e-hentai.org/g/1491793/45f9e85e48/");
-                        var imgs = ext.Item1;
-                        int count = imgs.Count;
-                        Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), (ext.Item2 as EHentaiArticle).Title));
-                        imgs.ForEach(x =>
-                        {
-                            x.Filename = Path.Combine(Directory.GetCurrentDirectory(), (ext.Item2 as EHentaiArticle).Title, x.Filename);
-                            x.CompleteCallback = () =>
-                            {
-                                Interlocked.Decrement(ref count);
-                            };
-                        });
-                        imgs.ForEach(x => AppProvider.Scheduler.Add(x));
-
-                        while (count != 0)
-                        {
-                            Thread.Sleep(500);
-                        }
-                    }
-                    break;
-            }
-        }
-#endif
 
         static void ProcessExtract(string url, string[] args, string[] PathFormat, bool ExtractInformation, bool ExtractLinks, bool PrintProcess, bool DisableDownloadProgress)
         {

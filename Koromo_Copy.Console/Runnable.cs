@@ -319,14 +319,34 @@ namespace Koromo_Copy.Console
                         AppProvider.Scheduler.Add(task);
                     });
 
-                    while (AppProvider.Scheduler.busy_thread != 0 || AppProvider.PPScheduler.busy_thread != 0)
+                    while (AppProvider.Scheduler.busy_thread != 0)
                     {
                         Thread.Sleep(500);
                     }
 
                     if (pb != null)
-                    { 
+                    {
                         pb.Dispose();
+                        System.Console.WriteLine("Done.");
+                    }
+
+                    WaitPostprocessor wpp = null;
+
+                    if (AppProvider.PPScheduler.busy_thread != 0 && !PrintProcess && !DisableDownloadProgress)
+                    {
+                        System.Console.Write("Wait postprocessor... ");
+                        wpp = new WaitPostprocessor();
+                    }
+
+                    while (AppProvider.PPScheduler.busy_thread != 0)
+                    {
+                        if (wpp != null) wpp.Report(AppProvider.PPScheduler.busy_thread + AppProvider.PPScheduler.queue.Count);
+                        Thread.Sleep(500);
+                    }
+
+                    if (wpp != null)
+                    {
+                        wpp.Dispose();
                         System.Console.WriteLine("Done.");
                     }
                 }

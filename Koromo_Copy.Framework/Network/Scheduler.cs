@@ -55,7 +55,7 @@ namespace Koromo_Copy.Framework.Network
         where P : IComparable<P>
         where F : IField<T, P>, new()
     {
-        UpdatableHeap<T> queue = new UpdatableHeap<T>();
+        public UpdatableHeap<T> queue = new UpdatableHeap<T>();
 
         public void update(UpdatableHeapElements<T> elem)
         {

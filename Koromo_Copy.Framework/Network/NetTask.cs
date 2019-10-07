@@ -29,7 +29,7 @@ namespace Koromo_Copy.Framework.Network
                 RetryCount = Settings.Instance.Network.RetryCount,
                 DownloadBufferSize = Settings.Instance.Network.DownloadBufferSize,
                 Priority = new NetPriority() { Type = NetPriorityType.Trivial },
-                Proxy = string.IsNullOrEmpty(Settings.Instance.Network.Proxy) ? new WebProxy(Settings.Instance.Network.Proxy) : null,
+                Proxy = !string.IsNullOrEmpty(Settings.Instance.Network.Proxy) ? new WebProxy(Settings.Instance.Network.Proxy) : null,
                 Cookie = cookie,
                 Url = url
             };
@@ -45,7 +45,7 @@ namespace Koromo_Copy.Framework.Network
                 RetryCount = Settings.Instance.Network.RetryCount,
                 DownloadBufferSize = Settings.Instance.Network.DownloadBufferSize,
                 Priority = new NetPriority() { Type = NetPriorityType.Trivial },
-                Proxy = string.IsNullOrEmpty(Settings.Instance.Network.Proxy) ? new WebProxy(Settings.Instance.Network.Proxy) : null,
+                Proxy = !string.IsNullOrEmpty(Settings.Instance.Network.Proxy) ? new WebProxy(Settings.Instance.Network.Proxy) : null,
                 Cookie = cookie,
                 Url = url
             };

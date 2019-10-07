@@ -42,7 +42,7 @@ namespace Koromo_Copy.Framework.Extractor
             return "%(artist)s (%(account)s)/%(file)s.%(ext)s";
         }
 
-        public override Tuple<List<NetTask>, object> Extract(string url, IExtractorOption option = null)
+        public override (List<NetTask>, ExtractedInfo) Extract(string url, IExtractorOption option = null)
         {
             if (!PixivAPI.Auth(Settings.Instance.Model.PixivSettings.Id, Settings.Instance.Model.PixivSettings.Password))
             {
@@ -105,15 +105,15 @@ namespace Koromo_Copy.Framework.Extractor
                     }
                 }
 
-                return new Tuple<List<NetTask>, object>(result, user);
+                return (result, null/*user*/);
             }
             else if (option.ExtractInformation == true)
             {
                 var user = PixivAPI.GetUsersAsync(match["id"].Value.ToInt()).Result;
-                return new Tuple<List<NetTask>, object>(null, user);
+                return (null, null/*user*/);
             }
 
-            return null;
+            return (null, null);
         }
 
         /// <summary>

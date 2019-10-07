@@ -79,7 +79,7 @@ namespace Koromo_Copy.Framework.Extractor
             return "%(title)s/%(file)s.%(ext)s";
         }
 
-        public override Tuple<List<NetTask>, object> Extract(string url, IExtractorOption option = null)
+        public override (List<NetTask>, ExtractedInfo) Extract(string url, IExtractorOption option = null)
         {
             var html = NetTools.DownloadString(url);
             var data = ParseArticleData(html);
@@ -90,7 +90,7 @@ namespace Koromo_Copy.Framework.Extractor
                 option = RecommendOption(url);
 
             if (option.ExtractInformation)
-                return new Tuple<List<NetTask>, object>(null, data);
+                return (null, null/*data*/);
 
             //
             //  Extract Image Url-Url
@@ -161,7 +161,7 @@ namespace Koromo_Copy.Framework.Extractor
 
             wait.WaitOne();
 
-            return new Tuple<List<NetTask>, object>(result.ToList(), data);
+            return (result.ToList(), null/*data*/);
         }
 
         #region Parse for EHentai Web Site

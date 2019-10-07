@@ -47,7 +47,7 @@ namespace Koromo_Copy.Framework.Extractor
             "ipb_member_id=1715959;ipb_pass_hash=67e57ed90cfc3b391c8a32e920a31cf0",
         };
 
-        public override Tuple<List<NetTask>, object> Extract(string url, IExtractorOption option = null)
+        public override (List<NetTask>, ExtractedInfo) Extract(string url, IExtractorOption option = null)
         {
             var html = NetTools.DownloadString(NetTask.MakeDefault(url, cookie: cookies[0]));
             var data = EHentaiExtractor.ParseArticleData(html, @"https://exhentai.org/.*?(?=\))");
@@ -114,7 +114,7 @@ namespace Koromo_Copy.Framework.Extractor
                 result[i] = task;
             }
 
-            return new Tuple<List<NetTask>, object>(result.ToList(), data);
+            return (result.ToList(), null/*data*/);
         }
     }
 }

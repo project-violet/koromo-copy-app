@@ -149,7 +149,7 @@ namespace Koromo_Copy.Framework.Extractor
             return "%(gallery)s/%(title)s/%(file)s.%(ext)s";
         }
 
-        public override Tuple<List<NetTask>, object> Extract(string url, IExtractorOption option = null)
+        public override (List<NetTask>, ExtractedInfo) Extract(string url, IExtractorOption option = null)
         {
             if (option == null)
                 option = new DCInsideExtractorOption { Type = ExtractorType.Images };
@@ -162,7 +162,7 @@ namespace Koromo_Copy.Framework.Extractor
             var html = NetTools.DownloadString(url);
 
             if (html == null)
-                return new Tuple<List<NetTask>, object>(result, null);
+                return (result, null);
 
             if (match[1].Value == "gall")
             {
@@ -200,11 +200,11 @@ namespace Koromo_Copy.Framework.Extractor
                                 result.Add(task);
                             }
 
-                            return new Tuple<List<NetTask>, object>(result, article);
+                            return (result, null/*article*/);
                         }
                         else if (option.Type == ExtractorType.ArticleInformation || option.ExtractInformation == true)
                         {
-                            return new Tuple<List<NetTask>, object>(null, article);
+                            return (null, null/*article*/);
                         }
                         else if (option.Type == ExtractorType.Comments)
                         {
@@ -231,7 +231,7 @@ namespace Koromo_Copy.Framework.Extractor
                                 Thread.Sleep(2000);
                             }
 
-                            return new Tuple<List<NetTask>, object>(null, GetComments(article, "0"));
+                            return (null, null/*GetComments(article, "0")*/);
                         }
                         else
                         {
@@ -254,7 +254,7 @@ namespace Koromo_Copy.Framework.Extractor
 
                         if (option.Type == ExtractorType.GalleryInformation || option.ExtractInformation == true)
                         {
-                            return new Tuple<List<NetTask>, object>(null, gallery);
+                            return (null, null/*gallery*/);
                         }
                         else
                         {
@@ -273,7 +273,7 @@ namespace Koromo_Copy.Framework.Extractor
                 throw new ExtractorException("[DCInside Extractor] Not support mobile page yet.");
             }
 
-            return new Tuple<List<NetTask>, object>(result, null);
+            return (result, null);
         }
 
         #region Parse for DCInside Web Site

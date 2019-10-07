@@ -56,7 +56,7 @@ namespace Koromo_Copy.Framework.Extractor
             return "%(user)s (%(account)s)/%(file)s.%(ext)s";
         }
 
-        public override Tuple<List<NetTask>, object> Extract(string url, IExtractorOption option = null)
+        public override (List<NetTask>, ExtractedInfo) Extract(string url, IExtractorOption option = null)
         {
             if (option == null)
                 option = RecommendOption(url);
@@ -102,7 +102,7 @@ namespace Koromo_Copy.Framework.Extractor
                 result.Add(task);
             }
 
-            return new Tuple<List<NetTask>, object>(result, null);
+            return (result, null);
         }
 
         public class InstaApi

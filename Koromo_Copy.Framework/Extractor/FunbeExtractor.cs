@@ -35,7 +35,7 @@ namespace Koromo_Copy.Framework.Extractor
             return "%(title)s/%(episode)s/%(file)s.%(ext)s";
         }
 
-        public override Tuple<List<NetTask>, object> Extract(string url, IExtractorOption option = null)
+        public override (List<NetTask>, ExtractedInfo) Extract(string url, IExtractorOption option = null)
         {
             if (option == null)
                 option = RecommendOption(url);
@@ -85,7 +85,7 @@ namespace Koromo_Copy.Framework.Extractor
                 }
             }
 
-            return new Tuple<List<NetTask>, object>(result, null);
+            return (result, null);
         }
     }
 }

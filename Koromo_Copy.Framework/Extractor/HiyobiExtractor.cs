@@ -41,7 +41,7 @@ namespace Koromo_Copy.Framework.Extractor
             return "%(artist)s/[%(id)s] %(title)s/%(file)s.%(ext)s";
         }
 
-        public override Tuple<List<NetTask>, object> Extract(string url, IExtractorOption option = null)
+        public override (List<NetTask>, ExtractedInfo) Extract(string url, IExtractorOption option = null)
         {
             var match = ValidUrl.Match(url).Groups;
 
@@ -82,14 +82,12 @@ namespace Koromo_Copy.Framework.Extractor
                     };
                     result.Add(task);
                 }
-                return new Tuple<List<NetTask>, object>(result, null);
+                return (result, null);
             }
             else
             {
                 throw new ExtractorException("'search' page not supports yet!");
             }
-
-            return null;
         }
         
         private static HitomiArticle parse_info(string html)

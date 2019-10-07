@@ -46,6 +46,11 @@ namespace Koromo_Copy.Framework.Extractor
         public virtual void CLParse(ref IExtractorOption model, string[] args) { }
     }
 
+    public class ExtractedInfo
+    {
+
+    }
+
     public abstract class ExtractorModel
     {
         public Regex HostName { get; protected set; }
@@ -54,7 +59,7 @@ namespace Koromo_Copy.Framework.Extractor
 
         public abstract IExtractorOption RecommendOption(string url);
         public abstract string RecommendFormat(IExtractorOption option);
-        public abstract Tuple<List<NetTask>, object> Extract(string url, IExtractorOption option);
+        public abstract (List<NetTask>, ExtractedInfo) Extract(string url, IExtractorOption option);
     }
 
     [JsonObject(MemberSerialization.OptIn)]

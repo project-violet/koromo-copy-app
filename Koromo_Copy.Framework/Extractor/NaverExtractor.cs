@@ -59,7 +59,7 @@ namespace Koromo_Copy.Framework.Extractor
             throw new NotImplementedException();
         }
 
-        public override Tuple<List<NetTask>, object> Extract(string url, IExtractorOption option = null)
+        public override (List<NetTask>, ExtractedInfo) Extract(string url, IExtractorOption option = null)
         {
             if (option == null)
                 option = RecommendOption(url);
@@ -96,10 +96,10 @@ namespace Koromo_Copy.Framework.Extractor
                     result.Add(task);
                 }
 
-                return new Tuple<List<NetTask>, object>(result, cinfo);
+                return (result, null/*cinfo*/);
             }
 
-            return null;
+            return (null, null);
         }
     }
 }

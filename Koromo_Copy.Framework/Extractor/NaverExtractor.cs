@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Web;
 using static Koromo_Copy.Framework.Extractor.IExtractorOption;
 
 namespace Koromo_Copy.Framework.Extractor
@@ -23,7 +24,7 @@ namespace Koromo_Copy.Framework.Extractor
         public NaverExtractor()
         {
             HostName = new Regex(@"(comic|blog)\.naver\.com");
-            ValidUrl = new Regex(@"^https?://(comic|blog)\.naver\.com/(webtoon|.*?)/((list|detail)\.nhn\?|.*)\??(titleId\=(\d+)\&no=(\d+))?(.*?)$");
+            ValidUrl = new Regex(@"^https?://(comic|blog)\.naver\.com/(webtoon|.*?)/((list|detail)\.nhn\?|.*)\??(titleId\=(?<id>\d+))?(.*?)$");
         }
         
         public override IExtractorOption RecommendOption(string url)
@@ -59,46 +60,65 @@ namespace Koromo_Copy.Framework.Extractor
             if (option == null)
                 option = RecommendOption(url);
 
+            var html = NetTools.DownloadString(url);
+
             //
             //  Extract Webtoon
             //
 
             if (option.Type == ExtractorType.EpisodeImages)
             {
-                var html = NetTools.DownloadString(url);
+                return (extract_episode_page(html), null);
+            }
+            else if (option.Type == ExtractorType.ComicIndex)
+            {
+                var match = ValidUrl.Match(url).Groups;
+                var max_no = Regex.Match(html, @"/webtoon/detail\.nhn\?titleId=\d+&no=(\d+)").Groups[1].Value.ToInt();
+                var urls = new List<string>();
+                for (int i = 1; i <= max_no; i++)
+                    urls.Add($"https://comic.naver.com/webtoon/detail.nhn?titleId={match["id"]}&no={i}");
 
-                var document = new HtmlDocument();
-                document.LoadHtml(html);
-                var node = document.DocumentNode;
-
-                var title = node.SelectSingleNode("/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/h2[1]").MyText();
-                var sub_title = node.SelectSingleNode("/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[2]/div[1]/h3[1]").InnerText.Trim();
-                var author = node.SelectSingleNode("/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/h2[1]/span[1]").InnerText.Trim();
-
-                var imgs = node.SelectNodes("/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[3]/div[1]/img");
+                var htmls = NetTools.DownloadStrings(urls);
                 var result = new List<NetTask>();
 
-                int count = 1;
-                foreach (var img in imgs)
-                {
-                    var durl = img.GetAttributeValue("src", "");
-                    var task = NetTask.MakeDefault(durl);
-                    task.SaveFile = true;
-                    task.Filename = durl.Split('/').Last();
-                    task.Format = new ExtractorFileNameFormat
-                    {
-                        Title = title,
-                        Episode = sub_title,
-                        FilenameWithoutExtension = count++.ToString("000"),
-                        Extension = Path.GetExtension(task.Filename).Replace(".", "")
-                    };
-                    result.Add(task);
-                }
+                foreach (var shtml in htmls)
+                    result.AddRange(extract_episode_page(shtml));
 
                 return (result, null);
             }
 
             return (null, null);
+        }
+
+        private List<NetTask> extract_episode_page(string html)
+        {
+            var node = html.ToHtmlNode();
+
+            var title = node.SelectSingleNode("/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/h2[1]").MyText();
+            var sub_title = node.SelectSingleNode("/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[2]/div[1]/h3[1]").InnerText.Trim();
+            var author = node.SelectSingleNode("/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/h2[1]/span[1]").InnerText.Trim();
+
+            var imgs = node.SelectNodes("/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[3]/div[1]/img");
+            var result = new List<NetTask>();
+
+            int count = 1;
+            foreach (var img in imgs)
+            {
+                var durl = img.GetAttributeValue("src", "");
+                var task = NetTask.MakeDefault(durl);
+                task.SaveFile = true;
+                task.Filename = durl.Split('/').Last();
+                task.Format = new ExtractorFileNameFormat
+                {
+                    Title = title,
+                    Episode = sub_title,
+                    FilenameWithoutExtension = count++.ToString("000"),
+                    Extension = Path.GetExtension(task.Filename).Replace(".", "")
+                };
+                result.Add(task);
+            }
+
+            return result;
         }
     }
 }

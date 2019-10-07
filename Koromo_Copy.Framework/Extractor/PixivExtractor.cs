@@ -63,6 +63,8 @@ namespace Koromo_Copy.Framework.Extractor
 
                 foreach (var work in works)
                 {
+                    if (work.PageCount > 1)
+                        ;
                     if (work.Type == null || work.Type == "illustration")
                     {
                         var task = NetTask.MakeDefault(work.ImageUrls.Large);
@@ -81,13 +83,9 @@ namespace Koromo_Copy.Framework.Extractor
                     }
                     else if (work.Type == "ugoira")
                     {
-                        var ugoira_uri = $"https://www.pixiv.net/ajax/illust/{work.Id}/ugoira_meta";
-
-                        option.PageReadCallback?.Invoke(ugoira_uri);
-
-                        var ugoira_data = JToken.Parse(NetTools.DownloadString(ugoira_uri)).SelectToken("body").ToObject<PixivAPI.Ugoira>();
-                        var task = NetTask.MakeDefault(ugoira_data.OriginalSource);
-                        task.Filename = ugoira_data.OriginalSource.Split('/').Last();
+                        var ugoira_data = PixivAPI.GetUgoiraAsync(work.Id.ToString()).Result;
+                        var task = NetTask.MakeDefault(ugoira_data.ZipUrls.Medium);
+                        task.Filename = ugoira_data.ZipUrls.Medium.Split('/').Last();
                         task.SaveFile = true;
                         task.Referer = url;
                         var pptask = new PostprocessorTask();
@@ -98,8 +96,8 @@ namespace Koromo_Copy.Framework.Extractor
                             Artist = user[0].Name,
                             Account = user[0].Account,
                             Id = user[0].Id.Value.ToString(),
-                            FilenameWithoutExtension = Path.GetFileNameWithoutExtension(ugoira_data.OriginalSource.Split('/').Last()),
-                            Extension = Path.GetExtension(ugoira_data.OriginalSource.Split('/').Last()).Replace(".", "")
+                            FilenameWithoutExtension = Path.GetFileNameWithoutExtension(ugoira_data.ZipUrls.Medium.Split('/').Last()),
+                            Extension = Path.GetExtension(ugoira_data.ZipUrls.Medium.Split('/').Last()).Replace(".", "")
                         };
                         result.Add(task);
                     }
@@ -428,6 +426,13 @@ namespace Koromo_Copy.Framework.Extractor
                 public string SanityLevel { get; set; }
             }
 
+            public class ZipUrls
+            {
+                [JsonProperty("medium")]
+                public string Medium { get; set; }
+            }
+
+
             public class UgoiraFrames
             {
                 [JsonProperty("file")]
@@ -439,6 +444,9 @@ namespace Koromo_Copy.Framework.Extractor
 
             public class Ugoira
             {
+                [JsonProperty("zip_urls")]
+                public ZipUrls ZipUrls { get; set; }
+
                 [JsonProperty("src")]
                 public string Source { get; set; }
 
@@ -534,6 +542,30 @@ namespace Koromo_Copy.Framework.Extractor
 
                 var result = await NetTools.DownloadStringAsync(task);
                 return JToken.Parse(result).SelectToken("response").ToObject<List<User>>();
+            }
+
+            /// <summary>
+            /// Get ugoira
+            /// </summary>
+            /// <param name="authorId"></param>
+            /// <returns></returns>
+            public static async Task<Ugoira> GetUgoiraAsync(string illust_id)
+            {
+                var url = "https://app-api.pixiv.net/v1/ugoira/metadata";
+
+                var param = new Dictionary<string, string>
+                {
+                    { "illust_id", illust_id }
+                };
+
+                var task = NetTask.MakeDefault(url + "?" + string.Join("&", param.ToList().Select(x => $"{x.Key}={x.Value}")));
+                task.Referer = "http://spapi.pixiv.net/";
+                task.UserAgent = "PixivIOSApp/5.8.0";
+                task.Headers = new Dictionary<string, string>();
+                task.Headers.Add("Authorization", "Bearer " + AccessToken);
+
+                var result = await NetTools.DownloadStringAsync(task);
+                return JToken.Parse(result)["ugoira_metadata"].ToObject<Ugoira>();
             }
 
             /// <summary>

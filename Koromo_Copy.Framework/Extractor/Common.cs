@@ -63,6 +63,7 @@ namespace Koromo_Copy.Framework.Extractor
             public UserArtist[] Connecitons;
             public UserArtist[] Follows;
             public string[] SNSLinks;
+            public string[] Tags;
         }
 
         public class Group
@@ -71,7 +72,6 @@ namespace Koromo_Copy.Framework.Extractor
             public string GroupName;
             public UserArtist[] Members;
         }
-
 
         public class WorksComic
         {
@@ -82,6 +82,7 @@ namespace Koromo_Copy.Framework.Extractor
             public string FirstPublished;
             public bool IsCompletion;
             public string LastPublished;
+            public string[] Tags;
             public class Episode
             {
                 public string URL;
@@ -99,6 +100,7 @@ namespace Koromo_Copy.Framework.Extractor
                 public string URL;
                 public string BoardName;
                 public string BoardId;
+                public string[] Tags;
 
                 public class Article
                 {
@@ -109,6 +111,7 @@ namespace Koromo_Copy.Framework.Extractor
                     public string Views;
                     public string UpVote;
                     public string DownVote;
+                    public string[] Tags;
                 }
                 public Article[] Articles;
             }

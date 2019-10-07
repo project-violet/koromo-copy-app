@@ -85,7 +85,7 @@ namespace Koromo_Copy.Framework.Extractor
                     count++;
                 }
 
-                return new Tuple<List<NetTask>, object>(result, null);
+                return (result, null);
             }
             else if (option.Type == ExtractorType.Works)
             {

@@ -58,7 +58,7 @@ namespace Koromo_Copy.Framework.Extractor
                 option = RecommendOption(url);
 
             if (option.ExtractInformation)
-                return new Tuple<List<NetTask>, object>(null, data);
+                return (null, null/*data*/);
 
             //
             //  Extract Image Url-Url

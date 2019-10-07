@@ -86,7 +86,27 @@ Comic
 
 Movie
  - Information
- 
+
+Community
+ - Board
+   - Information
+     - Board Name
+     - Board Id
+     - Article Per Page
+     - End Page
+   - Article
+     - Title
+     - Writer
+     - WriteTime
+     - View
+     - Up Vote
+     - Down Vote
+     - Data
+       - Images
+       - Vidoes
+       - Text Data
+     - Reply
+
 =================================================
 
 * User Defined Extracting

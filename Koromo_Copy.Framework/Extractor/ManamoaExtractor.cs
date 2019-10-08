@@ -24,7 +24,7 @@ namespace Koromo_Copy.Framework.Extractor
         public ManamoaExtractor()
         {
             HostName = new Regex(@"manamoa\d+\.net");
-            ValidUrl = new Regex(@"^(?<host>https?://manamoa\d+\.net)/bbs/(?<type>page|board)\.php.*(manga_id|wr_id)=(?<code>\d+).*?$");
+            ValidUrl = new Regex(@"^(?<host>https?://manamoa\d*\.net)/bbs/(?<type>page|board)\.php.*(manga_id|wr_id)=(?<code>\d+).*?$");
         }
 
         public class ComicInformation

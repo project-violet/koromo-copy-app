@@ -29,7 +29,8 @@ namespace Koromo_Copy.Framework.Network
                 RetryCount = Settings.Instance.Network.RetryCount,
                 DownloadBufferSize = Settings.Instance.Network.DownloadBufferSize,
                 Priority = new NetPriority() { Type = NetPriorityType.Trivial },
-                Proxy = !string.IsNullOrEmpty(Settings.Instance.Network.Proxy) ? new WebProxy(Settings.Instance.Network.Proxy) : null,
+                Proxy = !string.IsNullOrEmpty(Settings.Instance.Network.Proxy) ? new WebProxy(Settings.Instance.Network.Proxy) : 
+                    Settings.Instance.Network.UsingProxyList ? new WebProxy(ProxyList.Instance.RandomPick()) : null,
                 Cookie = cookie,
                 Url = url
             };
@@ -45,7 +46,8 @@ namespace Koromo_Copy.Framework.Network
                 RetryCount = Settings.Instance.Network.RetryCount,
                 DownloadBufferSize = Settings.Instance.Network.DownloadBufferSize,
                 Priority = new NetPriority() { Type = NetPriorityType.Trivial },
-                Proxy = !string.IsNullOrEmpty(Settings.Instance.Network.Proxy) ? new WebProxy(Settings.Instance.Network.Proxy) : null,
+                Proxy = !string.IsNullOrEmpty(Settings.Instance.Network.Proxy) ? new WebProxy(Settings.Instance.Network.Proxy) :
+                    Settings.Instance.Network.UsingProxyList ? new WebProxy(ProxyList.Instance.RandomPick()) : null,
                 Cookie = cookie,
                 Url = url
             };
@@ -71,6 +73,7 @@ namespace Koromo_Copy.Framework.Network
         public Dictionary<string, string> Headers { get; set; }
         [JsonProperty]
         public Dictionary<string, string> Query { get; set; }
+        [JsonProperty]
         public IWebProxy Proxy { get; set; }
 
         /* Detail Information */

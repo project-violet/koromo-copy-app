@@ -20,6 +20,7 @@ namespace Koromo_Copy.Framework.Setting
             public int DownloadBufferSize;
             public int RetryCount;
             public string Proxy;
+            public bool UsingProxyList;
         }
 
         public NetworkSetting NetworkSettings;
@@ -100,6 +101,7 @@ namespace Koromo_Copy.Framework.Setting
                         DownloadBufferSize = 131072,
                         RetryCount = 10,
                         Proxy = "",
+                        UsingProxyList = false
                     },
 
                     PixivSettings = new SettingModel.PixivSetting()

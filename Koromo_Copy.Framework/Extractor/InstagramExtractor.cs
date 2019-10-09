@@ -69,6 +69,7 @@ namespace Koromo_Copy.Framework.Extractor
             var user = InstaApi.get_user(option as InstagramExtractorOption, html);
             var urls = new List<string>();
             urls.AddRange(user.FirstPost.DisplayUrls);
+            option.PostStatus?.Invoke(user.FirstPost.PostCount);
 
             var count = 0;
             var pp = user.FirstPost;
@@ -79,6 +80,7 @@ namespace Koromo_Copy.Framework.Extractor
 
                 var posts = InstaApi.query_next(option as InstagramExtractorOption, InstaApi.posts_query_hash(), user.UserId, "50", pp.EndCursor);
                 urls.AddRange(posts.DisplayUrls);
+                option.PostStatus?.Invoke(posts.PostCount);
                 count += 50;
                 pp = posts;
             }
@@ -121,6 +123,7 @@ namespace Koromo_Copy.Framework.Extractor
                 public bool HasNext { get; set; }
                 public string EndCursor { get; set; }
                 public List<string> DisplayUrls { get; set; }
+                public int PostCount { get; set; }
             }
 
             public class User
@@ -129,6 +132,7 @@ namespace Koromo_Copy.Framework.Extractor
                 public string FullName { get; set; }
                 public string UserId { get; set; }
                 public Posts FirstPost { get; set; }
+                public int TotalPostsCount { get; set; }
             }
 
             /// <summary>
@@ -146,16 +150,20 @@ namespace Koromo_Copy.Framework.Extractor
                     UserId = juser["id"].ToString(),
                     UserName = juser["username"].ToString(),
                     FullName = juser["full_name"].ToString(),
+                    TotalPostsCount = juser["edge_owner_to_timeline_media"]["count"].ToString().ToInt(),
                     FirstPost = new Posts
                     {
                         HasNext = (bool)juser["edge_owner_to_timeline_media"]["page_info"]["has_next_page"],
                         EndCursor = juser["edge_owner_to_timeline_media"]["page_info"]["end_cursor"].ToString(),
-                        DisplayUrls = new List<string>()
+                        DisplayUrls = new List<string>(),
                     }
                 };
 
+                option.ProgressMax?.Invoke(user.TotalPostsCount);
+
                 foreach (var post in juser["edge_owner_to_timeline_media"]["edges"])
                 {
+                    user.FirstPost.PostCount++;
                     if (post["node"]["__typename"].ToString() == "GraphImage" || option.OnlyThumbnail)
                         user.FirstPost.DisplayUrls.Add(post["node"]["display_url"].ToString());
                     else
@@ -216,6 +224,7 @@ namespace Koromo_Copy.Framework.Extractor
 
                     foreach (var post in jmedia["edges"])
                     {
+                        posts.PostCount++;
                         if (post["node"]["__typename"].ToString() != "GraphSidecar" || option.OnlyThumbnail)
                         {
                             extract_url(post["node"], option, posts.DisplayUrls);

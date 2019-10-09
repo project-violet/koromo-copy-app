@@ -75,6 +75,46 @@ namespace Koromo_Copy.Console
     /// Reference[MIT]: DanielSWolf - https://gist.github.com/DanielSWolf/0ab6a96899cc5377bf54
     /// </summary>
 
+    public class ExtractingProgressBar : ProgressBase, IDisposable
+    {
+        private const int blockCount = 20;
+        private double currentProgress = 0;
+        private long total = 0;
+        private long complete = 0;
+
+        public ExtractingProgressBar()
+            : base()
+        {
+        }
+
+        public void Report(long total, long complete)
+        {
+            var value = Math.Max(0, Math.Min(1, complete / (double)total));
+            Interlocked.Exchange(ref currentProgress, value);
+            this.total = total;
+            this.complete = complete;
+        }
+
+        protected override void TimerHandler(object state)
+        {
+            lock (timer)
+            {
+                if (disposed) return;
+
+                int progressBlockCount = (int)(currentProgress * blockCount);
+                int percent = (int)(currentProgress * 100);
+
+                string text = string.Format("[{0}{1}] {2,3}% [{3}/{4}]",
+                    new string('#', progressBlockCount), new string('-', blockCount - progressBlockCount),
+                    percent, complete, total);
+
+                UpdateText(text);
+
+                ResetTimer();
+            }
+        }
+    }
+
     public class WaitProgress : ProgressBase, IDisposable
     {
         private const string animation = @"|/-\";

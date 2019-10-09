@@ -250,7 +250,37 @@ namespace Koromo_Copy.Console
                         return;
                     }
 
+                    long extracting_progress_max = 0;
+                    ExtractingProgressBar epb = null;
+
+                    option.ProgressMax = (count) =>
+                    {
+                        extracting_progress_max = count;
+                        if (wp != null)
+                        {
+                            wp.Dispose();
+                            wp = null;
+                            epb = new ExtractingProgressBar();
+                            epb.Report(extracting_progress_max, 0);
+                        }
+                    };
+
+                    long extracting_cumulative_count = 0;
+
+                    option.PostStatus = (count) =>
+                    {
+                        var val = Interlocked.Add(ref extracting_cumulative_count, count);
+                        if (epb != null)
+                            epb.Report(extracting_progress_max, extracting_cumulative_count);
+                    };
+
                     var tasks = extractor.Extract(url, option);
+
+                    if (epb != null)
+                    {
+                        epb.Dispose();
+                        System.Console.WriteLine("Done.");
+                    }
 
                     if (wp != null)
                     {

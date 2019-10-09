@@ -35,7 +35,7 @@ namespace Koromo_Copy.Framework.Extractor
         }
     }
 
-    class InstagramExtractor : ExtractorModel
+    public class InstagramExtractor : ExtractorModel
     {
         public InstagramExtractor()
         {

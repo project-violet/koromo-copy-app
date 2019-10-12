@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<cardView:CardView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:cardView="clr-namespace:CardView;assembly=CardView"
+             mc:Ignorable="d"
+             x:Class="Koromo_Copy.App.DownloadElement"
+             BackgroundColor="White" CardViewOutlineColorThickness="2" CardViewHasShadow="True"
+             CardViewHeightRequest="100"
+             CardViewHorizontalOptions="FillAndExpand">
+    <cardView:CardView.CardViewContent>
+        <Grid Margin="4">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" Text="정보: "/>
+            <Label Grid.Row="0" Grid.Column="1" x:Name="Info"/>
+            <Label Grid.Row="1" Grid.Column="0" Text="상태: "/>
+            <Label Grid.Row="1" Grid.Column="1" x:Name="Status"/>
+            <Label x:Name="ProgressText" Grid.Row="2" Grid.Column="0" Text="진행상황: " IsVisible="False"/>
+            <ProgressBar Visual="Material" x:Name="Progress" Grid.Row="2" Grid.Column="1" IsVisible="False" ProgressColor="Pink"/>
+            <ActivityIndicator VerticalOptions="Center" Margin="0,0,16,0" Grid.RowSpan="4" Grid.Column="2" IsRunning="True" WidthRequest="50" HeightRequest="50" x:Name="Spinner"/>
+        </Grid>
+    </cardView:CardView.CardViewContent>
+</cardView:CardView>

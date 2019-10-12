@@ -3,22 +3,33 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:Koromo_Copy.App"
              mc:Ignorable="d"
              x:Class="Koromo_Copy.App.DownloadPage">
     <ContentPage.Content>
-        <AbsoluteLayout>
+        <Grid Padding="8">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-            <StackLayout>
-                <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-            </StackLayout>
+            <ScrollView Grid.Row="0" VerticalOptions="FillAndExpand">
+                <!--<ListView x:Name="List">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <local:DownloadElement/>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>-->
+                <StackLayout x:Name="List"/>
+            </ScrollView>
 
-            <!--<ImageButton Source="editFAB.png" 
-                         BackgroundColor="Transparent"
-                         AbsoluteLayout.LayoutFlags="PositionProportional"  
-                         AbsoluteLayout.LayoutBounds=".95,.95,80,80" 
-                         Clicked="Handle_Clicked" />-->
-        </AbsoluteLayout>
+            <Button Grid.Row="1" Visual="Material" Text="URL 직접 추가"
+                    HorizontalOptions="FillAndExpand"
+                    BackgroundColor="#F50057" Clicked="Button_Clicked"/>
+        </Grid>
+
     </ContentPage.Content>
 </ContentPage>

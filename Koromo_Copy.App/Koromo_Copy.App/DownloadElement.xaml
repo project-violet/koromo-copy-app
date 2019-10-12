@@ -7,7 +7,7 @@
              mc:Ignorable="d"
              x:Class="Koromo_Copy.App.DownloadElement"
              BackgroundColor="White" CardViewOutlineColorThickness="2" CardViewHasShadow="True"
-             CardViewHeightRequest="100"
+             CardViewHeightRequest="120"
              CardViewHorizontalOptions="FillAndExpand">
     <cardView:CardView.CardViewContent>
         <Grid Margin="4">

@@ -62,6 +62,9 @@ namespace Koromo_Copy.Framework.Extractor
 
                 var strings = NetTools.DownloadStrings(urls);
 
+                if (string.IsNullOrEmpty(strings[0]) || string.IsNullOrEmpty(strings[1]) || string.IsNullOrEmpty(strings[2]))
+                    return (null, null);
+
                 var data1 = ParseGalleryBlock(strings[0]);
                 var data2 = ParseGallery(strings[1]);
                 var imgs = strings[2];

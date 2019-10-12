@@ -18,10 +18,9 @@ namespace Koromo_Copy.App
         {
             InitializeComponent();
 
-            var url = "https://manamoa13.net/bbs/page.php?hid=manga_detail&manga_id=10953";
-
-            var elem = new DownloadElement(url, false);
-            List.Children.Add(elem);
+            //var url = "https://manamoa13.net/bbs/page.php?hid=manga_detail&manga_id=10953";
+            //var elem = new DownloadElement(url, false);
+            //List.Children.Add(elem);
         }
 
         private async void Button_Clicked(object sender, EventArgs e)

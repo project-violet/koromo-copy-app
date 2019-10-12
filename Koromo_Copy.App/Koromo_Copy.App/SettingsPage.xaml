@@ -26,6 +26,24 @@
                     </Grid>
                 </ContentView>
                 <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" Color="LightGray"/>
+                <ContentView x:Name="SettingNotify" xe:TouchEffect.Color="Gray" xe:Commands.Tap="{Binding TapCommand}">
+                    <Grid Padding="16">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <Label Grid.Row="0" Grid.Column="0" Text="다운로드 완료시 알리기" TextColor="Black"/>
+                        <Label Grid.Row="1" Grid.Column="0" Text="백그다운드로 다운로드 중에 다운로드가 완료되었다면 푸시알림을 통해 알립니다."/>
+                        <Switch x:Name="NotifyToggle" Grid.RowSpan="2" Grid.Column="1"/>
+                    </Grid>
+                </ContentView>
+                <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" Color="LightGray"/>
                 <Label Text="네트워크 설정" TextColor="#F50057" Margin="16,16,16,0"/>
                 <ContentView>
                     <Grid Padding="16">

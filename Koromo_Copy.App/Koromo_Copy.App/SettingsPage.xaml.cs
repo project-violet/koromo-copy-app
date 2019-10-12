@@ -39,6 +39,10 @@ namespace Koromo_Copy.App
                 }
             }));
 
+            Commands.SetTap(SettingNotify, new Command(async () => {
+                NotifyToggle.IsToggled = !NotifyToggle.IsToggled;
+            }));
+
             Commands.SetTap(SettingBufferSize, new Command(async () => {
                 var promptConfig = new PromptConfig();
                 promptConfig.InputType = InputType.Number;

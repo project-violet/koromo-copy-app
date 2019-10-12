@@ -99,6 +99,18 @@ namespace Koromo_Copy.App
                     return;
                 }
 
+                if (tasks.Item1 == null)
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        ProgressText.IsVisible = false;
+                        Progress.IsVisible = false;
+                        Spinner.IsVisible = false;
+                        Status.Text = "다운로드할 내용이 없습니다 :(";
+                    });
+                    return;
+                }
+
                 var format = extractor.RecommendFormat(option);
 
                 Device.BeginInvokeOnMainThread(() =>

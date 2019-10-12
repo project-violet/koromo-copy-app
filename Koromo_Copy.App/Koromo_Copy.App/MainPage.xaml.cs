@@ -1,4 +1,7 @@
-﻿using Koromo_Copy.App.Models;
+﻿// This source code is a part of Koromo Copy Project.
+// Copyright (C) 2019. dc-koromo. Licensed under the MIT Licence.
+
+using Koromo_Copy.App.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -21,6 +24,8 @@ namespace Koromo_Copy.App
 
             MenuPages.Add((int)MenuItemType.Browse, (NavigationPage)Detail);
         }
+
+        public NavigationPage NaviInstance { get { return Navi; } }
 
         public async Task NavigateFromMenu(int id)
         {

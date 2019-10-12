@@ -1,4 +1,7 @@
-﻿using Koromo_Copy.Framework;
+﻿// This source code is a part of Koromo Copy Project.
+// Copyright (C) 2019. dc-koromo. Licensed under the MIT Licence.
+
+using Koromo_Copy.Framework;
 using Koromo_Copy.Framework.Extractor;
 using Koromo_Copy.Framework.Log;
 using Koromo_Copy.Framework.Network;
@@ -13,17 +16,27 @@ using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using XamEffects;
 
 namespace Koromo_Copy.App
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class DownloadElement : CardView.CardView
+    public partial class DownloadElement : ContentView
     {
         public DownloadElement(string url, bool completed)
         {
             InitializeComponent();
 
             Info.Text = url;
+
+            int hitomi_id = 0;
+            if (int.TryParse(url, out hitomi_id))
+                url = "https://hitomi.la/galleries/" + url + ".html";
+
+            Commands.SetTap(Body, new Command(async () =>
+            {
+                await (Application.Current.MainPage as MainPage).NaviInstance.PushAsync(new DownloadInfoPage());
+            }));
 
             if (!url.StartsWith("http://") && !url.StartsWith("https://"))
             {

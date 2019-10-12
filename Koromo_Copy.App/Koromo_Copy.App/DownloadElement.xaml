@@ -1,17 +1,15 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<cardView:CardView xmlns="http://xamarin.com/schemas/2014/forms" 
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:cardView="clr-namespace:CardView;assembly=CardView"
+             xmlns:xe="clr-namespace:XamEffects;assembly=XamEffects"
              mc:Ignorable="d"
              x:Class="Koromo_Copy.App.DownloadElement"
-             BackgroundColor="White" CardViewOutlineColorThickness="2" CardViewHasShadow="True"
-             CardViewHeightRequest="120"
-             CardViewHorizontalOptions="FillAndExpand">
-    <cardView:CardView.CardViewContent>
-        <Grid Margin="4">
-
+             BackgroundColor="White">
+    <Frame HasShadow="True" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Padding="4">
+        <Grid x:Name="Body" xe:TouchEffect.Color="Gray" xe:Commands.Tap="{Binding TapCommand}"
+              VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -33,5 +31,5 @@
             <ProgressBar Visual="Material" x:Name="Progress" Grid.Row="2" Grid.Column="1" IsVisible="False" ProgressColor="Pink"/>
             <ActivityIndicator VerticalOptions="Center" Margin="0,0,16,0" Grid.RowSpan="4" Grid.Column="2" IsRunning="True" WidthRequest="50" HeightRequest="50" x:Name="Spinner"/>
         </Grid>
-    </cardView:CardView.CardViewContent>
-</cardView:CardView>
+    </Frame>
+</ContentView>

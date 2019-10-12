@@ -12,7 +12,7 @@
     </MasterDetailPage.Master>
 
     <MasterDetailPage.Detail>
-        <NavigationPage>
+        <NavigationPage x:Name="Navi">
             <NavigationPage.Icon>
                 <OnPlatform x:TypeArguments="FileImageSource">
                     <On Platform="iOS" Value="tab_feed.png"/>
@@ -20,6 +20,7 @@
             </NavigationPage.Icon>
             <x:Arguments>
                 <TabbedPage Title="Koromo Copy">
+                    <local:SearchPage Title="검색"/>
                     <local:DownloadPage Title="다운로드"/>
                 </TabbedPage>
             </x:Arguments>

@@ -13,9 +13,9 @@ using Xamarin.Forms.Xaml;
 namespace Koromo_Copy.App
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class AboutPage : ContentPage
+    public partial class DownloadInfoPage : ContentPage
     {
-        public AboutPage()
+        public DownloadInfoPage()
         {
             InitializeComponent();
         }

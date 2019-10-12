@@ -110,7 +110,6 @@ namespace Koromo_Copy.Framework.Setting
                     },
                 };
             }
-
             Save();
         }
 
@@ -122,6 +121,7 @@ namespace Koromo_Copy.Framework.Setting
             {
                 fs.Write(json);
             }
+            AppProvider.DefaultSuperPath = Model.SuperPath;
         }
     }
 }

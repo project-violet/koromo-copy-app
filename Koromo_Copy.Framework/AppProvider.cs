@@ -64,7 +64,6 @@ namespace Koromo_Copy.Framework
             // Initialize Postprocessor Scheduler
             PPScheduler = new PostprocessorScheduler(Settings.Instance.Model.PostprocessorThreadCount);
 
-
             Logs.Instance.Push("App provider starts.");
 
             GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);

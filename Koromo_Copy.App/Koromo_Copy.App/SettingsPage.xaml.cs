@@ -56,8 +56,10 @@ namespace Koromo_Copy.App
             }));
 
             Commands.SetTap(ExportLog, new Command(async () => {
-                File.Copy(System.IO.Path.Combine(AppProvider.DefaultSuperPath, "log.txt"),
-                    System.IO.Path.Combine(AppProvider.ApplicationPath, "log.txt"));
+                if (!Directory.Exists(AppProvider.DefaultSuperPath))
+                    Directory.CreateDirectory(AppProvider.DefaultSuperPath);
+                File.Copy(System.IO.Path.Combine(AppProvider.ApplicationPath, "log.txt"),
+                    System.IO.Path.Combine(AppProvider.DefaultSuperPath, "log.txt"), true);
                 Plugin.XSnack.CrossXSnack.Current.ShowMessage("로그를 성공적으로 내보냈습니다.");
             }));
 

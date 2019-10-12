@@ -8,6 +8,7 @@ using Android.Widget;
 using Android.OS;
 using System.IO;
 using Koromo_Copy.Framework;
+using Acr.UserDialogs;
 
 namespace Koromo_Copy.App.Droid
 {
@@ -23,6 +24,8 @@ namespace Koromo_Copy.App.Droid
 
             AppProvider.DefaultSuperPath = Path.Combine(Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryPictures).AbsolutePath, "KoromoCopy");
 
+            UserDialogs.Init(this);
+            XamEffects.Droid.Effects.Init();
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             global::Xamarin.Forms.FormsMaterial.Init(this, savedInstanceState);

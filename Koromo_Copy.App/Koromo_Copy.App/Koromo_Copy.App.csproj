@@ -6,9 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Acr.UserDialogs" Version="7.0.30" />
+    <PackageReference Include="Plugin.XSnack" Version="1.0.17" />
     <PackageReference Include="Xamarin.Forms" Version="4.2.0.709249" />
     <PackageReference Include="Xamarin.Essentials" Version="1.2.0" />
     <PackageReference Include="Xamarin.Forms.Visual.Material" Version="4.2.0.709249" />
+    <PackageReference Include="Xamarin.Plugin.FilePicker" Version="2.1.34" />
+    <PackageReference Include="XamEffects" Version="1.6.3" />
   </ItemGroup>
 
   <ItemGroup>

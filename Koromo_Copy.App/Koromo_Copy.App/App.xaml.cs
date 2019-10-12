@@ -15,6 +15,7 @@ namespace Koromo_Copy.App
             InitializeComponent();
 
             MainPage = new MainPage();
+
         }
 
         protected override void OnStart()
@@ -31,7 +32,6 @@ namespace Koromo_Copy.App
         protected override void OnResume()
         {
             // Handle when your app resumes
-            AppProvider.Initialize();
         }
     }
 }

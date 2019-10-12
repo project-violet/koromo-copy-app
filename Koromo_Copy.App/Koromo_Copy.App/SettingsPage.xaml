@@ -3,14 +3,78 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:col="clr-namespace:System.Collections;assembly=netstandard"
              mc:Ignorable="d"
+             xmlns:xe="clr-namespace:XamEffects;assembly=XamEffects"
              x:Class="Koromo_Copy.App.SettingsPage"
              Title="Koromo Copy 설정">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <Label Text="일반 설정" TextColor="#F50057" Margin="16,16,16,0"/>
+            <ContentView x:Name="SettingSuperPath" xe:TouchEffect.Color="Gray" xe:Commands.Tap="{Binding TapCommand}">
+                <Grid Padding="16">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Row="0" Text="최상위 경로 설정" TextColor="Black"/>
+                    <Label Grid.Row="1" Text="다운로드된 항목을 저장하기 위한 최상위 경로를 설정합니다."/>
+                    <Label x:Name="Path" Grid.Row="2"/>
+                </Grid>
+            </ContentView>
+            <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" Color="LightGray"/>
+            <Label Text="네트워크 설정" TextColor="#F50057" Margin="16,16,16,0"/>
+            <ContentView>
+                <Grid Padding="16">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Row="0" Grid.ColumnSpan="2" Text="네트워크 스레드" TextColor="Black"/>
+                    <Label Grid.Row="1" Grid.ColumnSpan="2" Text="다운로드할 때 사용할 스레드의 수를 설정합니다."/>
+
+                    <Label x:Name="ThreadCountText" Grid.Row="2" Grid.Column="0" Text="스레드 수: 0" WidthRequest="80"/>
+                    <Slider x:Name="ThreadCount" Grid.Row="2" Grid.Column="1" HorizontalOptions="FillAndExpand" Maximum="32" Minimum="1" Value="50" MinimumTrackColor="Pink"
+                            MaximumTrackColor="Gray" ValueChanged="Slider_ValueChanged"/>
+                </Grid>
+            </ContentView>
+            <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" Color="LightGray"/>
+            <ContentView x:Name="SettingBufferSize" xe:TouchEffect.Color="Gray" xe:Commands.Tap="{Binding TapCommand}">
+                <Grid Padding="16">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Row="0" Text="다운로드 버퍼 크기" TextColor="Black"/>
+                    <Label Grid.Row="1" Text="다운로드할 때 사용할 버퍼의 크기를 설정합니다."/>
+                    <Label x:Name="BufferSize" Grid.Row="2" Text="설정된 크기: "/>
+                </Grid>
+            </ContentView>
+            <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" Color="LightGray"/>
+            <Label Text="기타" TextColor="#F50057" Margin="16,16,16,0"/>
+            <ContentView x:Name="ExportLog" xe:TouchEffect.Color="Gray" xe:Commands.Tap="{Binding TapCommand}">
+                <Grid Padding="16">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Row="0" Text="로그 내보내기" TextColor="Black"/>
+                    <Label Grid.Row="1" Text="Koromo Copy의 동작정보 및 다운로드 정보를 모두 기록한 정보를 내보냅니다."/>
+                </Grid>
+            </ContentView>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

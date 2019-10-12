@@ -63,7 +63,7 @@ namespace Koromo_Copy.Framework.Setting
 
         public Settings()
         {
-            var full_path = Path.Combine(Directory.GetCurrentDirectory(), Name);
+            var full_path = Path.Combine(AppProvider.ApplicationPath, Name);
             if (File.Exists(full_path))
                 Model = JsonConvert.DeserializeObject<SettingModel>(File.ReadAllText(full_path));
 
@@ -92,7 +92,7 @@ namespace Koromo_Copy.Framework.Setting
                     Language = language,
                     ThreadCount = Environment.ProcessorCount,
                     PostprocessorThreadCount = 3,
-                    SuperPath = Directory.GetCurrentDirectory(),
+                    SuperPath = AppProvider.DefaultSuperPath,
 
                     NetworkSettings = new SettingModel.NetworkSetting
                     {
@@ -116,7 +116,7 @@ namespace Koromo_Copy.Framework.Setting
 
         public void Save()
         {
-            var full_path = Path.Combine(Directory.GetCurrentDirectory(), Name);
+            var full_path = Path.Combine(AppProvider.ApplicationPath, Name);
             var json = JsonConvert.SerializeObject(Model, Formatting.Indented);
             using (var fs = new StreamWriter(new FileStream(full_path, FileMode.Create, FileAccess.Write)))
             {

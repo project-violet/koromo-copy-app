@@ -7,9 +7,9 @@
              x:Class="Koromo_Copy.App.MainMenuPage"
              Title="Menu">
 
-    <ScrollView>
-        <StackLayout VerticalOptions="FillAndExpand">
-
+    <StackLayout VerticalOptions="FillAndExpand">
+        <Label x:Name="Title" HorizontalOptions="StartAndExpand" Text="Koromo Copy" FontSize="25" Margin="8,64,8,8"/>
+        <ScrollView>
             <ListView x:Name="ListViewMenu"
                     HasUnevenRows="True">
                 <d:ListView.ItemsSource>
@@ -29,8 +29,7 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-
-            <Label HorizontalOptions="StartAndExpand" Text="© 2019 Koromo Copy Project" Margin="16,0,8,8" FontSize="18"/>
-        </StackLayout>
-    </ScrollView>
+        </ScrollView>
+        <Label HorizontalOptions="StartAndExpand" Text="© 2019 Koromo Copy Project" Margin="16,0,8,8" FontSize="18"/>
+    </StackLayout>
 </ContentPage>

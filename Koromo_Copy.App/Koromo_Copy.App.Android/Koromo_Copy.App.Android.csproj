@@ -97,6 +97,10 @@
     <Folder Include="Resources\drawable\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Koromo_Copy.Framework\Koromo_Copy.Framework.csproj">
+      <Project>{98B35499-DC95-44CF-808E-7E7F7827C00B}</Project>
+      <Name>Koromo_Copy.Framework</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Koromo_Copy.App\Koromo_Copy.App.csproj">
       <Project>{CA36FD16-B9C9-49FD-B237-C766E789FB43}</Project>
       <Name>Koromo_Copy.App</Name>

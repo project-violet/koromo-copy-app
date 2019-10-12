@@ -23,7 +23,7 @@ namespace Koromo_Copy.Framework.Cache
         {
             try
             {
-                var full_path = Path.Combine(Directory.GetCurrentDirectory(), Name);
+                var full_path = Path.Combine(AppProvider.ApplicationPath, Name);
                 if (!File.Exists(full_path))
                     using (File.Create(full_path)) { }
                 else

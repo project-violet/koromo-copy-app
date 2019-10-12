@@ -9,6 +9,7 @@ using Koromo_Copy.Framework.Setting;
 using Koromo_Copy.Framework.Utils;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Runtime;
 using System.Runtime.CompilerServices;
@@ -21,6 +22,9 @@ namespace Koromo_Copy.Framework
     /// </summary>
     public class AppProvider
     {
+        public static string ApplicationPath = Directory.GetCurrentDirectory();
+        public static string DefaultSuperPath = Directory.GetCurrentDirectory();
+
         public static Dictionary<string, object> Instance =>
             InstanceMonitor.Instances;
 

@@ -1,5 +1,5 @@
 ﻿using Koromo_Copy.App.Models;
-using System;
+using Koromo_Copy.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -37,6 +37,8 @@ namespace Koromo_Copy.App
                 var id = (int)((MainMenuItem)e.SelectedItem).Id;
                 await RootPage.NavigateFromMenu(id);
             };
+
+            Title.Text += " " + Version.Text;
         }
     }
 }

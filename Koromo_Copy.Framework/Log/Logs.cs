@@ -130,7 +130,7 @@ namespace Koromo_Copy.Framework.Log
             CultureInfo en = new CultureInfo("en-US");
             lock (log_lock)
             {
-                File.AppendAllText("log.txt", $"[{dt.ToString(en)}] {message}\r\n");
+                File.AppendAllText(Path.Combine(AppProvider.ApplicationPath, "log.txt"), $"[{dt.ToString(en)}] {message}\r\n");
             }
         }
 
@@ -139,7 +139,7 @@ namespace Koromo_Copy.Framework.Log
             CultureInfo en = new CultureInfo("en-US");
             lock (log_lock)
             {
-                File.AppendAllText("log.txt", $"[{dt.ToString(en)}] [Error] {message}\r\n");
+                File.AppendAllText(Path.Combine(AppProvider.ApplicationPath, "log.txt"), $"[{dt.ToString(en)}] [Error] {message}\r\n");
             }
         }
     }

@@ -89,11 +89,11 @@ namespace Koromo_Copy.Framework.Extractor
             }
             else if (option.Type == ExtractorType.Works)
             {
-                var title = node.SelectSingleNode("/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]").InnerText;
+                var title = node.SelectSingleNode("/html[1]/body[1]/div[1]/div[3]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]").InnerText;
                 var sub_urls = new List<string>();
                 var sub_titles = new List<string>();
 
-                foreach (var item in node.SelectNodes("/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[2]/div[1]/div[1]/div"))
+                foreach (var item in node.SelectNodes("/html[1]/body[1]/div[1]/div[3]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[2]/div[1]/div[1]/div"))
                 {
                     sub_urls.Add(match["host"] + item.SelectSingleNode("./a[1]").GetAttributeValue("href", ""));
                     sub_titles.Add(item.SelectSingleNode("./a[1]/div[1]").MyText());

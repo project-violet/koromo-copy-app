@@ -77,16 +77,16 @@ namespace Koromo_Copy.App
 
                 if (DownloadAvailable == 4)
                 {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        Status.Text = $"다른 작업이 끝나길 기다리는 중 입니다...";
+                    });
                     while (DownloadAvailable >= 4)
                     {
                         Thread.Sleep(1000);
-                        Device.BeginInvokeOnMainThread(() =>
-                        {
-                            Status.Text = $"다른 작업이 끝나길 기다리는 중 입니다...";
-                        });
                     }
                 }
-
+                
                 if (Interlocked.Increment(ref DownloadAvailable) > 4)
                 {
                     goto WAIT_ANOTHER_TASKS;

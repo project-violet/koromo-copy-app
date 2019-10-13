@@ -122,7 +122,7 @@ namespace Koromo_Copy.Framework.Extractor
         /// </summary>
         public class PixivAPI
         {
-            public static string AccessToken { get; private set; }
+            public static string AccessToken { get; set; }
 
             #region Pixiv Model
 

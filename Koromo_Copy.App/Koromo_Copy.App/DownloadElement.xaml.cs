@@ -55,6 +55,8 @@ namespace Koromo_Copy.App
                 favurl = "https://ltn.hitomi.la/favicon-32x32.png";
             else if (favurl.StartsWith("https://www.instagram.com/"))
                 favurl = "https://www.instagram.com/static/images/ico/favicon-192.png/68d99ba29cc8.png";
+            else if (favurl.StartsWith("https://twitter.com/"))
+                favurl = "https://abs.twimg.com/icons/apple-touch-icon-192x192.png";
 
             Fav.IsVisible = true;
             Fav.Source = favurl;
@@ -118,8 +120,15 @@ namespace Koromo_Copy.App
                     var val = Interlocked.Add(ref extracting_cumulative_count, count);
                     Device.BeginInvokeOnMainThread(() =>
                     {
-                        Progress.Progress = val / (double)extracting_progress_max;
-                        Status.Text = $"추출중...[{val}/{extracting_progress_max}]";
+                        if (extracting_progress_max != 0)
+                        {
+                            Progress.Progress = val / (double)extracting_progress_max;
+                            Status.Text = $"추출중...[{val}/{extracting_progress_max}]";
+                        }
+                        else
+                        {
+                            Status.Text = $"추출중...[{val}개 항목 추출됨]";
+                        }
                     });
                 };
 

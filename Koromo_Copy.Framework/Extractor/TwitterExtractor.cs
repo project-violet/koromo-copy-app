@@ -128,6 +128,7 @@ namespace Koromo_Copy.Framework.Extractor
                 var user = node.SelectSingleNode("/html[1]/body[1]/div[1]/div[2]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/h1[1]/a[1]").InnerText;
                 var videos = new List<(string, List<string>)>();
                 var post_count = tweets.Count;
+                var last_url_count = 0;
 
                 foreach (var tweet in tweets)
                     urls.AddRange(parse_tweet_hashtag(option as TwitterExtractorOption, tweet, videos));
@@ -141,6 +142,8 @@ namespace Koromo_Copy.Framework.Extractor
                         break;
                     foreach (var tweet in tweets2)
                         urls.AddRange(parse_tweet_hashtag(option as TwitterExtractorOption, tweet, videos));
+                    option.PostStatus?.Invoke(urls.Count - last_url_count);
+                    last_url_count = urls.Count;
                     post_count += tweets2.Count;
                     min_position = JToken.Parse(next)["min_position"].ToString();
                     if (!(bool)JToken.Parse(next)["has_more_items"])

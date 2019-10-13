@@ -27,6 +27,7 @@ namespace Koromo_Copy.App
 
         private void Button_Clicked(object sender, EventArgs e)
         {
+            PixivExtractor.PixivAPI.AccessToken = null;
             if (!PixivExtractor.PixivAPI.Auth(Id.Text, Password.Text))
             {
                 Fail.IsVisible = true;

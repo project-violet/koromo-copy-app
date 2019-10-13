@@ -8,24 +8,24 @@
              xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              Title="About Koromo Copy">
     <ContentPage.Content>
-        <ScrollView>
-            <StackLayout>
-                <StackLayout Margin="8">
-                    <Label Text="Koromo Copy Project" FontSize="30" TextColor="Black"/>
-                    <Label Text="Copyright (C) dc-koromo. All rights reserved."/>
-                    <Label Text="Licensed under the MIT Licence."/>
-                    <Label>
-                        <Label.FormattedText>
-                            <FormattedString>
-                                <Span Text="E-Mail: "/>
-                                <Span x:Name="Mail" Text="koromo.software@gmail.com" TextColor="Blue" TextDecorations="Underline"/>
-                            </FormattedString>
-                        </Label.FormattedText>
-                    </Label>
+        <StackLayout Margin="8">
+            <Label Text="Koromo Copy Project" FontSize="30" TextColor="Black"/>
+            <Label Text="Copyright (C) dc-koromo. All rights reserved."/>
+            <Label Text="Licensed under the MIT Licence."/>
+            <Label>
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="E-Mail: "/>
+                        <Span x:Name="Mail" Text="koromo.software@gmail.com" TextColor="Blue" TextDecorations="Underline"/>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+            <ScrollView>
+                <StackLayout>
                     <ff:CachedImage x:Name="Image" Aspect="AspectFit" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
                     <ScrollView x:Name="License"/>
                 </StackLayout>
-            </StackLayout>
-        </ScrollView>
+            </ScrollView>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -79,7 +79,7 @@ namespace Koromo_Copy.Framework.Network
                 interrupt.WaitOne();
 
                 return result;
-            });
+            }).ConfigureAwait(false);
         }
 
         public static void DownloadFile(string url, string filename)
@@ -114,7 +114,7 @@ namespace Koromo_Copy.Framework.Network
                 };
 
                 interrupt.WaitOne();
-            });
+            }).ConfigureAwait(false);
         }
 
         public static byte[] DownloadData(string url)
@@ -152,7 +152,7 @@ namespace Koromo_Copy.Framework.Network
                 interrupt.WaitOne();
 
                 return result;
-            });
+            }).ConfigureAwait(false);
         }
     }
 }

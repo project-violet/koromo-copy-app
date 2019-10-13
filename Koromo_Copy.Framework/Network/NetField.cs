@@ -125,7 +125,16 @@ namespace Koromo_Copy.Framework.Network
                         }
                         else
                         {
-                            ostream = File.OpenWrite(content.Filename);
+                            try
+                            {
+                                ostream = new FileStream(content.Filename, FileMode.Open, FileAccess.Write, FileShare.None);
+                            }
+                            catch (IOException e)
+                            {
+                                Log.Logs.Instance.PushError("[NetField] File used! - " + content.Filename + "\r\n" + e.Message + "\r\n" + e.StackTrace);
+                                content.ErrorCallback?.Invoke(5);
+                                return;
+                            }
                         }
 
                         content.SizeCallback?.Invoke(response.ContentLength);
@@ -225,7 +234,7 @@ namespace Koromo_Copy.Framework.Network
                     e.Status == WebExceptionStatus.NameResolutionFailure ||
                     e.Status == WebExceptionStatus.UnknownError)
                 {
-                    if (response.StatusCode == HttpStatusCode.Forbidden && response.Cookies != null)
+                    if (response != null && response.StatusCode == HttpStatusCode.Forbidden && response.Cookies != null)
                     {
                         content.CookieReceive?.Invoke(response.Cookies);
                         return;

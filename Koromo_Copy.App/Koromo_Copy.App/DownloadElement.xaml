@@ -7,29 +7,32 @@
              mc:Ignorable="d"
              x:Class="Koromo_Copy.App.DownloadElement"
              BackgroundColor="White">
-    <Frame HasShadow="True" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Padding="4">
+    <Frame HasShadow="True" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Padding="0">
         <Grid x:Name="Body" xe:TouchEffect.Color="Gray" xe:Commands.Tap="{Binding TapCommand}"
               VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+            <Grid Padding="4">
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-            <Label Grid.Row="0" Grid.Column="0" Text="정보: "/>
-            <Label Grid.Row="0" Grid.Column="1" x:Name="Info"/>
-            <Label Grid.Row="1" Grid.Column="0" Text="상태: "/>
-            <Label Grid.Row="1" Grid.Column="1" x:Name="Status"/>
-            <Label x:Name="ProgressText" Grid.Row="2" Grid.Column="0" Text="진행상황: " IsVisible="False"/>
-            <ProgressBar Visual="Material" x:Name="Progress" Grid.Row="2" Grid.Column="1" IsVisible="False" ProgressColor="Pink"/>
-            <ActivityIndicator VerticalOptions="Center" Margin="0,0,16,0" Grid.RowSpan="4" Grid.Column="2" IsRunning="True" WidthRequest="50" HeightRequest="50" x:Name="Spinner"/>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" Text="정보: "/>
+                <Label Grid.Row="0" Grid.Column="1" x:Name="Info"/>
+                <Label Grid.Row="1" Grid.Column="0" Text="상태: "/>
+                <Label Grid.Row="1" Grid.Column="1" x:Name="Status"/>
+                <Label x:Name="ProgressText" Grid.Row="2" Grid.Column="0" Text="진행상황: " IsVisible="False"/>
+                <ProgressBar Visual="Material" x:Name="Progress" Grid.Row="2" Grid.Column="1" IsVisible="False" ProgressColor="Pink"/>
+                <ActivityIndicator VerticalOptions="Center" Margin="0,0,16,0" Grid.RowSpan="4" Grid.Column="2" IsRunning="True" WidthRequest="50" HeightRequest="50" x:Name="Spinner"/>
+            </Grid>
         </Grid>
     </Frame>
 </ContentView>

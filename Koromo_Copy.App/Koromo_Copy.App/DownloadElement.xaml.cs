@@ -62,7 +62,7 @@ namespace Koromo_Copy.App
 
                 Device.BeginInvokeOnMainThread(() =>
                 {
-                    Info.Text = extractor.GetType().Name.Replace("Extractor", "") + " (" + url + ")";
+                    Info.Text = extractor.GetType().Name.Replace("Extractor", "") + " (" + "/" + string.Join("/", url.Split('/').Skip(3)) + ")";
                     Status.Text = "다운로드할 파일들의 정보를 추출 중 입니다...";
                 });
 
@@ -88,6 +88,14 @@ namespace Koromo_Copy.App
                     {
                         Progress.Progress = val / (double)extracting_progress_max;
                         Status.Text = $"추출중...[{val}/{extracting_progress_max}]";
+                    });
+                };
+
+                option.SimpleInfoCallback = (info) =>
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        Info.Text = extractor.GetType().Name.Replace("Extractor", "") + info;
                     });
                 };
 

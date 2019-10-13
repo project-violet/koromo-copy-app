@@ -194,7 +194,7 @@ namespace Koromo_Copy.Framework.Extractor
                                     Id = article.Id,
                                     Gallery = article.GalleryName,
                                     Title = article.Title,
-                                    FilenameWithoutExtension = Path.GetFileNameWithoutExtension(article.FilesName[i]),
+                                    FilenameWithoutExtension = (i+1).ToString("000"),
                                     Extension = Path.GetExtension(article.FilesName[i]).Replace(".", ""),
                                 };
                                 result.Add(task);

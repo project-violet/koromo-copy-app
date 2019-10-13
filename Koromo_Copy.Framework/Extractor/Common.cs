@@ -43,6 +43,8 @@ namespace Koromo_Copy.Framework.Extractor
         public Action<long> ProgressMax { get; set; }
         public Action<long> PostStatus { get; set; }
 
+        public Action<string> SimpleInfoCallback { get; set; }
+
         public int StartPage = 0;
         public int EndPage = int.MaxValue;
 

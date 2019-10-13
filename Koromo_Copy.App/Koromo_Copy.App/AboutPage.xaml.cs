@@ -32,7 +32,7 @@ namespace Koromo_Copy.App
             view.Markdown = @"
 # About Koromo Copy
 
-`Koromo Copy`는 모두를 위한 강력한 다운로더입니다.
+`Koromo Copy`는 모두를 위한 강력한 다운로더 프로젝트입니다.
 
 Github: [https://github.com/dc-koromo/koromo-copy](https://github.com/dc-koromo/koromo-copy)
 

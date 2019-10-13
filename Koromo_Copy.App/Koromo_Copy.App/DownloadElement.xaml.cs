@@ -180,7 +180,7 @@ namespace Koromo_Copy.App
                     AppProvider.Scheduler.Add(task);
                 });
 
-                while (tasks.Item1 != download_count)
+                while (tasks.Item1.Count != download_count)
                 {
                     Thread.Sleep(1000);
                     Device.BeginInvokeOnMainThread(() =>

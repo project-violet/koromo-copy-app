@@ -23,7 +23,7 @@ namespace Koromo_Copy.Framework.Network
         RETRY_PROCEDURE:
 
             interrupt.WaitOne();
-            if (cancel != null && cancel.IsCancellationRequested)
+            if (content.Cancel != null && content.Cancel.IsCancellationRequested)
             {
                 content.CancleCallback();
                 return;
@@ -39,9 +39,9 @@ namespace Koromo_Copy.Framework.Network
         REDIRECTION:
 
             interrupt.WaitOne();
-            if (cancel != null && cancel.IsCancellationRequested)
+            if (content.Cancel != null && content.Cancel.IsCancellationRequested)
             {
-                content.CancleCallback();
+                content.Cancel.CancleCallback();
                 return;
             }
 
@@ -95,9 +95,9 @@ namespace Koromo_Copy.Framework.Network
                     request_stream.Close();
 
                     interrupt.WaitOne();
-                    if (cancel != null && cancel.IsCancellationRequested)
+                    if (content.Cancel != null && content.Cancel.IsCancellationRequested)
                     {
-                        content.CancleCallback();
+                        content.Cancel.CancleCallback();
                         return;
                     }
                 }
@@ -126,9 +126,9 @@ namespace Koromo_Copy.Framework.Network
                              response.StatusCode == HttpStatusCode.Redirect)
                     {
                         interrupt.WaitOne();
-                        if (cancel != null && cancel.IsCancellationRequested)
+                        if (content.Cancel != null && content.Cancel.IsCancellationRequested)
                         {
-                            content.CancleCallback();
+                            content.Cancel.CancleCallback();
                             return;
                         }
 
@@ -167,9 +167,9 @@ namespace Koromo_Copy.Framework.Network
                         }
 
                         interrupt.WaitOne();
-                        if (cancel != null && cancel.IsCancellationRequested)
+                        if (content.Cancel != null && content.Cancel.IsCancellationRequested)
                         {
-                            content.CancleCallback();
+                            content.Cancel.CancleCallback();
                             return;
                         }
 
@@ -183,9 +183,9 @@ namespace Koromo_Copy.Framework.Network
                         do
                         {
                             interrupt.WaitOne();
-                            if (cancel != null && cancel.IsCancellationRequested)
+                            if (content.Cancel != null && content.Cancel.IsCancellationRequested)
                             {
-                                content.CancleCallback();
+                                content.Cancel.CancleCallback();
                                 return;
                             }
 
@@ -193,9 +193,9 @@ namespace Koromo_Copy.Framework.Network
                             ostream.Write(buffer, 0, (int)byte_read);
 
                             interrupt.WaitOne();
-                            if (cancel != null && cancel.IsCancellationRequested)
+                            if (content.Cancel != null && content.Cancel.IsCancellationRequested)
                             {
-                                content.CancleCallback();
+                                content.Cancel.CancleCallback();
                                 return;
                             }
 
@@ -226,18 +226,18 @@ namespace Koromo_Copy.Framework.Network
                         if (content.PostProcess != null)
                         {
                             interrupt.WaitOne();
-                            if (cancel != null && cancel.IsCancellationRequested)
+                            if (content.Cancel != null && content.Cancel.IsCancellationRequested)
                             {
-                                content.CancleCallback();
+                                content.Cancel.CancleCallback();
                                 return;
                             }
 
                             content.StartPostprocessorCallback?.Invoke();
 
                             interrupt.WaitOne();
-                            if (cancel != null && cancel.IsCancellationRequested)
+                            if (content.Cancel != null && content.Cancel.IsCancellationRequested)
                             {
-                                content.CancleCallback();
+                                content.Cancel.CancleCallback();
                                 return;
                             }
 

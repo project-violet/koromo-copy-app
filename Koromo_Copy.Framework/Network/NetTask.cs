@@ -152,6 +152,7 @@ namespace Koromo_Copy.Framework.Network
 
         public bool Aborted;
         public HttpWebRequest Request;
+        public CancellationToken Cancel;
 
         /* Post Processor */
 

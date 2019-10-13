@@ -41,7 +41,6 @@ namespace Koromo_Copy.Framework.Network
     {
         public abstract void Main(T content);
         public ManualResetEvent interrupt = new ManualResetEvent(true);
-        public CancellationToken cancel;
     }
 
     /// <summary>

@@ -23,6 +23,11 @@ namespace Koromo_Copy.Framework.Network
         RETRY_PROCEDURE:
 
             interrupt.WaitOne();
+            if (cancel != null && cancel.IsCancellationRequested)
+            {
+                content.CancleCallback();
+                return;
+            }
 
             if (content.DownloadString)
                 Log.Logs.Instance.Push("[NetField] Start download string... " + content.Url);
@@ -34,6 +39,11 @@ namespace Koromo_Copy.Framework.Network
         REDIRECTION:
 
             interrupt.WaitOne();
+            if (cancel != null && cancel.IsCancellationRequested)
+            {
+                content.CancleCallback();
+                return;
+            }
 
             content.StartCallback?.Invoke();
 
@@ -85,6 +95,11 @@ namespace Koromo_Copy.Framework.Network
                     request_stream.Close();
 
                     interrupt.WaitOne();
+                    if (cancel != null && cancel.IsCancellationRequested)
+                    {
+                        content.CancleCallback();
+                        return;
+                    }
                 }
 
                 //
@@ -111,6 +126,11 @@ namespace Koromo_Copy.Framework.Network
                              response.StatusCode == HttpStatusCode.Redirect)
                     {
                         interrupt.WaitOne();
+                        if (cancel != null && cancel.IsCancellationRequested)
+                        {
+                            content.CancleCallback();
+                            return;
+                        }
 
                         Stream istream = response.GetResponseStream();
                         Stream ostream = null;
@@ -147,6 +167,11 @@ namespace Koromo_Copy.Framework.Network
                         }
 
                         interrupt.WaitOne();
+                        if (cancel != null && cancel.IsCancellationRequested)
+                        {
+                            content.CancleCallback();
+                            return;
+                        }
 
                         byte[] buffer = new byte[content.DownloadBufferSize];
                         long byte_read = 0;
@@ -158,11 +183,21 @@ namespace Koromo_Copy.Framework.Network
                         do
                         {
                             interrupt.WaitOne();
+                            if (cancel != null && cancel.IsCancellationRequested)
+                            {
+                                content.CancleCallback();
+                                return;
+                            }
 
                             byte_read = istream.Read(buffer, 0, buffer.Length);
                             ostream.Write(buffer, 0, (int)byte_read);
 
                             interrupt.WaitOne();
+                            if (cancel != null && cancel.IsCancellationRequested)
+                            {
+                                content.CancleCallback();
+                                return;
+                            }
 
                             content.DownloadCallback?.Invoke(byte_read);
 
@@ -191,10 +226,20 @@ namespace Koromo_Copy.Framework.Network
                         if (content.PostProcess != null)
                         {
                             interrupt.WaitOne();
+                            if (cancel != null && cancel.IsCancellationRequested)
+                            {
+                                content.CancleCallback();
+                                return;
+                            }
 
                             content.StartPostprocessorCallback?.Invoke();
 
                             interrupt.WaitOne();
+                            if (cancel != null && cancel.IsCancellationRequested)
+                            {
+                                content.CancleCallback();
+                                return;
+                            }
 
                             content.PostProcess.DownloadTask = content;
                             AppProvider.PPScheduler.Add(content.PostProcess);

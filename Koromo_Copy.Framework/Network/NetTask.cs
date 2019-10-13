@@ -140,6 +140,7 @@ namespace Koromo_Copy.Framework.Network
         public Action<string> CompleteCallbackString;
         public Action<byte[]> CompleteCallbackBytes;
         public Action<CookieCollection> CookieReceive;
+        public Action CancleCallback;
 
         /// <summary>
         /// Return total downloaded size

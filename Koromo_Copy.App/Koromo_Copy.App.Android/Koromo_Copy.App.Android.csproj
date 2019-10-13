@@ -65,12 +65,14 @@
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="YoutubeDL.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\materialdesignicons-webfont.ttf" />
     <AndroidAsset Include="Assets\materialdesignicons-webfont.woff" />
     <AndroidAsset Include="Assets\materialdesignicons-webfont.woff2" />
     <AndroidAsset Include="Assets\materialdesignicons-webfont.eot" />
+    <AndroidAsset Include="Assets\youtube_dl" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
     <None Include="Properties\AndroidManifest.xml" />

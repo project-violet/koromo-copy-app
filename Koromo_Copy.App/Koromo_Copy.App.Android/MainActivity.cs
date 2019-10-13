@@ -13,6 +13,7 @@ using Android.Support.V4.App;
 using Android.Support.V4.Content;
 using Android;
 using Plugin.CurrentActivity;
+using Java.Lang;
 
 namespace Koromo_Copy.App.Droid
 {
@@ -27,7 +28,7 @@ namespace Koromo_Copy.App.Droid
             }
             else
             {
-                ActivityCompat.RequestPermissions(this, new String[] { Manifest.Permission.ReadExternalStorage }, 1);
+                ActivityCompat.RequestPermissions(this, new System.String[] { Manifest.Permission.ReadExternalStorage }, 1);
             }
             if (ContextCompat.CheckSelfPermission(this, Manifest.Permission.WriteExternalStorage) == (int)Permission.Granted)
             {
@@ -35,7 +36,7 @@ namespace Koromo_Copy.App.Droid
             }
             else
             {
-                ActivityCompat.RequestPermissions(this, new String[] { Manifest.Permission.WriteExternalStorage }, 1);
+                ActivityCompat.RequestPermissions(this, new System.String[] { Manifest.Permission.WriteExternalStorage }, 1);
             }
 
             TabLayoutResource = Resource.Layout.Tabbar;
@@ -52,6 +53,8 @@ namespace Koromo_Copy.App.Droid
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             global::Xamarin.Forms.FormsMaterial.Init(this, savedInstanceState);
             LoadApplication(new App());
+
+            //YoutubeDL.test_run();
         }
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {

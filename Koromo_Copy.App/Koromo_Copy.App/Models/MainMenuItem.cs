@@ -11,7 +11,8 @@ namespace Koromo_Copy.App.Models
     {
         Browse,
         About,
-        Settings
+        Settings,
+        Log
     }
 
     public class MainMenuItem

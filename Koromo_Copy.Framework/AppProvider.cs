@@ -37,10 +37,6 @@ namespace Koromo_Copy.Framework
             // Initialize logs instance
             Logs.Instance.Push("App provider initializing...");
 
-            // If locking fails, then cannot use koromo-copy.
-            //if (!ProgramLock.Lock())
-            //    return false;
-
             // Check program crashed.
             if (ProgramLock.ProgramCrashed)
                 Logs.Instance.Push("Program is terminated abnormally.");
@@ -76,8 +72,6 @@ namespace Koromo_Copy.Framework
         public static void Deinitialize()
         {
             Logs.Instance.Push("App provider de-initialized.");
-
-            //ProgramLock.UnLock();
         }
     }
 }

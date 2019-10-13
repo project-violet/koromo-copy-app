@@ -42,7 +42,7 @@ namespace Koromo_Copy.App
                 }
             }));
 
-            Commands.SetTap(SettingNotify, new Command(async () => {
+            Commands.SetTap(SettingNotify, new Command(() => {
                 NotifyToggle.IsToggled = !NotifyToggle.IsToggled;
             }));
 
@@ -62,7 +62,7 @@ namespace Koromo_Copy.App
                 }
             }));
 
-            Commands.SetTap(ExportLog, new Command(async () => {
+            Commands.SetTap(ExportLog, new Command(() => {
                 if (!Directory.Exists(AppProvider.DefaultSuperPath))
                     Directory.CreateDirectory(AppProvider.DefaultSuperPath);
                 File.Copy(System.IO.Path.Combine(AppProvider.ApplicationPath, "log.txt"),

@@ -13,7 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
+using System.Web;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using XamEffects;
@@ -45,6 +45,18 @@ namespace Koromo_Copy.App
                 Spinner.IsVisible = false;
                 return;
             }
+
+            var uri = new Uri(url);
+            var favurl = uri.Scheme + Uri.SchemeDelimiter + uri.Host + "/favicon.ico";
+
+            // Fav Exceptions
+            if (favurl.StartsWith("https://hitomi.la/"))
+                favurl = "https://ltn.hitomi.la/favicon-32x32.png";
+            else if (favurl.StartsWith("https://www.instagram.com/"))
+                favurl = "https://www.instagram.com/static/images/ico/favicon-192.png/68d99ba29cc8.png";
+
+            Fav.IsVisible = true;
+            Fav.Source = favurl;
 
             Task.Run(() =>
             {
@@ -166,7 +178,7 @@ namespace Koromo_Copy.App
                     AppProvider.Scheduler.Add(task);
                 });
 
-                while (AppProvider.Scheduler.busy_thread != 0)
+                while (tasks.Item1 != download_count)
                 {
                     Thread.Sleep(1000);
                     Device.BeginInvokeOnMainThread(() =>

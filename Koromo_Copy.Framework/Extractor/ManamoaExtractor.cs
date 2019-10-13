@@ -99,27 +99,34 @@ namespace Koromo_Copy.Framework.Extractor
                     sub_titles.Add(item.SelectSingleNode("./a[1]/div[1]").MyText());
                 }
 
-                var htmls = NetTools.DownloadStrings(sub_urls);
+                var htmls = NetTools.DownloadStrings(sub_urls, "PHPSESSID=" + Externals.ManamoaPHPSESSID);
 
                 var result = new List<NetTask>();
                 for (int i = 0; i < sub_urls.Count; i++)
                 {
-                    var images = get_board_images(htmls[i]);
-                    int count = 1;
-                    foreach (var img in images)
+                    try
                     {
-                        var task = NetTask.MakeDefault(img);
-                        task.SaveFile = true;
-                        task.Filename = count.ToString("000") + Path.GetExtension(img.Split('/').Last());
-                        task.Format = new ExtractorFileNameFormat
+                        var images = get_board_images(htmls[i]);
+                        int count = 1;
+                        foreach (var img in images)
                         {
-                            Title = title,
-                            Episode = sub_titles[i],
-                            FilenameWithoutExtension = count.ToString("000"),
-                            Extension = Path.GetExtension(task.Filename).Replace(".", "")
-                        };
-                        result.Add(task);
-                        count++;
+                            var task = NetTask.MakeDefault(img);
+                            task.SaveFile = true;
+                            task.Filename = count.ToString("000") + Path.GetExtension(img.Split('/').Last());
+                            task.Format = new ExtractorFileNameFormat
+                            {
+                                Title = title,
+                                Episode = sub_titles[i],
+                                FilenameWithoutExtension = count.ToString("000"),
+                                Extension = Path.GetExtension(task.Filename).Replace(".", "")
+                            };
+                            result.Add(task);
+                            count++;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        ;
                     }
                 }
 

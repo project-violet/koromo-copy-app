@@ -2619,6 +2619,8 @@ namespace Koromo_Copy.App.Droid
 			global::AndroidHUD.Resource.Styleable.ProgressWheel_ahText = global::Koromo_Copy.App.Droid.Resource.Styleable.ProgressWheel_ahText;
 			global::AndroidHUD.Resource.Styleable.ProgressWheel_ahTextColor = global::Koromo_Copy.App.Droid.Resource.Styleable.ProgressWheel_ahTextColor;
 			global::AndroidHUD.Resource.Styleable.ProgressWheel_ahTextSize = global::Koromo_Copy.App.Droid.Resource.Styleable.ProgressWheel_ahTextSize;
+			global::Cookies.Android.Resource.String.ApplicationName = global::Koromo_Copy.App.Droid.Resource.String.ApplicationName;
+			global::Cookies.Android.Resource.String.Hello = global::Koromo_Copy.App.Droid.Resource.String.Hello;
 			global::Xamarin.Essentials.Resource.Attribute.alpha = global::Koromo_Copy.App.Droid.Resource.Attribute.alpha;
 			global::Xamarin.Essentials.Resource.Attribute.coordinatorLayoutStyle = global::Koromo_Copy.App.Droid.Resource.Attribute.coordinatorLayoutStyle;
 			global::Xamarin.Essentials.Resource.Attribute.font = global::Koromo_Copy.App.Droid.Resource.Attribute.font;

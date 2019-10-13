@@ -25,9 +25,12 @@ namespace Koromo_Copy.App
             menuItems = new List<MainMenuItem>
             {
                 new MainMenuItem {Id = MenuItemType.Browse, Title="메인", Icon = IconPack.Web },
-                new MainMenuItem {Id = MenuItemType.Settings, Title="로그", Icon= IconPack.Post },
+                new MainMenuItem {Id = MenuItemType.Settings, Title="로그", Icon= IconPack.PostOutline },
                 new MainMenuItem {Id = MenuItemType.Settings, Title="설정", Icon= IconPack.Settings },
-                new MainMenuItem {Id = MenuItemType.About, Title="이 어플에 관하여", Icon= IconPack.InformationOutline }
+                new MainMenuItem {Id = MenuItemType.About, Title="이 어플에 관하여", Icon= IconPack.InformationOutline },
+#if DEBUG
+                new MainMenuItem {Id = MenuItemType.Test, Title="테스트", Icon= IconPack.BottleTonicSkull }
+#endif
             };
 
             ListViewMenu.ItemsSource = menuItems;

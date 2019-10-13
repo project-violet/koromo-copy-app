@@ -143,6 +143,7 @@ namespace Koromo_Copy.Framework.Network
         public Action<string> CompleteCallbackString;
         public Action<byte[]> CompleteCallbackBytes;
         public Action<CookieCollection> CookieReceive;
+        public Action<string> HeaderReceive;
         public Action CancleCallback;
 
         /// <summary>

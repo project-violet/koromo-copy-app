@@ -141,6 +141,9 @@ namespace Koromo_Copy.Framework.Network
                             return;
                         }
 
+                        content.HeaderReceive?.Invoke(response.Headers.ToString());
+                        content.CookieReceive?.Invoke(response.Cookies);
+
                         Stream istream = response.GetResponseStream();
                         Stream ostream = null;
 

@@ -82,6 +82,18 @@
                 </ContentView>
                 <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" Color="LightGray"/>
                 <Label Text="기타" TextColor="#F50057" Margin="16,16,16,0"/>
+                <ContentView x:Name="SettingPixiv" xe:TouchEffect.Color="Gray" xe:Commands.Tap="{Binding TapCommand}">
+                    <Grid Padding="16">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Row="0" Text="픽시브 로그인" TextColor="Black"/>
+                        <Label Grid.Row="1" Text="픽시브 작품을 다운로드하기 위한 로그인 정보를 입력합니다."/>
+                    </Grid>
+                </ContentView>
+                <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" Color="LightGray"/>
                 <ContentView x:Name="ExportLog" xe:TouchEffect.Color="Gray" xe:Commands.Tap="{Binding TapCommand}">
                     <Grid Padding="16">
                         <Grid.RowDefinitions>

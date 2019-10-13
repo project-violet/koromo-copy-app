@@ -54,7 +54,7 @@ namespace Koromo_Copy.Framework.Extractor
             if (option == null)
                 option = new PixivExtractorOption { Type = ExtractorType.Works };
 
-            if (match[1].Value.StartsWith("member") && option.ExtractInformation == false)
+            if (match[2].Value.StartsWith("member") && option.ExtractInformation == false)
             {
                 var user = PixivAPI.GetUsersAsync(match["id"].Value.ToInt()).Result;
                 var works = PixivAPI.GetUsersWorksAsync(match["id"].Value.ToInt(), 1, 10000000).Result;

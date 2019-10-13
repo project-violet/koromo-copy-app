@@ -62,6 +62,10 @@ namespace Koromo_Copy.App
                 }
             }));
 
+            Commands.SetTap(SettingPixiv, new Command(async () => {
+                await Navigation.PushAsync(new PixivLoginPage());
+            }));
+
             Commands.SetTap(ExportLog, new Command(() => {
                 if (!Directory.Exists(AppProvider.DefaultSuperPath))
                     Directory.CreateDirectory(AppProvider.DefaultSuperPath);

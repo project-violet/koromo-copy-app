@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="Koromo_Copy.App.PixivLoginPage"
+             Title="Pixiv 로그인">
+    <ContentPage.Content>
+        <Grid HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <Label Grid.Row="0" Grid.Column="0" TextColor="Black" HorizontalOptions="EndAndExpand"
+                   Text="아이디: " FontSize="25"/>
+            <Entry x:Name="Id" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" WidthRequest="200"/>
+            <Label Grid.Row="1" Grid.Column="0" TextColor="Black" Text="비밀번호: " FontSize="25"/>
+            <Entry IsPassword="True" x:Name="Password" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" WidthRequest="200"/>
+            <Label x:Name="Fail" IsVisible="False" Grid.Row="2" Grid.ColumnSpan="3" Text="로그인에 실패했습니다. 아이디/비밀번호를 확인해주세요" TextColor="Red"/>
+            <Button Visual="Material" Grid.Row="3" Grid.Column="2" Text="로그인" FontSize="20"
+                    BackgroundColor="#F50057" WidthRequest="150" Clicked="Button_Clicked"/>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

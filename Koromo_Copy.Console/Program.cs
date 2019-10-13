@@ -35,10 +35,10 @@ namespace Koromo_Copy.Console
             //args = new string[] { "https://xn--9w3b15m8vo.asia/reader/1496049#1-", "-p" };
             //args = new string[] { "https://danbooru.donmai.us/posts?tags=oryou", "-p", "--end-page", "3" };
             //args = new string[] { "https://funbe19.com/왕의-딸로-태어났다고-합니다", "-p"  };
-            //args = new string[] { "https://www.pixiv.net/member.php?id=115051", "-p" };
+            args = new string[] { "https://www.pixiv.net/member.php?id=115051", "-p" };
             //args = new string[] { "https://comic.naver.com/webtoon/list.nhn?titleId=626907&weekday=wed" };
             //args = new string[] { "https://manamoa.net/bbs/page.php?hid=manga_detail&manga_id=10953" };
-            args = new string[] { "https://www.instagram.com/chuu__chloe/?hl=ko" };
+            //args = new string[] { "https://www.instagram.com/chuu__chloe/?hl=ko" };
 #endif
 
             AppProvider.Initialize();

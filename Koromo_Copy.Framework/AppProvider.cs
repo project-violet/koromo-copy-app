@@ -38,17 +38,19 @@ namespace Koromo_Copy.Framework
             Logs.Instance.Push("App provider initializing...");
 
             // If locking fails, then cannot use koromo-copy.
-            if (!ProgramLock.Lock())
-                return false;
+            //if (!ProgramLock.Lock())
+            //    return false;
 
             // Check program crashed.
             if (ProgramLock.ProgramCrashed)
                 Logs.Instance.Push("Program is terminated abnormally.");
 
+#if DEBUG
             // Check exists instances.
             if (Instance.Count > 1)
                 throw new Exception("You must wait for app-provider initialization procedure before using instance-lazy!\n" +
                     "For more informations, see the development documents.");
+#endif
 
             // GC Setting
             GCLatencyMode oldMode = GCSettings.LatencyMode;
@@ -75,7 +77,7 @@ namespace Koromo_Copy.Framework
         {
             Logs.Instance.Push("App provider de-initialized.");
 
-            ProgramLock.UnLock();
+            //ProgramLock.UnLock();
         }
     }
 }

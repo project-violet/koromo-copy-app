@@ -149,6 +149,7 @@ namespace Koromo_Copy.Framework.Extractor
                     min_position = JToken.Parse(next)["min_position"].ToString();
                     if (!(bool)JToken.Parse(next)["has_more_items"])
                         break;
+                    Thread.Sleep(3000);
                 }
 
                 var result = new List<NetTask>();

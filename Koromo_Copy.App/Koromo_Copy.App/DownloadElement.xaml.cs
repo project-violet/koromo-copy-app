@@ -158,6 +158,7 @@ namespace Koromo_Copy.App
                         Status.Text = "추출 작업 중 오류가 발생했습니다 :(\n" + e.Message;
                         Status.TextColor = Color.Red;
                     });
+                    Interlocked.Decrement(ref DownloadAvailable);
                     return;
                 }
 
@@ -170,6 +171,7 @@ namespace Koromo_Copy.App
                         Spinner.IsVisible = false;
                         Status.Text = "다운로드할 내용이 없습니다 :(";
                     });
+                    Interlocked.Decrement(ref DownloadAvailable);
                     return;
                 }
 

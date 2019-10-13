@@ -5,12 +5,27 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              x:Class="Koromo_Copy.App.AboutPage"
+             xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              Title="About Koromo Copy">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+        <ScrollView>
+            <StackLayout>
+                <StackLayout Margin="8">
+                    <Label Text="Koromo Copy Project" FontSize="30" TextColor="Black"/>
+                    <Label Text="Copyright (C) dc-koromo. All rights reserved."/>
+                    <Label Text="Licensed under the MIT Licence."/>
+                    <Label>
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="E-Mail: "/>
+                                <Span x:Name="Mail" Text="koromo.software@gmail.com" TextColor="Blue" TextDecorations="Underline"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <ff:CachedImage x:Name="Image" Aspect="AspectFit" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+                    <ScrollView x:Name="License"/>
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

@@ -14,6 +14,7 @@ using Android.Support.V4.Content;
 using Android;
 using Plugin.CurrentActivity;
 using Java.Lang;
+using FFImageLoading.Forms.Platform;
 
 namespace Koromo_Copy.App.Droid
 {
@@ -48,6 +49,7 @@ namespace Koromo_Copy.App.Droid
 
             UserDialogs.Init(this);
             CrossCurrentActivity.Current.Init(Application);
+            CachedImageRenderer.Init(true);
             XamEffects.Droid.Effects.Init();
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);

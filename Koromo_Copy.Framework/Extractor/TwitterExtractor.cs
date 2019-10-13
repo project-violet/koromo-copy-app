@@ -12,6 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Web;
 using static Koromo_Copy.Framework.Extractor.IExtractorOption;
 
@@ -148,6 +149,7 @@ namespace Koromo_Copy.Framework.Extractor
                     min_position = JToken.Parse(next)["min_position"].ToString();
                     if (!(bool)JToken.Parse(next)["has_more_items"])
                         break;
+                    Thread.Sleep(2000);
                 }
 
                 var result = new List<NetTask>();

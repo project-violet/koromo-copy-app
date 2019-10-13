@@ -32,8 +32,16 @@ namespace Koromo_Copy.Framework
 
         public static PostprocessorScheduler PPScheduler { get; set; }
 
+        public static bool Initialized { get; set; }
+
         public static bool Initialize()
         {
+            if (Initialized)
+            {
+                Logs.Instance.Push("App provider already initialized!");
+                return true;
+            }
+
             // Initialize logs instance
             Logs.Instance.Push("App provider initializing...");
 
@@ -65,6 +73,8 @@ namespace Koromo_Copy.Framework
             Logs.Instance.Push("App provider starts.");
 
             GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+
+            Initialized = true;
 
             return true;
         }

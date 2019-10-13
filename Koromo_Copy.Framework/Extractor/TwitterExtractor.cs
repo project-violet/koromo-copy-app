@@ -149,7 +149,6 @@ namespace Koromo_Copy.Framework.Extractor
                     min_position = JToken.Parse(next)["min_position"].ToString();
                     if (!(bool)JToken.Parse(next)["has_more_items"])
                         break;
-                    Thread.Sleep(2000);
                 }
 
                 var result = new List<NetTask>();
@@ -263,7 +262,9 @@ namespace Koromo_Copy.Framework.Extractor
             url += $"max_position={position}&";
             url += "reset_error_state=false";
             option.PageReadCallback?.Invoke(url);
-            return NetTools.DownloadString(url);
+            var task = NetTask.MakeDefault(url);
+            task.RetryCallback = (count) => Thread.Sleep(5000);
+            return NetTools.DownloadString(task);
         }
     }
 }

@@ -121,9 +121,18 @@ namespace Koromo_Copy.Framework.Network
                         content.ErrorCallback?.Invoke(3);
                         return;
                     }
-                    else if (response.StatusCode == HttpStatusCode.OK ||
-                             response.StatusCode == HttpStatusCode.Moved ||
+                    else if (response.StatusCode == HttpStatusCode.Moved ||
                              response.StatusCode == HttpStatusCode.Redirect)
+                    {
+                        if (content.AutoRedirection)
+                        {
+                            var old = content.Url;
+                            content.Url = response.Headers.Get("Location");
+                            Log.Logs.Instance.Push("[NetField] Redirection " + old + " to " + content.Url);
+                            goto REDIRECTION;
+                        }
+                    }
+                    else if (response.StatusCode == HttpStatusCode.OK)
                     {
                         interrupt.WaitOne();
                         if (content.Cancel != null && content.Cancel.IsCancellationRequested)

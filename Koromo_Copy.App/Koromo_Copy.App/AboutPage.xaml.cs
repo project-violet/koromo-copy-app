@@ -36,15 +36,6 @@ namespace Koromo_Copy.App
 
 Github: [https://github.com/dc-koromo/koromo-copy](https://github.com/dc-koromo/koromo-copy)
 
-# Developers
-
-### dc-koromo
-
-`Hitomi Copy` 및 데스크탑용 `Koromo Copy`를 제작했던 개발자다.
-현재는 모든 플랫폼을 지원하는 것을 목표로 새로운 `Koromo Copy`를 개발하고있다.
-
-# Contributors
-
 # Licenses
 
 ### Koromo Copy Core Library

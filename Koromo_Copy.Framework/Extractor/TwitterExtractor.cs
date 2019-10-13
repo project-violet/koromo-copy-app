@@ -208,7 +208,7 @@ namespace Koromo_Copy.Framework.Extractor
                     result.Add(img.GetAttributeValue("src", ""));
             }
 
-            if (media_video != null)
+            if (media_video != null && false)
             {
                 var id = tweet.SelectSingleNode("./div[1]").GetAttributeValue("data-tweet-id", "");
                 var url = $"https://api.twitter.com/1.1/videos/tweet/config/{id}.json";
@@ -217,7 +217,7 @@ namespace Koromo_Copy.Framework.Extractor
 
                 var task = NetTask.MakeDefault(url);
                 task.Headers = new Dictionary<string, string>();
-                task.Headers.Add("authorization", "Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA");
+                task.Headers.Add("authorization", "Bearer AAAAAAAAAAAAAAAAAAAAAPYXBAAAAAAACLXUNDekMxqa8h%2F40K4moUkGsoc%3DTYfbDKbT3jJPCEVnMYqilB28NHfOPqkca3qaAxGfsyKCs0wRbw");
                 task.RetryCallback = (count) => Thread.Sleep(5000);
                 var data = NetTools.DownloadString(task);
 

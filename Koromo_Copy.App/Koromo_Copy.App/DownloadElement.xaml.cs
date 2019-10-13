@@ -157,8 +157,10 @@ namespace Koromo_Copy.App
                 int download_count = 0;
                 long download_bytes = 0;
                 long download_1s = 0;
+                int task_count = 0;
 
                 tasks.Item1.ForEach(task => {
+                    task.Priority.TaskPriority = task_count++;
                     task.Filename = Path.Combine(Settings.Instance.Model.SuperPath, task.Format.Formatting(format));
                     if (!Directory.Exists(Path.GetDirectoryName(task.Filename)))
                         Directory.CreateDirectory(Path.GetDirectoryName(task.Filename));

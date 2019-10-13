@@ -29,7 +29,7 @@ namespace Koromo_Copy.Framework.Extractor
         public PixivExtractor()
         {
             HostName = new Regex(@"www\.pixiv\.net");
-            ValidUrl = new Regex(@"^https?://www\.pixiv\.net/(member(?:_illust)?\.php\?id\=|artworks/)(?<id>.*?)$");
+            ValidUrl = new Regex(@"^https?://(www\.)?pixiv\.net/(member(?:_illust)?\.php\?id\=|artworks/)(?<id>.*?)$");
         }
 
         public override IExtractorOption RecommendOption(string url)

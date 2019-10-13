@@ -23,6 +23,7 @@ namespace Koromo_Copy.App
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class DownloadElement : ContentView
     {
+        public static int DownloadAvailable = 0;
         public DownloadElement(string url, bool completed)
         {
             InitializeComponent();
@@ -70,6 +71,25 @@ namespace Koromo_Copy.App
                         Spinner.IsVisible = false;
                     });
                     return;
+                }
+
+            WAIT_ANOTHER_TASKS:
+
+                if (DownloadAvailable == 4)
+                {
+                    while (DownloadAvailable >= 4)
+                    {
+                        Thread.Sleep(1000);
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            Status.Text = $"다른 작업이 끝나길 기다리는 중 입니다...";
+                        });
+                    }
+                }
+
+                if (Interlocked.Increment(ref DownloadAvailable) > 4)
+                {
+                    goto WAIT_ANOTHER_TASKS;
                 }
 
                 Device.BeginInvokeOnMainThread(() =>
@@ -157,7 +177,8 @@ namespace Koromo_Copy.App
                 int download_count = 0;
                 long download_bytes = 0;
                 long download_1s = 0;
-                int task_count = 0;
+                int task_count = AppProvider.Scheduler.LatestPriority != null ? 
+                                AppProvider.Scheduler.LatestPriority.TaskPriority : 0;
 
                 tasks.Item1.ForEach(task => {
                     task.Priority.TaskPriority = task_count++;
@@ -189,6 +210,8 @@ namespace Koromo_Copy.App
                         Interlocked.Exchange(ref download_1s, 0);
                     });
                 }
+
+                Interlocked.Decrement(ref DownloadAvailable);
 
                 Device.BeginInvokeOnMainThread(() =>
                 {

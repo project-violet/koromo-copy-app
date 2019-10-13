@@ -66,6 +66,8 @@ namespace Koromo_Copy.Framework.Network
         public int busy_thread = 0;
         public int capacity = 0;
 
+        public P LatestPriority;
+
         public List<Thread> threads = new List<Thread>();
         public List<ManualResetEvent> interrupt = new List<ManualResetEvent>();
         public List<F> field = new List<F>();
@@ -122,6 +124,8 @@ namespace Koromo_Copy.Framework.Network
                 }
 
                 Interlocked.Increment(ref busy_thread);
+
+                LatestPriority = task.Priority;
 
                 field[index].Main(task);
 

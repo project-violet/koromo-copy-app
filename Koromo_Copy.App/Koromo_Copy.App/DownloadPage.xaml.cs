@@ -36,7 +36,7 @@ namespace Koromo_Copy.App
             if (result.Ok)
             {
                 var elem = new DownloadElement( result.Text, false);
-                List.Children.Add(elem);
+                List.Children.Insert(0, elem);
             }
         }
     }

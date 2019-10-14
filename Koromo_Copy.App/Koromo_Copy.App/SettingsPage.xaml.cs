@@ -33,6 +33,8 @@ namespace Koromo_Copy.App
                 promptConfig.IsCancellable = true;
                 promptConfig.Message = "경로를 입력해주세요.";
                 promptConfig.Text = Path.Text;
+                promptConfig.OkText = "확인";
+                promptConfig.CancelText = "취소";
                 var result = await UserDialogs.Instance.PromptAsync(promptConfig);
                 if (result.Ok)
                 {
@@ -52,6 +54,8 @@ namespace Koromo_Copy.App
                 promptConfig.IsCancellable = true;
                 promptConfig.Message = "버퍼 크기를 입력해주세요.";
                 promptConfig.Text = Settings.Instance.Network.DownloadBufferSize.ToString();
+                promptConfig.OkText = "확인";
+                promptConfig.CancelText = "취소";
                 var result = await UserDialogs.Instance.PromptAsync(promptConfig);
                 if (result.Ok)
                 {

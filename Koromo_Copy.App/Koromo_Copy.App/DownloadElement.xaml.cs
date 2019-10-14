@@ -213,7 +213,7 @@ namespace Koromo_Copy.App
                     };
                     if (task.PostProcess != null)
                     {
-                        task.PostProcess.StartPostprocessor = (index) =>
+                        task.StartPostprocessorCallback = () =>
                         {
                             Interlocked.Increment(ref post_process_count);
                         };

@@ -77,6 +77,7 @@ namespace Koromo_Copy.App
             Path.Text = Settings.Instance.Model.SuperPath;
             ThreadCount.Value = Settings.Instance.Model.ThreadCount;
             BufferSize.Text = "설정된 크기: " + byte_format(Settings.Instance.Network.DownloadBufferSize);
+            PPThreadCount.Value = Settings.Instance.Model.PostprocessorThreadCount;
         }
 
         private static string byte_format(int bytes)
@@ -95,6 +96,16 @@ namespace Koromo_Copy.App
             ThreadCount.Value = newStep;
             ThreadCountText.Text = "스레드 수: " + newStep;
             Settings.Instance.Model.ThreadCount = newStep;
+            Settings.Instance.Save();
+        }
+
+        private void PPSlider_ValueChanged(object sender, ValueChangedEventArgs e)
+        {
+            var newStep = (int)Math.Round(e.NewValue / 1.0);
+
+            PPThreadCount.Value = newStep;
+            PPThreadCountText.Text = "스레드 수: " + newStep;
+            Settings.Instance.Model.PostprocessorThreadCount = newStep;
             Settings.Instance.Save();
         }
     }

@@ -62,7 +62,7 @@
                         <Label Grid.Row="1" Grid.ColumnSpan="2" Text="다운로드할 때 사용할 스레드의 수를 설정합니다."/>
 
                         <Label x:Name="ThreadCountText" Grid.Row="2" Grid.Column="0" Text="스레드 수: 0" WidthRequest="80"/>
-                        <Slider x:Name="ThreadCount" Grid.Row="2" Grid.Column="1" HorizontalOptions="FillAndExpand" Maximum="32" Minimum="1" Value="50" MinimumTrackColor="Pink"
+                        <Slider x:Name="ThreadCount" Grid.Row="2" Grid.Column="1" HorizontalOptions="FillAndExpand" Maximum="32" Minimum="1" Value="0" MinimumTrackColor="Pink"
                             MaximumTrackColor="Gray" ValueChanged="Slider_ValueChanged"/>
                     </Grid>
                 </ContentView>
@@ -82,6 +82,28 @@
                 </ContentView>
                 <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" Color="LightGray"/>
                 <Label Text="기타" TextColor="#F50057" Margin="16,16,16,0"/>
+                <ContentView>
+                    <Grid Padding="16">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Row="0" Grid.ColumnSpan="2" Text="후처리 스레드" TextColor="Black"/>
+                        <Label Grid.Row="1" Grid.ColumnSpan="2" Text="후처리 작업을 진행할 때 사용할 스레드의 수를 설정합니다."/>
+
+                        <Label x:Name="PPThreadCountText" Grid.Row="2" Grid.Column="0" Text="스레드 수: 0" WidthRequest="80"/>
+                        <Slider x:Name="PPThreadCount" Grid.Row="2" Grid.Column="1" HorizontalOptions="FillAndExpand" Maximum="16" Minimum="1" Value="0" MinimumTrackColor="Pink"
+                            MaximumTrackColor="Gray" ValueChanged="PPSlider_ValueChanged"/>
+                    </Grid>
+                </ContentView>
+                <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" Color="LightGray"/>
                 <ContentView x:Name="SettingPixiv" xe:TouchEffect.Color="Gray" xe:Commands.Tap="{Binding TapCommand}">
                     <Grid Padding="16">
                         <Grid.RowDefinitions>

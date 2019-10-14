@@ -7,10 +7,7 @@
              x:Class="Koromo_Copy.App.LogPage"
              Title="로그">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+        <Editor x:Name="LogText" IsReadOnly="True" VerticalOptions="FillAndExpand" 
+                FontSize="15"/>
     </ContentPage.Content>
 </ContentPage>

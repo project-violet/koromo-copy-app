@@ -19,5 +19,10 @@ namespace Koromo_Copy.App
         {
             InitializeComponent();
         }
+
+        protected override void OnAppearing()
+        {
+            LogText.Text = App.log_recored.ToString();
+        }
     }
 }

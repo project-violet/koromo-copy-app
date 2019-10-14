@@ -92,6 +92,16 @@ Github: [https://github.com/dc-koromo/koromo-copy](https://github.com/dc-koromo/
  * [https://github.com/ice-j/Plugin.XSnack/](https://github.com/ice-j/Plugin.XSnack/)
  * Licensed under the MIT Licence.
 
+#### sqlite-net
+
+ * [https://github.com/praeclarum/sqlite-net](https://github.com/praeclarum/sqlite-net)
+ * Licensed under the MIT Licence.
+
+#### CookiesWebView
+
+ * [https://github.com/seansparkman/CookiesWebView](https://github.com/seansparkman/CookiesWebView)
+ * Licensed under the MIT Licence.
+
 #### Xam.Forms.MarkdownView
 
  * [https://github.com/dotnet-ad/MarkdownView](https://github.com/dotnet-ad/MarkdownView)

@@ -9,6 +9,7 @@
     <PackageReference Include="Acr.UserDialogs" Version="7.0.30" />
     <PackageReference Include="CookieWebView" Version="1.0.9" />
     <PackageReference Include="Plugin.XSnack" Version="1.0.17" />
+    <PackageReference Include="sqlite-net-pcl" Version="1.6.292" />
     <PackageReference Include="Xam.Forms.MarkdownView" Version="0.6.1-pre" />
     <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.11.982" />
     <PackageReference Include="Xamarin.Forms" Version="4.2.0.709249" />

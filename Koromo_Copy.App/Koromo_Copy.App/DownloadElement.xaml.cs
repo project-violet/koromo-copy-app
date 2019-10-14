@@ -190,6 +190,8 @@ namespace Koromo_Copy.App
                 long download_1s = 0;
                 int task_count = AppProvider.Scheduler.LatestPriority != null ? 
                                 AppProvider.Scheduler.LatestPriority.TaskPriority : 0;
+                int post_process_count = 0;
+                int post_process_progress = 0;
 
                 tasks.Item1.ForEach(task => {
                     task.Priority.TaskPriority = task_count++;
@@ -209,6 +211,17 @@ namespace Koromo_Copy.App
                             Progress.Progress = cur / (double)tasks.Item1.Count;
                         });
                     };
+                    if (task.PostProcess != null)
+                    {
+                        task.PostProcess.StartPostprocessor = (index) =>
+                        {
+                            Interlocked.Increment(ref post_process_count);
+                        };
+                        task.PostProcess.CompletePostprocessor = (index) =>
+                        {
+                            Interlocked.Increment(ref post_process_progress);
+                        };
+                    }
                     AppProvider.Scheduler.Add(task);
                 });
 
@@ -223,6 +236,16 @@ namespace Koromo_Copy.App
                 }
 
                 Interlocked.Decrement(ref DownloadAvailable);
+
+                while (post_process_progress != post_process_count)
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        Status.Text = $"후처리 작업 중...[{post_process_progress}/{post_process_count}]";
+                        Progress.Progress = post_process_progress / (double)post_process_count;
+                    });
+                    Thread.Sleep(1000);
+                }
 
                 Device.BeginInvokeOnMainThread(() =>
                 {

@@ -56,12 +56,18 @@ namespace Koromo_Copy.App
 
             if (newPage != null && Detail != newPage)
             {
-                Detail = newPage;
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    Detail = newPage;
+                });
 
                 if (Device.RuntimePlatform == Device.Android)
                     await Task.Delay(100);
 
-                IsPresented = false;
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    IsPresented = false;
+                });
             }
         }
     }

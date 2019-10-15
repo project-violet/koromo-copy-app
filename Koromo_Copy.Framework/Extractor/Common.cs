@@ -56,9 +56,15 @@ namespace Koromo_Copy.Framework.Extractor
     /// </summary>
     public class ExtractedInfo
     {
-        public class UserArtist
+        public abstract class IInfo
         {
             public string URL;
+            public string Thumbnail;
+            public string ShortInfo;
+        }
+
+        public class UserArtist : IInfo
+        {
             public string RealName;
             public string NickName;
             public string Id;
@@ -71,16 +77,14 @@ namespace Koromo_Copy.Framework.Extractor
             public string[] Tags;
         }
 
-        public class Group
+        public class Group : IInfo
         {
-            public string URL;
             public string GroupName;
             public UserArtist[] Members;
         }
 
-        public class WorksComic
+        public class WorksComic : IInfo
         {
-            public string URL;
             public string Title;
             public string[] Author;
             public bool IsOmnibus;
@@ -97,9 +101,8 @@ namespace Koromo_Copy.Framework.Extractor
             public Episode[] Episodes;
         }
 
-        public class Community
+        public class Community : IInfo
         {
-            public string URL;
             public class Board
             {
                 public string URL;
@@ -122,6 +125,8 @@ namespace Koromo_Copy.Framework.Extractor
             }
             public Board[] BoardInfo;
         }
+
+        public IInfo Info;
     }
 
     public abstract class ExtractorModel

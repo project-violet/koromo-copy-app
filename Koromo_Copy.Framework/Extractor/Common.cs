@@ -51,8 +51,15 @@ namespace Koromo_Copy.Framework.Extractor
         public virtual void CLParse(ref IExtractorOption model, string[] args) { }
     }
 
+    public class DownloadInfo
+    {
+        public DateTime DownloadStarts;
+        public DateTime DownloadEnds;
+        public bool DownloadAborted;
+    }
+
     /// <summary>
-    /// Reference: https://github.com/koromo-copy/koromo-copy/blob/master/Document/General.md
+    /// Reference: https://github.com/dc-koromo/koromo-copy/blob/master/Document/General.md
     /// </summary>
     public class ExtractedInfo
     {
@@ -61,6 +68,12 @@ namespace Koromo_Copy.Framework.Extractor
             public string URL;
             public string Thumbnail;
             public string ShortInfo;
+        }
+
+        public class Search : IInfo
+        {
+            public string SearchToken;
+            public string ResultCount;
         }
 
         public class UserArtist : IInfo
@@ -87,11 +100,15 @@ namespace Koromo_Copy.Framework.Extractor
         {
             public string Title;
             public string[] Author;
+            public string[] AuthorGroup;
             public bool IsOmnibus;
             public string FirstPublished;
             public bool IsCompletion;
             public string LastPublished;
             public string[] Tags;
+            public string[] Parodies;
+            public string[] Characters;
+            public string Language;
             public class Episode
             {
                 public string URL;

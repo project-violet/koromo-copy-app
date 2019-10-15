@@ -24,10 +24,14 @@ namespace Koromo_Copy.App
     public partial class DownloadElement : ContentView
     {
         public static int DownloadAvailable = 0;
+        public DownloadInfo DownloadInfo = new DownloadInfo();
+        public ExtractedInfo ExtractedInfo;
+        public CancellationTokenSource CancelSource = new CancellationTokenSource();
         public DownloadElement(string url, bool completed)
         {
             InitializeComponent();
 
+            DownloadInfo.DownloadStarts = DateTime.Now;
             Info.Text = url;
 
             int hitomi_id = 0;
@@ -175,6 +179,15 @@ namespace Koromo_Copy.App
                     return;
                 }
 
+                if (tasks.Item2 != null)
+                {
+                    ExtractedInfo = tasks.Item2;
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        Thumbnail.Source = tasks.Item2.Info.Thumbnail;
+                    });
+                }
+
                 var format = extractor.RecommendFormat(option);
 
                 Device.BeginInvokeOnMainThread(() =>
@@ -192,6 +205,7 @@ namespace Koromo_Copy.App
                                 AppProvider.Scheduler.LatestPriority.TaskPriority : 0;
                 int post_process_count = 0;
                 int post_process_progress = 0;
+                bool canceled = false;
 
                 tasks.Item1.ForEach(task => {
                     task.Priority.TaskPriority = task_count++;
@@ -211,6 +225,8 @@ namespace Koromo_Copy.App
                             Progress.Progress = cur / (double)tasks.Item1.Count;
                         });
                     };
+                    task.CancleCallback = () => canceled = true;
+                    task.Cancel = CancelSource.Token;
                     if (task.PostProcess != null)
                     {
                         task.StartPostprocessorCallback = () =>
@@ -225,7 +241,7 @@ namespace Koromo_Copy.App
                     AppProvider.Scheduler.Add(task);
                 });
 
-                while (tasks.Item1.Count != download_count)
+                while (tasks.Item1.Count != download_count && !canceled)
                 {
                     Thread.Sleep(1000);
                     Device.BeginInvokeOnMainThread(() =>
@@ -237,7 +253,7 @@ namespace Koromo_Copy.App
 
                 Interlocked.Decrement(ref DownloadAvailable);
 
-                while (post_process_progress != post_process_count)
+                while (post_process_progress != post_process_count && !canceled)
                 {
                     Device.BeginInvokeOnMainThread(() =>
                     {
@@ -247,13 +263,28 @@ namespace Koromo_Copy.App
                     Thread.Sleep(1000);
                 }
 
-                Device.BeginInvokeOnMainThread(() =>
+                if (!canceled)
                 {
-                    Status.Text = "다운로드 완료";
-                    ProgressText.IsVisible = false;
-                    Progress.IsVisible = false;
-                    Plugin.XSnack.CrossXSnack.Current.ShowMessage(url + " 항목의 다운로드가 완료되었습니다.");
-                });
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        Status.Text = "다운로드 완료";
+                        ProgressText.IsVisible = false;
+                        Progress.IsVisible = false;
+                        Plugin.XSnack.CrossXSnack.Current.ShowMessage(Info.Text + " 항목의 다운로드가 완료되었습니다.");
+                    });
+                }
+                else
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        Status.Text = "다운로드 취소됨";
+                        ProgressText.IsVisible = false;
+                        Progress.IsVisible = false;
+                        Plugin.XSnack.CrossXSnack.Current.ShowMessage(Info.Text + " 항목의 다운로드가 취소되었습니다.");
+                    });
+                }
+
+                DownloadInfo.DownloadEnds = DateTime.Now;
             });
         }
 

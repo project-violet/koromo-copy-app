@@ -51,11 +51,12 @@ namespace Koromo_Copy.Framework.Extractor
 
             if (option.Type == ExtractorType.Images)
             {
+                var sinfo = new ExtractedInfo.WorksComic();
                 var imgs_url = $"https://ltn.hitomi.la/galleries/{match["id"].Value}.js";
                 option.PageReadCallback?.Invoke($"https://ltn.hitomi.la/galleryblock/{match["id"]}.html");
                 option.PageReadCallback?.Invoke(url);
                 option.PageReadCallback?.Invoke(imgs_url);
-                var urls = new List<string> { 
+                var urls = new List<string> {
                     $"https://ltn.hitomi.la/galleryblock/{match["id"]}.html", 
                     url, 
                     imgs_url };
@@ -86,6 +87,17 @@ namespace Koromo_Copy.Framework.Extractor
                     else
                         img_urls.Add($"https://{subdomain}a.hitomi.la/webp/{match["id"].Value}/{obj.Value<string>("name")}.webp");
                 }
+
+                sinfo.Thumbnail = img_urls[0];
+                sinfo.URL = url;
+                sinfo.Title = data1.Title;
+                sinfo.Author = data1.artist?.ToArray();
+                sinfo.AuthorGroup = data2.group?.ToArray();
+                sinfo.ShortInfo = $"[{data1.Magic}] {data1.Title})";
+                sinfo.Tags = data1.Tags?.ToArray();
+                sinfo.Characters = data2.character?.ToArray();
+                sinfo.Language = data1.Language;
+                sinfo.Parodies = data1.parody?.ToArray();
 
                 var result = new List<NetTask>();
                 foreach (var img in img_urls)
@@ -129,7 +141,7 @@ namespace Koromo_Copy.Framework.Extractor
                     result.Add(task);
                 }
 
-                return (result, null);
+                return (result, new ExtractedInfo { Info = sinfo });
             }
 
             return (null, null);

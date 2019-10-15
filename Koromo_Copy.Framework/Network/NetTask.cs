@@ -55,6 +55,16 @@ namespace Koromo_Copy.Framework.Network
                 Url = url
             };
 
+        public enum NetError
+        {
+            Unhandled = 0,
+            CannotContinueByCriticalError,
+            UnknowError, // Check DPI Blocker
+            UriFormatError,
+            Aborted,
+            ManyRetry,
+        }
+
         /* Task Information */
 
         [JsonProperty]
@@ -150,7 +160,7 @@ namespace Koromo_Copy.Framework.Network
         /// Return total downloaded size
         /// </summary>
         public Action<int> RetryCallback;
-        public Action<int> ErrorCallback;
+        public Action<NetError> ErrorCallback;
 
         /* For NetField */
 

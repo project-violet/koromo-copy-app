@@ -118,7 +118,7 @@ namespace Koromo_Copy.Framework.Network
                         //  Cannot continue
                         //
 
-                        content.ErrorCallback?.Invoke(3);
+                        content.ErrorCallback?.Invoke(NetTask.NetError.CannotContinueByCriticalError);
                         return;
                     }
                     else if (response.StatusCode == HttpStatusCode.Moved ||
@@ -292,8 +292,6 @@ namespace Koromo_Copy.Framework.Network
                     //  Cannot continue
                     //
 
-                    content.ErrorCallback?.Invoke(3);
-
                     if (e.Status == WebExceptionStatus.UnknownError)
                     {
                         lock (Log.Logs.Instance)
@@ -301,6 +299,12 @@ namespace Koromo_Copy.Framework.Network
                             Log.Logs.Instance.PushError("[NetField] Check your Firewall, Router or DPI settings.");
                             Log.Logs.Instance.PushError("[NetField] If you continue to receive this error, please contact developer.");
                         }
+
+                        content.ErrorCallback?.Invoke(NetTask.NetError.UnknowError);
+                    }
+                    else
+                    {
+                        content.ErrorCallback?.Invoke(NetTask.NetError.CannotContinueByCriticalError);
                     }
 
                     return;
@@ -318,7 +322,7 @@ namespace Koromo_Copy.Framework.Network
                 //  Cannot continue
                 //
 
-                content.ErrorCallback?.Invoke(4);
+                content.ErrorCallback?.Invoke(NetTask.NetError.UriFormatError);
                 return;
             }
             catch (Exception e)
@@ -335,7 +339,10 @@ namespace Koromo_Copy.Framework.Network
             //
 
             if (content.Aborted)
-                content.ErrorCallback?.Invoke(1);
+            {
+                content.ErrorCallback?.Invoke(NetTask.NetError.Aborted);
+                return;
+            }
 
             //
             //  Retry
@@ -366,10 +373,10 @@ namespace Koromo_Copy.Framework.Network
                     Log.Logs.Instance.Push($"[NetField] Many Retry");
                     Log.Logs.Instance.Push(content);
                 }
-                content.ErrorCallback?.Invoke(2);
+                content.ErrorCallback?.Invoke(NetTask.NetError.ManyRetry);
             }
 
-            content.ErrorCallback?.Invoke(0);
+            content.ErrorCallback?.Invoke(NetTask.NetError.Unhandled);
         }
     }
 }

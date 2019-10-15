@@ -30,7 +30,7 @@ namespace Koromo_Copy.Framework.Network
                     if (Interlocked.Decrement(ref count) == 0)
                         interrupt.Set();
                 };
-                task.ErrorCallback = (int code) =>
+                task.ErrorCallback = (code) =>
                 {
                     if (Interlocked.Decrement(ref count) == 0)
                         interrupt.Set();
@@ -69,7 +69,7 @@ namespace Koromo_Copy.Framework.Network
                     interrupt.Set();
                 };
 
-                task.ErrorCallback = (int code) =>
+                task.ErrorCallback = (code) =>
                 {
                     task.ErrorCallback = null;
                     interrupt.Set();
@@ -108,7 +108,7 @@ namespace Koromo_Copy.Framework.Network
                     interrupt.Set();
                 };
 
-                task.ErrorCallback = (int code) =>
+                task.ErrorCallback = (code) =>
                 {
                     task.ErrorCallback = null;
                     interrupt.Set();
@@ -142,7 +142,7 @@ namespace Koromo_Copy.Framework.Network
                     interrupt.Set();
                 };
 
-                task.ErrorCallback = (int code) =>
+                task.ErrorCallback = (code) =>
                 {
                     task.ErrorCallback = null;
                     interrupt.Set();

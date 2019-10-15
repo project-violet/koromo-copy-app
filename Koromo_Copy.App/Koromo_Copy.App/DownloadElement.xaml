@@ -28,7 +28,8 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <ff:CachedImage x:Name="Thumbnail" Grid.Row="0" Grid.RowSpan="4" Grid.Column="0" VerticalOptions="FillAndExpand" WidthRequest="100" IsVisible="False"/>
+                <ff:CachedImage x:Name="Thumbnail" Grid.Row="0" Grid.RowSpan="4" Grid.Column="0" WidthRequest="70" IsVisible="False"
+                                HorizontalOptions="Center" VerticalOptions="Center" DownsampleToViewSize="True"/>
 
                 <Label Grid.Row="0" Grid.Column="1" Text="정보: "/>
                 <Label Grid.Row="0" Grid.Column="2" x:Name="Info"/>

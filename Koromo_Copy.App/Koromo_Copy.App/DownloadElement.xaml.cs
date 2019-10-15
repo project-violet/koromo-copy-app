@@ -1,6 +1,7 @@
 ﻿// This source code is a part of Koromo Copy Project.
 // Copyright (C) 2019. dc-koromo. Licensed under the MIT Licence.
 
+using FFImageLoading;
 using Koromo_Copy.Framework;
 using Koromo_Copy.Framework.Extractor;
 using Koromo_Copy.Framework.Log;
@@ -10,6 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -184,7 +187,9 @@ namespace Koromo_Copy.App
                     ExtractedInfo = tasks.Item2;
                     Device.BeginInvokeOnMainThread(() =>
                     {
-                        Thumbnail.Source = tasks.Item2.Info.Thumbnail;
+                        ImageService.Instance.Config.HttpClient = Task2HC(tasks.Item2.Info.Thumbnail);
+                        Thumbnail.IsVisible = true;
+                        Thumbnail.Source = tasks.Item2.Info.Thumbnail.Url;
                     });
                 }
 
@@ -286,6 +291,28 @@ namespace Koromo_Copy.App
 
                 DownloadInfo.DownloadEnds = DateTime.Now;
             });
+        }
+
+        private static HttpClient Task2HC(NetTask task)
+        {
+            var hc = new HttpClient();
+            var uri = new Uri(task.Url);
+
+            hc.DefaultRequestHeaders.Add("Accept", task.Accept);
+            hc.DefaultRequestHeaders.Add("User-Agent", task.UserAgent);
+
+            if (task.Referer != null)
+                hc.DefaultRequestHeaders.Add("Referer", task.Referer);
+            else
+                hc.DefaultRequestHeaders.Add("Referer", (task.Url.StartsWith("https://") ? "https://" : (task.Url.Split(':')[0] + "//")) + uri.Host);
+
+            if (task.Cookie != null)
+                hc.DefaultRequestHeaders.Add("Cookie", task.Cookie);
+
+            if (task.Headers != null)
+                task.Headers.ToList().ForEach(p => hc.DefaultRequestHeaders.Add(p.Key, p.Value));
+
+            return hc;
         }
 
         private string convert_bytes2string(long bytes)

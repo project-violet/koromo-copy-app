@@ -88,17 +88,6 @@ namespace Koromo_Copy.Framework.Extractor
                         img_urls.Add($"https://{subdomain}a.hitomi.la/webp/{match["id"].Value}/{obj.Value<string>("name")}.webp");
                 }
 
-                sinfo.Thumbnail = img_urls[0];
-                sinfo.URL = url;
-                sinfo.Title = data1.Title;
-                sinfo.Author = data1.artist?.ToArray();
-                sinfo.AuthorGroup = data2.group?.ToArray();
-                sinfo.ShortInfo = $"[{data1.Magic}] {data1.Title})";
-                sinfo.Tags = data1.Tags?.ToArray();
-                sinfo.Characters = data2.character?.ToArray();
-                sinfo.Language = data1.Language;
-                sinfo.Parodies = data1.parody?.ToArray();
-
                 var result = new List<NetTask>();
                 foreach (var img in img_urls)
                 {
@@ -140,6 +129,17 @@ namespace Koromo_Copy.Framework.Extractor
 
                     result.Add(task);
                 }
+
+                sinfo.Thumbnail = result[0];
+                sinfo.URL = url;
+                sinfo.Title = data1.Title;
+                sinfo.Author = data1.artist?.ToArray();
+                sinfo.AuthorGroup = data2.group?.ToArray();
+                sinfo.ShortInfo = $"[{data1.Magic}] {data1.Title})";
+                sinfo.Tags = data1.Tags?.ToArray();
+                sinfo.Characters = data2.character?.ToArray();
+                sinfo.Language = data1.Language;
+                sinfo.Parodies = data1.parody?.ToArray();
 
                 return (result, new ExtractedInfo { Info = sinfo });
             }

@@ -66,7 +66,7 @@ namespace Koromo_Copy.Framework.Extractor
         public abstract class IInfo
         {
             public string URL;
-            public string Thumbnail;
+            public NetTask Thumbnail;
             public string ShortInfo;
         }
 

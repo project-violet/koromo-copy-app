@@ -131,6 +131,8 @@ namespace Koromo_Copy.Framework.Extractor
                 var post_count = tweets.Count;
                 var last_url_count = 0;
 
+                option.SimpleInfoCallback?.Invoke($"{user} ({name})");
+
                 foreach (var tweet in tweets)
                     urls.AddRange(parse_tweet_hashtag(option as TwitterExtractorOption, tweet, videos));
 

@@ -63,6 +63,8 @@ namespace Koromo_Copy.Framework.Extractor
                 var img_file_json = NetTools.DownloadString(img_file_json_task);
                 var img_urls = JArray.Parse(img_file_json).Select(x => $"https://xn--9w3b15m8vo.asia/data/{id}/{x["name"].ToString()}").ToList();
 
+                option.SimpleInfoCallback?.Invoke($"{data.Title}");
+
                 var result = new List<NetTask>();
                 var count = 1;
                 foreach (var img in img_urls)

@@ -64,6 +64,8 @@ namespace Koromo_Copy.Framework.Extractor
             if ((option as GelbooruExtractorOption).EndPage != null)
                 end_page = (option as GelbooruExtractorOption).EndPage[0].ToInt();
 
+            option.SimpleInfoCallback?.Invoke($"{HttpUtility.UrlDecode(tags)}");
+
             while (true)
             {
                 var durl = "https://gelbooru.com/index.php?page=dapi&s=post&q=index&limit=100&tags=" + tags + "&pid=" + page.ToString();

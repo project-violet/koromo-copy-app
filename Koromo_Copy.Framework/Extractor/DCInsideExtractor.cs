@@ -183,6 +183,8 @@ namespace Koromo_Copy.Framework.Extractor
                                 throw new Exception("Nothing to download!");
                             }
 
+                            option.SimpleInfoCallback?.Invoke($"{article.Title}");
+
                             for (int i = 0; i < article.ImagesLink.Count; i++)
                             {
                                 var task = NetTask.MakeDefault(article.ImagesLink[i]);

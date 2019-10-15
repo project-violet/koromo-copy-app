@@ -93,6 +93,8 @@ namespace Koromo_Copy.Framework.Extractor
                 var sub_urls = new List<string>();
                 var sub_titles = new List<string>();
 
+                option.SimpleInfoCallback?.Invoke($"{title}");
+
                 foreach (var item in node.SelectNodes("/html[1]/body[1]/div[1]/div[3]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[2]/div[1]/div[1]/div"))
                 {
                     sub_urls.Add(match["host"] + item.SelectSingleNode("./a[1]").GetAttributeValue("href", ""));

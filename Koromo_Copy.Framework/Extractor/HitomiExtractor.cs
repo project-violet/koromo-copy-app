@@ -69,6 +69,8 @@ namespace Koromo_Copy.Framework.Extractor
                 var data2 = ParseGallery(strings[1]);
                 var imgs = strings[2];
 
+                option.SimpleInfoCallback?.Invoke($"[{data1.Magic}] {data1.Title})");
+
                 // download.js
                 var number_of_frontends = 3;
                 var subdomain = Convert.ToChar(97 + (Convert.ToInt32(match["id"].Value.Last()) % number_of_frontends));

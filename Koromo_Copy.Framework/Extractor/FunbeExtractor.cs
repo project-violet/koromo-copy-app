@@ -48,6 +48,8 @@ namespace Koromo_Copy.Framework.Extractor
             var title = node.SelectSingleNode("/html[1]/body[1]/div[2]/div[1]/div[1]/div[3]/div[1]/table[2]/tbody[1]/tr[2]/td[1]/table[1]/tr[1]/td[1]").InnerText;
             var sub_datas = node.SelectNodes("/html[1]/body[1]/div[2]/div[1]/div[1]/div[3]/div[1]/div[1]/form[1]/table[1]//tr/td[2]");
 
+            option.SimpleInfoCallback?.Invoke($"{title}");
+
             var sub_urls = new List<string>();
             var sub_titles = new List<string>();
             foreach (var sub_data in sub_datas)

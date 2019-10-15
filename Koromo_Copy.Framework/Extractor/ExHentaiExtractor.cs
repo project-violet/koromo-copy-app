@@ -54,6 +54,8 @@ namespace Koromo_Copy.Framework.Extractor
             var pages = EHentaiExtractor.GetPagesUri(html);
             var image_urls = new List<string>();
 
+            option.SimpleInfoCallback?.Invoke($"{data.Title}");
+
             if (option == null)
                 option = RecommendOption(url);
 

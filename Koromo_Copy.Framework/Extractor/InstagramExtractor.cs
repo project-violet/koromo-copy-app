@@ -71,6 +71,8 @@ namespace Koromo_Copy.Framework.Extractor
             urls.AddRange(user.FirstPost.DisplayUrls);
             option.PostStatus?.Invoke(user.FirstPost.PostCount);
 
+            option.SimpleInfoCallback?.Invoke($"{user.FullName} ({user.UserName})");
+
             var count = 0;
             var pp = user.FirstPost;
             while (pp.HasNext)

@@ -136,7 +136,7 @@ namespace Koromo_Copy.App
                 {
                     Device.BeginInvokeOnMainThread(() =>
                     {
-                        Info.Text = extractor.GetType().Name.Replace("Extractor", "") + info;
+                        Info.Text = $"{extractor.GetType().Name.Replace("Extractor", "")}({info})";
                     });
                 };
 

@@ -89,6 +89,8 @@ namespace Koromo_Copy.Framework.Extractor
             if (option == null)
                 option = RecommendOption(url);
 
+            option.SimpleInfoCallback?.Invoke($"{data.Title}");
+
             if (option.ExtractInformation)
                 return (null, null/*data*/);
 

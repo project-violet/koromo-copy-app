@@ -59,6 +59,8 @@ namespace Koromo_Copy.Framework.Extractor
                 var user = PixivAPI.GetUsersAsync(match["id"].Value.ToInt()).Result;
                 var works = PixivAPI.GetUsersWorksAsync(match["id"].Value.ToInt(), 1, 10000000).Result;
 
+                option.SimpleInfoCallback?.Invoke($"{user[0].Name} ({user[0].Account})");
+
                 var result = new List<NetTask>();
 
                 foreach (var work in works)

@@ -58,6 +58,9 @@ namespace Koromo_Copy.Framework.Extractor
             var tags = match["search"].Value;
             var result = new List<NetTask>();
             var page = 1;
+
+            option.SimpleInfoCallback?.Invoke($"{tags}");
+
             if ((option as DanbooruExtractorOption).StartPage != null)
                 page = (option as DanbooruExtractorOption).StartPage[0].ToInt();
 

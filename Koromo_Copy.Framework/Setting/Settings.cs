@@ -33,6 +33,8 @@ namespace Koromo_Copy.Framework.Setting
 
         public PixivSetting PixivSettings;
 
+        public AppSettings AppSettings;
+
         /// <summary>
         /// Scheduler Thread Count
         /// </summary>
@@ -69,27 +71,9 @@ namespace Koromo_Copy.Framework.Setting
 
             if (Model == null)
             {
-                var lang = Thread.CurrentThread.CurrentCulture.ToString();
-                var language = "all";
-
-                switch (lang)
-                {
-                    case "ko-KR":
-                        language = "korean";
-                        break;
-
-                    case "ja-JP":
-                        language = "japanese";
-                        break;
-
-                    case "en-US":
-                        language = "english";
-                        break;
-                }
-
                 Model = new SettingModel
                 {
-                    Language = language,
+                    Language = GetLanguageKey(),
                     ThreadCount = Environment.ProcessorCount,
                     PostprocessorThreadCount = 3,
                     SuperPath = AppProvider.DefaultSuperPath,
@@ -108,9 +92,86 @@ namespace Koromo_Copy.Framework.Setting
                     {
                         
                     },
+
+                    AppSettings = new AppSettings()
+                    {
+                        SaveThumbnailOnLocalStorage = true,
+                        DownloadWithMetadata = false,
+                    },
                 };
             }
             Save();
+        }
+
+        public static string GetLanguageKey()
+        {
+            var lang = Thread.CurrentThread.CurrentCulture.ToString();
+            var language = "all";
+            switch (lang)
+            {
+                case "ko-KR":
+                    language = "korean";
+                    break;
+
+                case "ja-JP":
+                    language = "japanese";
+                    break;
+
+                case "en-US":
+                    language = "english";
+                    break;
+            }
+            return language;
+        }
+
+        /// <summary>
+        /// Recover incorrect configuration.
+        /// </summary>
+        public void Recover()
+        {
+            if (string.IsNullOrWhiteSpace(Model.Language))
+                Model.Language = GetLanguageKey();
+
+            if (Model.ThreadCount <= 0 || Model.ThreadCount >= 128)
+                Model.ThreadCount = Environment.ProcessorCount;
+            if (Model.PostprocessorThreadCount <= 0 || Model.PostprocessorThreadCount >= 128)
+                Model.ThreadCount = 3;
+            if (string.IsNullOrWhiteSpace(Model.SuperPath))
+                Model.SuperPath = AppProvider.DefaultSuperPath;
+
+            if (Model.NetworkSettings == null)
+            {
+                Model.NetworkSettings = new SettingModel.NetworkSetting
+                {
+                    TimeoutInfinite = false,
+                    TimeoutMillisecond = 10000,
+                    DownloadBufferSize = 131072,
+                    RetryCount = 10,
+                    Proxy = "",
+                    UsingProxyList = false
+                };
+            }
+
+            if (Model.NetworkSettings.TimeoutMillisecond < 1000)
+                Model.NetworkSettings.TimeoutMillisecond = 10000;
+            if (Model.NetworkSettings.DownloadBufferSize < 100000)
+                Model.NetworkSettings.DownloadBufferSize = 131072;
+            if (Model.NetworkSettings.RetryCount < 0)
+                Model.NetworkSettings.RetryCount = 10;
+
+            if (Model.PixivSettings == null)
+            {
+                Model.PixivSettings = new SettingModel.PixivSetting();
+            }
+
+            if (Model.AppSettings == null)
+            {
+                Model.AppSettings = new AppSettings
+                {
+                    SaveThumbnailOnLocalStorage = true,
+                    DownloadWithMetadata = false,
+                };
+            }
         }
 
         public void Save()

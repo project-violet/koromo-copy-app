@@ -163,6 +163,8 @@ namespace Koromo_Copy.Framework.Extractor
 
                 option.ProgressMax?.Invoke(user.TotalPostsCount);
 
+                option.ThumbnailCallback?.Invoke(NetTask.MakeDefault(juser["profile_pic_url_hd"].ToString()));
+
                 foreach (var post in juser["edge_owner_to_timeline_media"]["edges"])
                 {
                     user.FirstPost.PostCount++;

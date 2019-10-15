@@ -70,7 +70,7 @@ namespace Koromo_Copy.Framework.Extractor
                 var data2 = ParseGallery(strings[1]);
                 var imgs = strings[2];
 
-                option.SimpleInfoCallback?.Invoke($"[{data1.Magic}] {data1.Title})");
+                option.SimpleInfoCallback?.Invoke($"[{data1.Magic}] {data1.Title}");
 
                 // download.js
                 var number_of_frontends = 3;
@@ -130,12 +130,14 @@ namespace Koromo_Copy.Framework.Extractor
                     result.Add(task);
                 }
 
+                option.ThumbnailCallback?.Invoke(result[0]);
+
                 sinfo.Thumbnail = result[0];
                 sinfo.URL = url;
                 sinfo.Title = data1.Title;
                 sinfo.Author = data1.artist?.ToArray();
                 sinfo.AuthorGroup = data2.group?.ToArray();
-                sinfo.ShortInfo = $"[{data1.Magic}] {data1.Title})";
+                sinfo.ShortInfo = $"[{data1.Magic}] {data1.Title}";
                 sinfo.Tags = data1.Tags?.ToArray();
                 sinfo.Characters = data2.character?.ToArray();
                 sinfo.Language = data1.Language;

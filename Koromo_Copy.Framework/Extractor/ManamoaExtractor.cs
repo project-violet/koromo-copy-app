@@ -95,6 +95,9 @@ namespace Koromo_Copy.Framework.Extractor
 
                 option.SimpleInfoCallback?.Invoke($"{title}");
 
+                option.ThumbnailCallback?.Invoke(NetTask.MakeDefault(
+                    Regex.Match(node.SelectSingleNode("/html[1]/body[1]/div[1]/div[3]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]").GetAttributeValue("style",""), @"(https?://.*?)\)").Groups[1].Value));
+
                 foreach (var item in node.SelectNodes("/html[1]/body[1]/div[1]/div[3]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[2]/div[1]/div[1]/div"))
                 {
                     sub_urls.Add(match["host"] + item.SelectSingleNode("./a[1]").GetAttributeValue("href", ""));

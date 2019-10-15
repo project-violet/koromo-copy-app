@@ -61,6 +61,8 @@ namespace Koromo_Copy.Framework.Extractor
 
                 option.SimpleInfoCallback?.Invoke($"{user[0].Name} ({user[0].Account})");
 
+                option.ThumbnailCallback?.Invoke(NetTask.MakeDefault(user[0].ProfileImageUrls.Px170x170));
+
                 var result = new List<NetTask>();
 
                 foreach (var work in works)

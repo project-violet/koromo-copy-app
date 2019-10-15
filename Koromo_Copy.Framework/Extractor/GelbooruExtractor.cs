@@ -66,6 +66,7 @@ namespace Koromo_Copy.Framework.Extractor
 
             option.SimpleInfoCallback?.Invoke($"{HttpUtility.UrlDecode(tags)}");
 
+            var post_thumbnail = false;
             while (true)
             {
                 var durl = "https://gelbooru.com/index.php?page=dapi&s=post&q=index&limit=100&tags=" + tags + "&pid=" + page.ToString();
@@ -95,6 +96,14 @@ namespace Koromo_Copy.Framework.Extractor
                     };
                     result.Add(task);
                 }
+
+                if (!post_thumbnail)
+                {
+                    option.ThumbnailCallback?.Invoke(result[0]);
+                    post_thumbnail = true;
+                }
+
+                option.PostStatus?.Invoke(nodes.Count);
 
                 page += 1;
 

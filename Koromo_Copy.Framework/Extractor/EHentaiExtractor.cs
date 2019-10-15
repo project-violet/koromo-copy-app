@@ -163,6 +163,8 @@ namespace Koromo_Copy.Framework.Extractor
 
             wait.WaitOne();
 
+            option.ThumbnailCallback?.Invoke(result[0]);
+
             return (result.ToList(), null/*data*/);
         }
 

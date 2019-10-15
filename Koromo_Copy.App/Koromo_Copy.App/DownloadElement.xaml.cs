@@ -117,7 +117,7 @@ namespace Koromo_Copy.App
                     extracting_progress_max = count;
                     Device.BeginInvokeOnMainThread(() =>
                     {
-                        ProgressText.IsVisible = true;
+                        ProgressProgressText.IsVisible = false;
                         Progress.IsVisible = true;
                     });
                 };
@@ -143,7 +143,18 @@ namespace Koromo_Copy.App
                 {
                     Device.BeginInvokeOnMainThread(() =>
                     {
-                        Info.Text = $"{extractor.GetType().Name.Replace("Extractor", "")}({info})";
+                        Info.Text = $"{info}";
+                    });
+                };
+
+                option.ThumbnailCallback = (thumbnail) =>
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        ImageService.Instance.Config.HttpClient = Task2HC(thumbnail);
+                        Thumbnail.HeightRequest = Height - 8;
+                        Thumbnail.IsVisible = true;
+                        Thumbnail.Source = thumbnail.Url;
                     });
                 };
 
@@ -159,7 +170,9 @@ namespace Koromo_Copy.App
                     Logs.Instance.PushError(e.StackTrace);
                     Device.BeginInvokeOnMainThread(() =>
                     {
-                        ProgressText.IsVisible = false;
+                        ProgressProgressText.IsVisible = true;
+                        ProgressProgressText.Text = "";
+                        ProgressText.Text = "";
                         Progress.IsVisible = false;
                         Spinner.IsVisible = false;
                         Status.Text = "추출 작업 중 오류가 발생했습니다 :(\n" + e.Message;
@@ -173,7 +186,9 @@ namespace Koromo_Copy.App
                 {
                     Device.BeginInvokeOnMainThread(() =>
                     {
-                        ProgressText.IsVisible = false;
+                        ProgressProgressText.IsVisible = true;
+                        ProgressProgressText.Text = "";
+                        ProgressText.Text = "";
                         Progress.IsVisible = false;
                         Spinner.IsVisible = false;
                         Status.Text = "다운로드할 내용이 없습니다 :(";
@@ -185,12 +200,6 @@ namespace Koromo_Copy.App
                 if (tasks.Item2 != null)
                 {
                     ExtractedInfo = tasks.Item2;
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        ImageService.Instance.Config.HttpClient = Task2HC(tasks.Item2.Info.Thumbnail);
-                        Thumbnail.IsVisible = true;
-                        Thumbnail.Source = tasks.Item2.Info.Thumbnail.Url;
-                    });
                 }
 
                 var format = extractor.RecommendFormat(option);
@@ -199,7 +208,7 @@ namespace Koromo_Copy.App
                 {
                     Spinner.IsVisible = false;
                     Status.Text = "다운로드 중...";
-                    ProgressText.IsVisible = true;
+                    ProgressProgressText.IsVisible = false;
                     Progress.IsVisible = true;
                 });
 
@@ -273,7 +282,9 @@ namespace Koromo_Copy.App
                     Device.BeginInvokeOnMainThread(() =>
                     {
                         Status.Text = "다운로드 완료";
-                        ProgressText.IsVisible = false;
+                        ProgressProgressText.IsVisible = true;
+                        ProgressProgressText.Text = "";
+                        ProgressText.Text = "";
                         Progress.IsVisible = false;
                         Plugin.XSnack.CrossXSnack.Current.ShowMessage(Info.Text + " 항목의 다운로드가 완료되었습니다.");
                     });
@@ -283,7 +294,9 @@ namespace Koromo_Copy.App
                     Device.BeginInvokeOnMainThread(() =>
                     {
                         Status.Text = "다운로드 취소됨";
-                        ProgressText.IsVisible = false;
+                        ProgressProgressText.IsVisible = true;
+                        ProgressProgressText.Text = "";
+                        ProgressText.Text = "";
                         Progress.IsVisible = false;
                         Plugin.XSnack.CrossXSnack.Current.ShowMessage(Info.Text + " 항목의 다운로드가 취소되었습니다.");
                     });

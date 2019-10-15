@@ -5,6 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:xe="clr-namespace:XamEffects;assembly=XamEffects"
              xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:ff1="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
              mc:Ignorable="d"
              x:Class="Koromo_Copy.App.DownloadElement"
              BackgroundColor="White">
@@ -18,7 +19,6 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
@@ -28,18 +28,23 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <ff:CachedImage x:Name="Thumbnail" Grid.Row="0" Grid.RowSpan="4" Grid.Column="0" WidthRequest="70" IsVisible="False"
-                                HorizontalOptions="Center" VerticalOptions="Center" DownsampleToViewSize="True"/>
+                <ff:CachedImage x:Name="Thumbnail" Grid.Row="0" Grid.RowSpan="4" Grid.Column="0" WidthRequest="80" IsVisible="False"
+                                HorizontalOptions="Center" VerticalOptions="Center" DownsampleToViewSize="True" Aspect="AspectFill"/>
 
                 <Label Grid.Row="0" Grid.Column="1" Text="정보: "/>
-                <Label Grid.Row="0" Grid.Column="2" x:Name="Info"/>
+                <Label Grid.Row="0" Grid.Column="2" x:Name="Info" LineBreakMode="NoWrap"/>
                 <Label Grid.Row="1" Grid.Column="1" Text="상태: "/>
-                <Label Grid.Row="1" Grid.Column="2" Grid.RowSpan="3" x:Name="Status"/>
-                <Label x:Name="ProgressText" Grid.Row="2" Grid.Column="1" Text="진행: " IsVisible="False"/>
-                <ProgressBar Visual="Material" x:Name="Progress" Grid.Row="2" Grid.Column="2" IsVisible="False" ProgressColor="Pink"/>
-                <ActivityIndicator VerticalOptions="Center" Margin="0,0,16,0" Grid.RowSpan="5" Grid.Column="3" IsRunning="True" WidthRequest="50" HeightRequest="50" x:Name="Spinner"/>
-                
-                <ff:CachedImage x:Name="Fav" Grid.Row="3" Grid.Column="1" HorizontalOptions="StartAndExpand" Margin="0,0,0,0" HeightRequest="25" WidthRequest="25" IsVisible="False"/>
+                <Label Grid.Row="1" Grid.Column="2" Grid.RowSpan="3" x:Name="Status" LineBreakMode="NoWrap"/>
+                <Label x:Name="ProgressText" Grid.Row="2" Grid.Column="1" Text="진행: "/>
+                <ProgressBar Visual="Material" x:Name="Progress" Grid.Row="2" Grid.Column="2" ProgressColor="Pink" IsVisible="False"/>
+                <Label x:Name="ProgressProgressText" Text="다운로드를 기다리는 중..." Grid.Row="2" Grid.Column="2" LineBreakMode="NoWrap"/>
+                <ActivityIndicator VerticalOptions="Center" Margin="0,0,16,0" Grid.RowSpan="4" Grid.Column="3" IsRunning="True" WidthRequest="50" HeightRequest="50" x:Name="Spinner"/>
+
+                <ff:CachedImage x:Name="Fav" Grid.Row="3" Grid.Column="1" HorizontalOptions="StartAndExpand" Margin="0,0,0,0" HeightRequest="25" WidthRequest="25" IsVisible="False">
+                    <ff:CachedImage.Transformations>
+                        <ff1:RoundedTransformation Radius="150"/>
+                    </ff:CachedImage.Transformations>
+                </ff:CachedImage>
             </Grid>
         </Grid>
     </Frame>

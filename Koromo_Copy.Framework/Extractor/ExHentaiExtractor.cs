@@ -114,6 +114,8 @@ namespace Koromo_Copy.Framework.Extractor
                     Series = series
                 };
                 result[i] = task;
+                if (i == 0)
+                    option.ThumbnailCallback?.Invoke(task);
             }
 
             return (result.ToList(), null/*data*/);

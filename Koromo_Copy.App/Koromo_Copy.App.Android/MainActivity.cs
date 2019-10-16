@@ -52,6 +52,7 @@ namespace Koromo_Copy.App.Droid
             CachedImageRenderer.Init(true);
             XamEffects.Droid.Effects.Init();
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
+            Xamarin.Forms.Forms.SetFlags("UseLegacyRenderers");
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             global::Xamarin.Forms.FormsMaterial.Init(this, savedInstanceState);
             LoadApplication(new App());

@@ -32,11 +32,11 @@ namespace Koromo_Copy.App
             });
 
             AppProvider.ApplicationPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-            AppProvider.Initialize();
 
             InitializeComponent();
 
             MainPage = new MainPage();
+            AppProvider.Initialize();
         }
 
         protected override void OnStart()

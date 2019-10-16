@@ -27,13 +27,21 @@ namespace Koromo_Copy.App
             //var elem = new DownloadElement(url, false);
             //List.Children.Add(elem);
 
-            foreach (var dbm in DownloadDBManager.Instance.QueryAll())
+            Task.Run(() =>
             {
-                var elem = new DownloadElement(dbm);
-                List.Children.Insert(0, elem);
-                Thread.Sleep(500);
-            }
+                foreach (var dbm in DownloadDBManager.Instance.QueryAll())
+                {
+                    var elem = new DownloadElement(dbm);
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        List.Children.Insert(0, elem);
+                    });
+                    Thread.Sleep(500);
+                }
+            });
         }
+
+
 
         private async void Button_Clicked(object sender, EventArgs e)
         {

@@ -2,11 +2,13 @@
 // Copyright (C) 2019. dc-koromo. Licensed under the MIT Licence.
 
 using Acr.UserDialogs;
+using Koromo_Copy.App.DataBase;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
@@ -24,6 +26,13 @@ namespace Koromo_Copy.App
             //var url = "https://gall.dcinside.com/mgallery/board/view/?id=purikone_redive&no=1651065&exception_mode=recommend&page=1";
             //var elem = new DownloadElement(url, false);
             //List.Children.Add(elem);
+
+            foreach (var dbm in DownloadDBManager.Instance.QueryAll())
+            {
+                var elem = new DownloadElement(dbm);
+                List.Children.Insert(0, elem);
+                Thread.Sleep(500);
+            }
         }
 
         private async void Button_Clicked(object sender, EventArgs e)
@@ -35,7 +44,7 @@ namespace Koromo_Copy.App
             var result = await UserDialogs.Instance.PromptAsync(promptConfig);
             if (result.Ok)
             {
-                var elem = new DownloadElement( result.Text, false);
+                var elem = new DownloadElement(result.Text);
                 List.Children.Insert(0, elem);
             }
         }

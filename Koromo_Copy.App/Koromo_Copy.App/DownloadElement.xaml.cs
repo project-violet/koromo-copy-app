@@ -2,11 +2,14 @@
 // Copyright (C) 2019. dc-koromo. Licensed under the MIT Licence.
 
 using FFImageLoading;
+using Koromo_Copy.App.DataBase;
 using Koromo_Copy.Framework;
+using Koromo_Copy.Framework.Cache;
 using Koromo_Copy.Framework.Extractor;
 using Koromo_Copy.Framework.Log;
 using Koromo_Copy.Framework.Network;
 using Koromo_Copy.Framework.Setting;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,7 +33,65 @@ namespace Koromo_Copy.App
         public DownloadInfo DownloadInfo = new DownloadInfo();
         public ExtractedInfo ExtractedInfo;
         public CancellationTokenSource CancelSource = new CancellationTokenSource();
-        public DownloadElement(string url, bool completed)
+
+        public DownloadElement(DownloadDBModel dbm)
+        {
+            InitializeComponent();
+
+            Commands.SetTap(Body, new Command(async () =>
+            {
+                await (Application.Current.MainPage as MainPage).NaviInstance.PushAsync(new DownloadInfoPage());
+            }));
+
+            Spinner.IsVisible = false;
+
+            SetupFavicon(dbm.Url);
+
+            if (!string.IsNullOrWhiteSpace(dbm.ShortInfo))
+                Info.Text = dbm.ShortInfo;
+            else
+                Info.Text = dbm.Url;
+
+            if (!string.IsNullOrWhiteSpace(dbm.ThumbnailCahce))
+                if (CacheManager.Instance.Exists(dbm.ThumbnailCahce))
+                {
+                    var thumbnail = JsonConvert.DeserializeObject<NetTask>(CacheManager.Instance.Find(dbm.ThumbnailCahce));
+                    ImageService.Instance.Config.HttpClient = Task2HC(thumbnail);
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        Thumbnail.HeightRequest = Height - 8;
+                        Thumbnail.IsVisible = true;
+                        Thumbnail.Source = thumbnail.Url;
+                    });
+                }
+
+            ProgressText.IsVisible = true;
+            ProgressText.Text = "날짜";
+
+            ProgressProgressText.IsVisible = true;
+            ProgressProgressText.Text = dbm.StartsTime.ToString();
+
+            switch (dbm.State)
+            {
+                case DownloadDBState.Aborted:
+                    Status.Text = "다운로드 취소됨";
+                    break;
+
+                case DownloadDBState.Downloaded:
+                    Status.Text = "다운로드됨";
+                    break;
+
+                case DownloadDBState.ErrorOccured:
+                    Status.Text = "다운로드 중 오류발생";
+                    break;
+
+                case DownloadDBState.Downloading:
+                    Status.Text = "다운로드 중단됨";
+                    break;
+            }
+        }
+
+        public DownloadElement(string url)
         {
             InitializeComponent();
 
@@ -40,6 +101,12 @@ namespace Koromo_Copy.App
             int hitomi_id = 0;
             if (int.TryParse(url, out hitomi_id))
                 url = "https://hitomi.la/galleries/" + url + ".html";
+
+            var dbm = new DownloadDBModel();
+            dbm.Url = url;
+            dbm.StartsTime = DownloadInfo.DownloadStarts;
+            dbm.State = DownloadDBState.Downloading;
+            DownloadDBManager.Instance.Add(dbm);
 
             Commands.SetTap(Body, new Command(async () =>
             {
@@ -51,22 +118,12 @@ namespace Koromo_Copy.App
                 Status.Text = "옳바른 URL이 아닙니다!";
                 Status.TextColor = Color.Red;
                 Spinner.IsVisible = false;
+                dbm.State = DownloadDBState.ErrorOccured;
+                DownloadDBManager.Instance.Add(dbm);
                 return;
             }
 
-            var uri = new Uri(url);
-            var favurl = uri.Scheme + Uri.SchemeDelimiter + uri.Host + "/favicon.ico";
-
-            // Fav Exceptions
-            if (favurl.StartsWith("https://hitomi.la/"))
-                favurl = "https://ltn.hitomi.la/favicon-32x32.png";
-            else if (favurl.StartsWith("https://www.instagram.com/"))
-                favurl = "https://www.instagram.com/static/images/ico/favicon-192.png/68d99ba29cc8.png";
-            else if (favurl.StartsWith("https://twitter.com/"))
-                favurl = "https://abs.twimg.com/icons/apple-touch-icon-192x192.png";
-
-            Fav.IsVisible = true;
-            Fav.Source = favurl;
+            SetupFavicon(url);
 
             Task.Run(() =>
             {
@@ -79,6 +136,8 @@ namespace Koromo_Copy.App
                         Status.TextColor = Color.Red;
                         Spinner.IsVisible = false;
                     });
+                    dbm.State = DownloadDBState.ErrorOccured;
+                    DownloadDBManager.Instance.Update(dbm);
                     return;
                 }
 
@@ -104,6 +163,8 @@ namespace Koromo_Copy.App
                 Device.BeginInvokeOnMainThread(() =>
                 {
                     Info.Text = extractor.GetType().Name.Replace("Extractor", "") + " (" + "/" + string.Join("/", url.Split('/').Skip(3)) + ")";
+                    dbm.ShortInfo = Info.Text;
+                    DownloadDBManager.Instance.Update(dbm);
                     Status.Text = "다운로드할 파일들의 정보를 추출 중 입니다...";
                 });
 
@@ -144,6 +205,8 @@ namespace Koromo_Copy.App
                     Device.BeginInvokeOnMainThread(() =>
                     {
                         Info.Text = $"{info}";
+                        dbm.ShortInfo = info;
+                        DownloadDBManager.Instance.Update(dbm);
                     });
                 };
 
@@ -151,6 +214,9 @@ namespace Koromo_Copy.App
                 {
                     Device.BeginInvokeOnMainThread(() =>
                     {
+                        CacheManager.Instance.Append(url + "*thumbnail" + dbm.Id, thumbnail);
+                        dbm.ThumbnailCahce = url + "*thumbnail" + dbm.Id;
+                        DownloadDBManager.Instance.Update(dbm);
                         ImageService.Instance.Config.HttpClient = Task2HC(thumbnail);
                         Thumbnail.HeightRequest = Height - 8;
                         Thumbnail.IsVisible = true;
@@ -179,6 +245,8 @@ namespace Koromo_Copy.App
                         Status.TextColor = Color.Red;
                     });
                     Interlocked.Decrement(ref DownloadAvailable);
+                    dbm.State = DownloadDBState.ErrorOccured;
+                    DownloadDBManager.Instance.Update(dbm);
                     return;
                 }
 
@@ -194,12 +262,17 @@ namespace Koromo_Copy.App
                         Status.Text = "다운로드할 내용이 없습니다 :(";
                     });
                     Interlocked.Decrement(ref DownloadAvailable);
+                    dbm.State = DownloadDBState.ErrorOccured;
+                    DownloadDBManager.Instance.Update(dbm);
                     return;
                 }
 
                 if (tasks.Item2 != null)
                 {
                     ExtractedInfo = tasks.Item2;
+                    CacheManager.Instance.Append(url + "*info" + dbm.Id, ExtractedInfo);
+                    dbm.InfoCache = url + "*info" + dbm.Id;
+                    DownloadDBManager.Instance.Update(dbm);
                 }
 
                 var format = extractor.RecommendFormat(option);
@@ -221,6 +294,12 @@ namespace Koromo_Copy.App
                 int post_process_progress = 0;
                 bool canceled = false;
 
+                if (tasks.Item1.Count > 0)
+                {
+                    dbm.Directory = Path.GetDirectoryName(Path.Combine(Settings.Instance.Model.SuperPath, tasks.Item1[0].Format.Formatting(format)));
+                    DownloadDBManager.Instance.Update(dbm);
+                }
+
                 tasks.Item1.ForEach(task => {
                     task.Priority.TaskPriority = task_count++;
                     task.Filename = Path.Combine(Settings.Instance.Model.SuperPath, task.Format.Formatting(format));
@@ -239,7 +318,15 @@ namespace Koromo_Copy.App
                             Progress.Progress = cur / (double)tasks.Item1.Count;
                         });
                     };
-                    task.CancleCallback = () => canceled = true;
+                    task.CancleCallback = () =>
+                    {
+                        if (!canceled)
+                        {
+                            dbm.State = DownloadDBState.Aborted;
+                            DownloadDBManager.Instance.Update(dbm);
+                        }
+                        canceled = true;
+                    };
                     task.Cancel = CancelSource.Token;
                     if (task.PostProcess != null)
                     {
@@ -266,6 +353,10 @@ namespace Koromo_Copy.App
                 }
 
                 Interlocked.Decrement(ref DownloadAvailable);
+
+                dbm.State = DownloadDBState.Downloaded;
+                dbm.EndsTime = DateTime.Now;
+                DownloadDBManager.Instance.Update(dbm);
 
                 while (post_process_progress != post_process_count && !canceled)
                 {
@@ -304,6 +395,23 @@ namespace Koromo_Copy.App
 
                 DownloadInfo.DownloadEnds = DateTime.Now;
             });
+        }
+
+        private void SetupFavicon(string url)
+        {
+            var uri = new Uri(url);
+            var favurl = uri.Scheme + Uri.SchemeDelimiter + uri.Host + "/favicon.ico";
+
+            // Fav Exceptions
+            if (favurl.StartsWith("https://hitomi.la/"))
+                favurl = "https://ltn.hitomi.la/favicon-32x32.png";
+            else if (favurl.StartsWith("https://www.instagram.com/"))
+                favurl = "https://www.instagram.com/static/images/ico/favicon-192.png/68d99ba29cc8.png";
+            else if (favurl.StartsWith("https://twitter.com/"))
+                favurl = "https://abs.twimg.com/icons/apple-touch-icon-192x192.png";
+
+            Fav.IsVisible = true;
+            Fav.Source = favurl;
         }
 
         private static HttpClient Task2HC(NetTask task)

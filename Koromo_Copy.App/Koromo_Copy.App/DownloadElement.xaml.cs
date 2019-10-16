@@ -5,6 +5,7 @@ using FFImageLoading;
 using Koromo_Copy.App.DataBase;
 using Koromo_Copy.Framework;
 using Koromo_Copy.Framework.Cache;
+using Koromo_Copy.Framework.Crypto;
 using Koromo_Copy.Framework.Extractor;
 using Koromo_Copy.Framework.Log;
 using Koromo_Copy.Framework.Network;
@@ -55,13 +56,12 @@ namespace Koromo_Copy.App
             if (!string.IsNullOrWhiteSpace(dbm.ThumbnailCahce))
                 if (CacheManager.Instance.Exists(dbm.ThumbnailCahce))
                 {
-                    var thumbnail = JsonConvert.DeserializeObject<NetTask>(CacheManager.Instance.Find(dbm.ThumbnailCahce));
-                    ImageService.Instance.Config.HttpClient = Task2HC(thumbnail);
+                    var thumbnail = dbm.ThumbnailCahce;
                     Device.BeginInvokeOnMainThread(() =>
                     {
                         Thumbnail.HeightRequest = Height - 8;
                         Thumbnail.IsVisible = true;
-                        Thumbnail.Source = thumbnail.Url;
+                        Thumbnail.Source = thumbnail;
                     });
                 }
 
@@ -212,15 +212,17 @@ namespace Koromo_Copy.App
 
                 option.ThumbnailCallback = (thumbnail) =>
                 {
+                    thumbnail.Priority = new NetPriority { Type = NetPriorityType.Trivial };
+                    thumbnail.Filename = Path.Combine(AppProvider.ApplicationPath, (url + "*thumbnail" + dbm.Id).GetHashMD5());
+                    dbm.ThumbnailCahce = thumbnail.Filename;
+                    NetTools.DownloadFile(thumbnail);
+                    DownloadDBManager.Instance.Update(dbm);
+
                     Device.BeginInvokeOnMainThread(() =>
                     {
-                        CacheManager.Instance.Append(url + "*thumbnail" + dbm.Id, thumbnail);
-                        dbm.ThumbnailCahce = url + "*thumbnail" + dbm.Id;
-                        DownloadDBManager.Instance.Update(dbm);
-                        ImageService.Instance.Config.HttpClient = Task2HC(thumbnail);
                         Thumbnail.HeightRequest = Height - 8;
                         Thumbnail.IsVisible = true;
-                        Thumbnail.Source = thumbnail.Url;
+                        Thumbnail.Source = thumbnail.Filename;
                     });
                 };
 

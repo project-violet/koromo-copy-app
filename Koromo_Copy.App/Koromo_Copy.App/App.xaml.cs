@@ -6,6 +6,7 @@ using Koromo_Copy.Framework.Log;
 using System;
 using System.Globalization;
 using System.Text;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -36,7 +37,7 @@ namespace Koromo_Copy.App
             InitializeComponent();
 
             MainPage = new MainPage();
-            AppProvider.Initialize();
+            Task.Run(() => AppProvider.Initialize());
         }
 
         protected override void OnStart()

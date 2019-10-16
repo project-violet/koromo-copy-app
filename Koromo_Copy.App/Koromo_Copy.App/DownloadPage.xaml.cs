@@ -23,10 +23,14 @@ namespace Koromo_Copy.App
         {
             InitializeComponent();
 
-            //var url = "https://gall.dcinside.com/mgallery/board/view/?id=purikone_redive&no=1651065&exception_mode=recommend&page=1";
-            //var elem = new DownloadElement(url, false);
-            //List.Children.Add(elem);
+            Appearing += DownloadPage_Appearing;
+        }
 
+        bool loaded = false;
+        private void DownloadPage_Appearing(object sender, EventArgs e)
+        {
+            if (loaded) return;
+            loaded = true;
             Task.Run(() =>
             {
                 foreach (var dbm in DownloadDBManager.Instance.QueryAll())
@@ -40,8 +44,6 @@ namespace Koromo_Copy.App
                 }
             });
         }
-
-
 
         private async void Button_Clicked(object sender, EventArgs e)
         {

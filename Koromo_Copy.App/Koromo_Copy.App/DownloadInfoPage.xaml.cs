@@ -2,7 +2,9 @@
 // Copyright (C) 2019. dc-koromo. Licensed under the MIT Licence.
 
 using Koromo_Copy.App.DataBase;
+using Koromo_Copy.Framework.Cache;
 using Koromo_Copy.Framework.Extractor;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +31,7 @@ namespace Koromo_Copy.App
 
             var model = ExtractorManager.Instance.GetExtractor(dbm.Url);
             if (model != null)
-                Type.Text = model.GetType().Name.Replace("Extractor", "추출기");
+                Type.Text = model.GetType().Name.Replace("Extractor", " 추출기");
             else
             {
                 Type.Text = "찾을 수 없음";
@@ -61,6 +63,29 @@ namespace Koromo_Copy.App
             }
 
             Capacity.Text = $"{dbm.CountOfFiles}개 항목 [{DownloadElement.convert_bytes2string(dbm.SizeOfContents)}]";
+
+            if (!string.IsNullOrWhiteSpace(dbm.InfoCache))
+            {
+                if (CacheManager.Instance.Exists(dbm.InfoCache))
+                {
+                    var info = JsonConvert.DeserializeObject<ExtractedInfo>(CacheManager.Instance.Find(dbm.InfoCache));
+                    switch (info.Type)
+                    {
+                        case ExtractedInfo.ExtractedType.WorksComic:
+                            Genre.Text = "만화";
+                            break;
+
+                        case ExtractedInfo.ExtractedType.Group:
+                        case ExtractedInfo.ExtractedType.UserArtist:
+                            Genre.Text = "일러스트 및 사진";
+                            break;
+
+                        case ExtractedInfo.ExtractedType.Community:
+                            Genre.Text = "게시글";
+                            break;
+                    }
+                }
+            }
 
             Thumbnail.Success += (s,e) =>
             {

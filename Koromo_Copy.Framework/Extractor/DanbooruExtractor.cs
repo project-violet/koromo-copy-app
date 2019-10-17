@@ -77,6 +77,9 @@ namespace Koromo_Copy.Framework.Extractor
                 var html = NetTools.DownloadString(durl);
                 var node = html.ToHtmlNode().SelectNodes("/html[1]/body[1]/div[1]/div[3]/div[1]/section[1]/div[3]/div[1]/article");
 
+                if (node == null)
+                    break;
+
                 var ds = new List<string>();
                 foreach (var sub in node)
                     ds.Add("https://danbooru.donmai.us" + sub.SelectSingleNode("./a").GetAttributeValue("href", ""));

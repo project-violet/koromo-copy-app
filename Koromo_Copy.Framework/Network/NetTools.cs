@@ -114,6 +114,8 @@ namespace Koromo_Copy.Framework.Network
                     interrupt.Set();
                 };
 
+                AppProvider.Scheduler.Add(task);
+
                 interrupt.WaitOne();
             }).ConfigureAwait(false);
         }

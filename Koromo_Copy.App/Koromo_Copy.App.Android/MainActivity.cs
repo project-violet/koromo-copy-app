@@ -46,7 +46,7 @@ namespace Koromo_Copy.App.Droid
             base.OnCreate(savedInstanceState);
 
             AppProvider.DefaultSuperPath = Path.Combine(Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryPictures).AbsolutePath, "KoromoCopy");
-
+            
             UserDialogs.Init(this);
             CrossCurrentActivity.Current.Init(Application);
             CachedImageRenderer.Init(true);
@@ -65,20 +65,27 @@ namespace Koromo_Copy.App.Droid
 
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+
         bool doubleBackToExitPressedOnce = false;
+
         public override void OnBackPressed()
         {
-            if (doubleBackToExitPressedOnce)
+            if (MainPage.Instance.NaviInstance.CurrentPage == MainPage.Instance.NaviInstance.RootPage)
             {
-                base.OnBackPressed();
-                return;
+                if (doubleBackToExitPressedOnce)
+                {
+                    base.OnBackPressed();
+                    return;
+                }
+                this.doubleBackToExitPressedOnce = true;
+                Toast.MakeText(this, "한 번더 누르면 종료합니다", ToastLength.Short).Show();
+                new Handler().PostDelayed(() =>
+                {
+                    doubleBackToExitPressedOnce = false;
+                }, 2000);
             }
-            this.doubleBackToExitPressedOnce = true;
-            Toast.MakeText(this, "종료하려면 한 번더", ToastLength.Short).Show();
-            new Handler().PostDelayed(() =>
-            {
-                doubleBackToExitPressedOnce = false;
-            }, 2000);
+            else
+                base.OnBackPressed();
         }
     }
 }

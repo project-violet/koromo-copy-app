@@ -24,9 +24,11 @@ namespace Koromo_Copy.App
         {
             InitializeComponent();
 
+            Instance = this;
             MenuPages.Add((int)MenuItemType.Browse, (NavigationPage)Detail);
         }
 
+        public static MainPage Instance { get; private set; }
         public NavigationPage NaviInstance { get { return Navi; } }
 
         public async Task NavigateFromMenu(int id)

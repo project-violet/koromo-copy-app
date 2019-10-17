@@ -68,6 +68,7 @@ namespace Koromo_Copy.Framework.Extractor
             if ((option as DanbooruExtractorOption).EndPage != null)
                 end_page = (option as DanbooruExtractorOption).EndPage[0].ToInt();
 
+            var already_thumbnail = false;
             while (true)
             {
                 var durl = $"https://danbooru.donmai.us/posts?tags={tags}&page=" + page.ToString();
@@ -130,6 +131,12 @@ namespace Koromo_Copy.Framework.Extractor
                         Extension = Path.GetExtension(task.Filename).Replace(".", "")
                     };
                     result.Add(task);
+                }
+
+                if (!already_thumbnail)
+                {
+                    option.ThumbnailCallback?.Invoke(result[0]);
+                    already_thumbnail = true;
                 }
 
                 page += 1;

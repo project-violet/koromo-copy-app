@@ -82,6 +82,7 @@ namespace Koromo_Copy.App
             {
                 Task.Run(() =>
                 {
+                    Thread.Sleep(500);
                     Device.BeginInvokeOnMainThread(() =>
                     {
                         var thumbnail = dbm.ThumbnailCahce;

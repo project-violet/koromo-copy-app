@@ -56,7 +56,7 @@ namespace Koromo_Copy.Framework.Extractor
 
             var tags = match[1].Value;
             var result = new List<NetTask>();
-            var page = 1;
+            var page = 0;
             if ((option as GelbooruExtractorOption).StartPage != null)
                 page = (option as GelbooruExtractorOption).StartPage[0].ToInt();
 

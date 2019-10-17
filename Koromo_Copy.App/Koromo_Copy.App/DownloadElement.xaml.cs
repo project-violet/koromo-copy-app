@@ -53,18 +53,6 @@ namespace Koromo_Copy.App
             else
                 Info.Text = dbm.Url;
 
-            if (!string.IsNullOrWhiteSpace(dbm.ThumbnailCahce))
-                if (CacheManager.Instance.Exists(dbm.ThumbnailCahce))
-                {
-                    var thumbnail = dbm.ThumbnailCahce;
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        Thumbnail.HeightRequest = Height - 8;
-                        Thumbnail.IsVisible = true;
-                        Thumbnail.Source = thumbnail;
-                    });
-                }
-
             ProgressText.IsVisible = true;
             ProgressText.Text = "날짜";
 
@@ -88,6 +76,20 @@ namespace Koromo_Copy.App
                 case DownloadDBState.Downloading:
                     Status.Text = "다운로드 중단됨";
                     break;
+            }
+
+            if (!string.IsNullOrWhiteSpace(dbm.ThumbnailCahce))
+            {
+                Task.Run(() =>
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        var thumbnail = dbm.ThumbnailCahce;
+                        Thumbnail.HeightRequest = Height - 8;
+                        Thumbnail.IsVisible = true;
+                        Thumbnail.Source = thumbnail;
+                    });
+                });
             }
         }
 
@@ -212,17 +214,26 @@ namespace Koromo_Copy.App
 
                 option.ThumbnailCallback = (thumbnail) =>
                 {
-                    thumbnail.Priority = new NetPriority { Type = NetPriorityType.Trivial };
-                    thumbnail.Filename = Path.Combine(AppProvider.ApplicationPath, (url + "*thumbnail" + dbm.Id).GetHashMD5());
-                    dbm.ThumbnailCahce = thumbnail.Filename;
-                    NetTools.DownloadFile(thumbnail);
-                    DownloadDBManager.Instance.Update(dbm);
-
-                    Device.BeginInvokeOnMainThread(() =>
+                    Task.Run(async () =>
                     {
-                        Thumbnail.HeightRequest = Height - 8;
-                        Thumbnail.IsVisible = true;
-                        Thumbnail.Source = thumbnail.Filename;
+                        var ttask = NetTask.MakeDefault(thumbnail.Url);
+                        ttask.Priority = new NetPriority { Type = NetPriorityType.Trivial };
+                        ttask.Filename = Path.Combine(AppProvider.ApplicationPath, (url + "*thumbnail" + dbm.Id).GetHashMD5() + Path.GetExtension(thumbnail.Filename));
+                        ttask.Headers = thumbnail.Headers;
+                        ttask.Referer = thumbnail.Referer;
+                        ttask.Cookie = thumbnail.Cookie;
+                        ttask.Accept = thumbnail.Accept;
+                        ttask.UserAgent = thumbnail.UserAgent;
+                        dbm.ThumbnailCahce = ttask.Filename;
+                        await NetTools.DownloadFileAsync(ttask);
+                        DownloadDBManager.Instance.Update(dbm);
+
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            Thumbnail.HeightRequest = Height - 8;
+                            Thumbnail.IsVisible = true;
+                            Thumbnail.Source = ttask.Filename;
+                        });
                     });
                 };
 

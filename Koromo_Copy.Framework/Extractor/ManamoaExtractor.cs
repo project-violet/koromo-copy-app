@@ -104,7 +104,12 @@ namespace Koromo_Copy.Framework.Extractor
                     sub_titles.Add(item.SelectSingleNode("./a[1]/div[1]").MyText());
                 }
 
-                var htmls = NetTools.DownloadStrings(sub_urls, "PHPSESSID=" + Externals.ManamoaPHPSESSID);
+                option.ProgressMax?.Invoke(sub_urls.Count);
+
+                var htmls = NetTools.DownloadStrings(sub_urls, "PHPSESSID=" + Externals.ManamoaPHPSESSID, () =>
+                {
+                    option.PostStatus?.Invoke(1);
+                });
 
                 var result = new List<NetTask>();
                 for (int i = 0; i < sub_urls.Count; i++)

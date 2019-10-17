@@ -12,7 +12,7 @@ namespace Koromo_Copy.Framework.Network
 {
     public class NetTools
     {
-        public static List<string> DownloadStrings(List<string> urls, string cookie = "")
+        public static List<string> DownloadStrings(List<string> urls, string cookie = "", Action complete = null)
         {
             var interrupt = new ManualResetEvent(false);
             var result = new string[urls.Count];
@@ -29,6 +29,7 @@ namespace Koromo_Copy.Framework.Network
                     result[itertmp] = str;
                     if (Interlocked.Decrement(ref count) == 0)
                         interrupt.Set();
+                    complete?.Invoke();
                 };
                 task.ErrorCallback = (code) =>
                 {

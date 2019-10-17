@@ -68,7 +68,15 @@ namespace Koromo_Copy.App
             {
                 if (CacheManager.Instance.Exists(dbm.InfoCache))
                 {
-                    var info = JsonConvert.DeserializeObject<ExtractedInfo>(CacheManager.Instance.Find(dbm.InfoCache));
+                    var ss = CacheManager.Instance.Find(dbm.InfoCache);
+                    var info = JsonConvert.DeserializeObject<ExtractedInfo>(CacheManager.Instance.Find(dbm.InfoCache), new JsonSerializerSettings
+                    {
+                        Error = (s,e) =>
+                        {
+                            var currentError = e.ErrorContext.Error.Message;
+                            e.ErrorContext.Handled = true;
+                        }
+                    });
                     switch (info.Type)
                     {
                         case ExtractedInfo.ExtractedType.WorksComic:

@@ -168,7 +168,7 @@ namespace Koromo_Copy.App
                     Info.Text = extractor.GetType().Name.Replace("Extractor", "") + " (" + "/" + string.Join("/", url.Split('/').Skip(3)) + ")";
                     dbm.ShortInfo = Info.Text;
                     DownloadDBManager.Instance.Update(dbm);
-                    Status.Text = "다운로드할 파일들의 정보를 추출 중 입니다...";
+                    Status.Text = "다운로드 정보를 추출 중 입니다...";
                 });
 
                 var option = extractor.RecommendOption(url);
@@ -362,7 +362,7 @@ namespace Koromo_Copy.App
                     Thread.Sleep(1000);
                     Device.BeginInvokeOnMainThread(() =>
                     {
-                        Status.Text = $"다운로드 중...[{download_count}/{tasks.Item1.Count}] ({convert_bytes2string(download_1s)}/S {convert_bytes2string(download_bytes)})";
+                        Status.Text = $"[{download_count}/{tasks.Item1.Count}] ({convert_bytes2string(download_1s)}/S {convert_bytes2string(download_bytes)})";
                         Interlocked.Exchange(ref download_1s, 0);
                     });
                 }

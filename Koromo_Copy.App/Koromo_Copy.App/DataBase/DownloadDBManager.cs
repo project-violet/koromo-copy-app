@@ -45,7 +45,6 @@ namespace Koromo_Copy.App.DataBase
         public DownloadDBManager()
         {
             var db_path = Path.Combine(AppProvider.ApplicationPath, "download.db");
-            File.Delete(db_path);
 
             db = new SQLiteConnection(db_path);
             var info = db.GetTableInfo("DownloadDBModel");

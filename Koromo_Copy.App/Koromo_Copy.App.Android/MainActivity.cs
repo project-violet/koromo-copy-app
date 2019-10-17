@@ -65,5 +65,20 @@ namespace Koromo_Copy.App.Droid
 
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+        bool doubleBackToExitPressedOnce = false;
+        public override void OnBackPressed()
+        {
+            if (doubleBackToExitPressedOnce)
+            {
+                base.OnBackPressed();
+                return;
+            }
+            this.doubleBackToExitPressedOnce = true;
+            Toast.MakeText(this, "종료하려면 한 번더", ToastLength.Short).Show();
+            new Handler().PostDelayed(() =>
+            {
+                doubleBackToExitPressedOnce = false;
+            }, 2000);
+        }
     }
 }

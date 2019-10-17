@@ -64,6 +64,15 @@ namespace Koromo_Copy.Framework.Extractor
     /// </summary>
     public class ExtractedInfo
     {
+        public enum ExtractedType
+        {
+            Search,
+            UserArtist,
+            Group,
+            WorksComic,
+            Community
+        }
+
         public abstract class IInfo
         {
             public string URL;
@@ -144,6 +153,7 @@ namespace Koromo_Copy.Framework.Extractor
             public Board[] BoardInfo;
         }
 
+        public ExtractedType Type;
         public IInfo Info;
     }
 

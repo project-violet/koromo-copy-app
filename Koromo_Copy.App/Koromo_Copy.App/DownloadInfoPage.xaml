@@ -3,13 +3,69 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:effects="clr-namespace:Koromo_Copy.App"
+             xmlns:ff1="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
              mc:Ignorable="d"
              x:Class="Koromo_Copy.App.DownloadInfoPage">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+        <RelativeLayout Padding="0">
+            <Grid>
+                <effects:BlurredImage x:Name="Background" Aspect="AspectFill" Opacity="0.5"/>
+            </Grid>
+            <ScrollView Padding="4" HorizontalOptions="Center">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Frame x:Name="ThumbnailFrame" Padding="0" Grid.Row="0"
+                       CornerRadius="30" HasShadow="True" Margin="0,32,0,16" HorizontalOptions="Center" VerticalOptions="Start">
+                        <ff:CachedImage x:Name="Thumbnail" DownsampleToViewSize="True">
+                            <ff:CachedImage.Transformations>
+                                <ff1:RoundedTransformation Radius="30"/>
+                            </ff:CachedImage.Transformations>
+                        </ff:CachedImage>
+                    </Frame>
+
+                    <Frame Grid.Row="1" Padding="4" CornerRadius="20" WidthRequest="350" HorizontalOptions="Center">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            
+                            <Label Grid.Column="0" Grid.Row="0" FontSize="20" FontAttributes="Bold" Text="정보: "/>
+                            <Label x:Name="Information" Grid.Column="1" Grid.Row="0" FontSize="15" FontAttributes="Bold"/>
+                            
+                            <Label Grid.Column="0" Grid.Row="1" FontSize="15" FontAttributes="Bold" Text="날짜: "/>
+                            <Label x:Name="Date" Grid.Column="1" Grid.Row="1" FontSize="15"/>
+                            
+                            <Label Grid.Column="0" Grid.Row="2" FontSize="15" FontAttributes="Bold" Text="유형: "/>
+                            <Label x:Name="Type" Grid.Column="1" Grid.Row="2" FontSize="15"/>
+
+                            <Label Grid.Column="0" Grid.Row="3" FontSize="15" FontAttributes="Bold" Text="장르: "/>
+                            <Label x:Name="Genre" Grid.Column="1" Grid.Row="3" FontSize="15"/>
+
+                            <Label Grid.Column="0" Grid.Row="4" FontSize="15" FontAttributes="Bold" Text="상태: "/>
+                            <Label x:Name="State" Grid.Column="1" Grid.Row="4" FontSize="15"/>
+
+                            <Label Grid.Column="0" Grid.Row="5" FontSize="15" FontAttributes="Bold" Text="용량: "/>
+                            <Label x:Name="Capacity" Grid.Column="1" Grid.Row="5" FontSize="15"/>
+
+                        </Grid>
+                    </Frame>
+                </Grid>
+            </ScrollView>
+        </RelativeLayout>
     </ContentPage.Content>
 </ContentPage>

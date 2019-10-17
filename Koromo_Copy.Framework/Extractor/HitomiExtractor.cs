@@ -143,7 +143,7 @@ namespace Koromo_Copy.Framework.Extractor
                 sinfo.Language = data1.Language;
                 sinfo.Parodies = data1.parody?.ToArray();
 
-                return (result, new ExtractedInfo { Info = sinfo });
+                return (result, new ExtractedInfo { Info = sinfo, Type = ExtractedInfo.ExtractedType.WorksComic });
             }
 
             return (null, null);

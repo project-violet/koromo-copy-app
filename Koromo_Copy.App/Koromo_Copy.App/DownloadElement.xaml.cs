@@ -41,7 +41,7 @@ namespace Koromo_Copy.App
 
             Commands.SetTap(Body, new Command(async () =>
             {
-                await (Application.Current.MainPage as MainPage).NaviInstance.PushAsync(new DownloadInfoPage());
+                await (Application.Current.MainPage as MainPage).NaviInstance.PushAsync(new DownloadInfoPage(dbm));
             }));
 
             Spinner.IsVisible = false;
@@ -113,7 +113,7 @@ namespace Koromo_Copy.App
 
             Commands.SetTap(Body, new Command(async () =>
             {
-                await (Application.Current.MainPage as MainPage).NaviInstance.PushAsync(new DownloadInfoPage());
+                await (Application.Current.MainPage as MainPage).NaviInstance.PushAsync(new DownloadInfoPage(dbm));
             }));
 
             if (!url.StartsWith("http://") && !url.StartsWith("https://"))
@@ -280,7 +280,7 @@ namespace Koromo_Copy.App
                     DownloadDBManager.Instance.Update(dbm);
                     return;
                 }
-
+                
                 if (tasks.Item2 != null)
                 {
                     ExtractedInfo = tasks.Item2;
@@ -311,6 +311,7 @@ namespace Koromo_Copy.App
                 if (tasks.Item1.Count > 0)
                 {
                     dbm.Directory = Path.GetDirectoryName(Path.Combine(Settings.Instance.Model.SuperPath, tasks.Item1[0].Format.Formatting(format)));
+                    dbm.CountOfFiles = tasks.Item1.Count;
                     DownloadDBManager.Instance.Update(dbm);
                 }
 
@@ -370,6 +371,7 @@ namespace Koromo_Copy.App
 
                 dbm.State = DownloadDBState.Downloaded;
                 dbm.EndsTime = DateTime.Now;
+                dbm.SizeOfContents = download_bytes;
                 DownloadDBManager.Instance.Update(dbm);
 
                 while (post_process_progress != post_process_count && !canceled)
@@ -450,7 +452,7 @@ namespace Koromo_Copy.App
             return hc;
         }
 
-        private string convert_bytes2string(long bytes)
+        public static string convert_bytes2string(long bytes)
         {
             string downloads;
             if (bytes > 1024 * 1024 * 1024)

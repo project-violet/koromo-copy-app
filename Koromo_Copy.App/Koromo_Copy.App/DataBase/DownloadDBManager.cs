@@ -33,6 +33,8 @@ namespace Koromo_Copy.App.DataBase
         public string InfoCache { get; set; }
         public string ThumbnailCahce { get; set; }
         public string LogCache { get; set; }
+        public int CountOfFiles { get; set; }
+        public long SizeOfContents { get; set; }
         public DownloadDBState State { get; set; }
     }
 
@@ -43,6 +45,7 @@ namespace Koromo_Copy.App.DataBase
         public DownloadDBManager()
         {
             var db_path = Path.Combine(AppProvider.ApplicationPath, "download.db");
+            File.Delete(db_path);
 
             db = new SQLiteConnection(db_path);
             var info = db.GetTableInfo("DownloadDBModel");

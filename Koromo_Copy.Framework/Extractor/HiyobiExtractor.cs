@@ -84,6 +84,7 @@ namespace Koromo_Copy.Framework.Extractor
                     };
                     result.Add(task);
                 }
+                option.ThumbnailCallback?.Invoke(result[0]);
                 return (result, new ExtractedInfo { Type = ExtractedInfo.ExtractedType.WorksComic });
             }
             else

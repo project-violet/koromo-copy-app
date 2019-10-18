@@ -2,8 +2,6 @@
 
 `Koromo Copy` is a cross platform image downloader.
 
-![](Document/Images/example.gif)
-
 ## Rules that must be followed
 
  * Do not use this program/project to generate excessive traffic to specific sites.

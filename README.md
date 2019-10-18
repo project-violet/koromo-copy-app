@@ -11,7 +11,7 @@
  * Do not share downloaded data with others.
 
 Violation of these are obviously illegal and can be punished under obstruction of business or other laws.
-The developer of `Koromo Copy` assumes no responsibility for this.
+The developer of `Koromo Copy` assumes no responsibility for this and other illegal activities.
 All legal responsibility rests with you.
 
 ## Documents

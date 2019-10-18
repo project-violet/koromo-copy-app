@@ -140,7 +140,7 @@ namespace Koromo_Copy.Framework.Extractor
                     }
                 }
 
-                return (result, , new ExtractedInfo { Type = ExtractedInfo.ExtractedType.WorksComic });
+                return (result, new ExtractedInfo { Type = ExtractedInfo.ExtractedType.WorksComic });
             }
 
             return (null, null);

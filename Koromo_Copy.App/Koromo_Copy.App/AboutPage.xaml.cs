@@ -127,6 +127,11 @@ Github: [https://github.com/dc-koromo/koromo-copy](https://github.com/dc-koromo/
  * [https://github.com/luberda-molinet/FFImageLoading](https://github.com/luberda-molinet/FFImageLoading)
  * Licensed under the MIT Licence.
 
+#### XamarinClipboardPlugin
+
+ * [https://github.com/stavroskasidis/XamarinClipboardPlugin](https://github.com/stavroskasidis/XamarinClipboardPlugin)
+ * Licensed under the MIT Licence.
+
 ### Reference Library
 
 #### youtube-dl

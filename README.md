@@ -6,7 +6,7 @@
 
  * Do not use this program/project to generate excessive traffic to specific sites.
 
- * Never use downloaded-data for commercial purposes.
+ * Do not use downloaded-data for commercial purposes.
 
  * Do not share downloaded data with others.
 

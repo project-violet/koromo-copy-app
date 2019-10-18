@@ -10,19 +10,17 @@
              Title="자세한 정보"
              x:Class="Koromo_Copy.App.DownloadInfoPage">
     <ContentPage.Content>
-        <RelativeLayout Padding="0">
-            <Grid>
-                <effects:BlurredImage x:Name="Background" Aspect="AspectFill" Opacity="0.5"/>
-            </Grid>
-            <ScrollView Padding="4" HorizontalOptions="Center">
-                <Grid>
+        <Grid>
+            <effects:BlurredImage x:Name="Background" Aspect="AspectFill" Opacity="0.5"/>
+            <ScrollView>
+                <Grid Padding="4" HorizontalOptions="Center">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <Frame x:Name="ThumbnailFrame" Padding="0" Grid.Row="0"
-                       CornerRadius="30" HasShadow="True" Margin="0,32,0,16" HorizontalOptions="Center" VerticalOptions="Start">
+                    <Frame x:Name="ThumbnailFrame" Padding="0" Grid.Row="0" CornerRadius="30" HasShadow="True" 
+                               Margin="0,32,0,16" HorizontalOptions="Center" VerticalOptions="Start">
                         <ff:CachedImage x:Name="Thumbnail" DownsampleToViewSize="True">
                             <ff:CachedImage.Transformations>
                                 <ff1:RoundedTransformation Radius="30"/>
@@ -30,13 +28,13 @@
                         </ff:CachedImage>
                     </Frame>
 
-                    <Frame Grid.Row="1" Padding="4" CornerRadius="10" WidthRequest="350" HorizontalOptions="Center">
+                    <Frame Grid.Row="1" Padding="4" Margin="0,0,0,8" CornerRadius="10" WidthRequest="350" HorizontalOptions="Center">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            
+
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
@@ -45,17 +43,17 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
-                                
+
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            
+
                             <!--<Label Grid.Column="0" Grid.Row="0" FontSize="20" FontAttributes="Bold" Text="정보: "/>-->
                             <Label x:Name="Information" Grid.ColumnSpan="2" Grid.Row="0" FontSize="15" FontAttributes="Bold"/>
-                            
+
                             <Label Grid.Column="0" Grid.Row="1" FontSize="15" FontAttributes="Bold" Text="날짜: "/>
                             <Label x:Name="Date" Grid.Column="1" Grid.Row="1" FontSize="15"/>
-                            
+
                             <Label Grid.Column="0" Grid.Row="2" FontSize="15" FontAttributes="Bold" Text="추출: "/>
                             <Label x:Name="Type" Grid.Column="1" Grid.Row="2" FontSize="15"/>
 
@@ -67,7 +65,7 @@
 
                             <Label Grid.Column="0" Grid.Row="5" FontSize="15" FontAttributes="Bold" Text="용량: "/>
                             <Label x:Name="Capacity" Grid.Column="1" Grid.Row="5" FontSize="15"/>
-                            
+
                             <Label Grid.Column="0" Grid.Row="6" FontSize="15" FontAttributes="Bold" Text="위치: "/>
                             <Label x:Name="Witch" Grid.Column="1" Grid.Row="6" FontSize="15"/>
 
@@ -78,6 +76,6 @@
                     </Frame>
                 </Grid>
             </ScrollView>
-        </RelativeLayout>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

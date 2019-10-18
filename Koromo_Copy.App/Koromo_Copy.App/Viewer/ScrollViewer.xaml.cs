@@ -3,6 +3,7 @@
 
 using FFImageLoading.Forms;
 using Koromo_Copy.App.DataBase;
+using Koromo_Copy.Framework.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,13 +31,18 @@ namespace Koromo_Copy.App.Viewer
                 Thread.Sleep(100);
                 int cnt = 0;
 
-                foreach (var file in Directory.GetFiles(dbm.Directory).OrderBy(f => f))
+                var comp = new Strings.NaturalComparer();
+                var files = Directory.GetFiles(dbm.Directory).ToList();
+                files.Sort((x, y) => comp.Compare(x, y));
+
+                foreach (var file in files)
                 {
                     Device.BeginInvokeOnMainThread(() =>
                     {
                         var image = new CachedImage();
                         ViewStack.Children.Add(image);
                         image.Margin = new Thickness(4, 4, 4, 4);
+                        image.DownsampleToViewSize = true;
                         image.Success += (s, e) =>
                         {
                             var h = e.ImageInformation.OriginalHeight;

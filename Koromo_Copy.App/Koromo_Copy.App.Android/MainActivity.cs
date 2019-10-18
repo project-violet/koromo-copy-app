@@ -15,6 +15,7 @@ using Android;
 using Plugin.CurrentActivity;
 using Java.Lang;
 using FFImageLoading.Forms.Platform;
+using Android.Content;
 
 namespace Koromo_Copy.App.Droid
 {
@@ -88,6 +89,20 @@ namespace Koromo_Copy.App.Droid
             }
             else
                 base.OnBackPressed();
+        }
+
+        public override void OnTrimMemory(TrimMemory level)
+        {
+            FFImageLoading.ImageService.Instance.InvalidateMemoryCache();
+            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+            base.OnTrimMemory(level);
+        }
+
+        public override void OnLowMemory()
+        {
+            FFImageLoading.ImageService.Instance.InvalidateMemoryCache();
+            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+            base.OnLowMemory();
         }
     }
 }

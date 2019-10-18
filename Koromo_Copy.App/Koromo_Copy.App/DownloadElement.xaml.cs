@@ -46,7 +46,8 @@ namespace Koromo_Copy.App
 
             Spinner.IsVisible = false;
 
-            SetupFavicon(dbm.Url);
+            if (!string.IsNullOrWhiteSpace(dbm.Url) && (dbm.Url.StartsWith("http://") || dbm.Url.StartsWith("https://")))
+                SetupFavicon(dbm.Url);
 
             if (!string.IsNullOrWhiteSpace(dbm.ShortInfo))
                 Info.Text = dbm.ShortInfo;

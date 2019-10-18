@@ -43,6 +43,8 @@ namespace Koromo_Copy.App.Droid
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 
+            CommonAPI.Instance = new DroidCommonAPI();
+
             base.OnCreate(savedInstanceState);
 
             AppProvider.DefaultSuperPath = Path.Combine(Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryPictures).AbsolutePath, "KoromoCopy");

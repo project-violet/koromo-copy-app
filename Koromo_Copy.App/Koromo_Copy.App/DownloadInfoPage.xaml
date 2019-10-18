@@ -7,6 +7,7 @@
              xmlns:effects="clr-namespace:Koromo_Copy.App"
              xmlns:ff1="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
              mc:Ignorable="d"
+             Title="자세한 정보"
              x:Class="Koromo_Copy.App.DownloadInfoPage">
     <ContentPage.Content>
         <RelativeLayout Padding="0">
@@ -42,6 +43,11 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
                             
                             <!--<Label Grid.Column="0" Grid.Row="0" FontSize="20" FontAttributes="Bold" Text="정보: "/>-->
@@ -61,6 +67,12 @@
 
                             <Label Grid.Column="0" Grid.Row="5" FontSize="15" FontAttributes="Bold" Text="용량: "/>
                             <Label x:Name="Capacity" Grid.Column="1" Grid.Row="5" FontSize="15"/>
+                            
+                            <Label Grid.Column="0" Grid.Row="6" FontSize="15" FontAttributes="Bold" Text="위치: "/>
+                            <Label x:Name="Witch" Grid.Column="1" Grid.Row="6" FontSize="15"/>
+
+                            <Button x:Name="CopyURL" BackgroundColor="Orange" Margin="0,8,0,0" Clicked="CopyURL_Clicked" Visual="Material" Text="URL 복사" Grid.ColumnSpan="2" Grid.Row="7"/>
+                            <Button x:Name="OpenViewer" BackgroundColor="Purple" Clicked="OpenViewer_Clicked" Visual="Material" Text="뷰어로 보기" Grid.ColumnSpan="2" Grid.Row="8"/>
 
                         </Grid>
                     </Frame>

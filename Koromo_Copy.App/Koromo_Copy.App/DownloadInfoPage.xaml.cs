@@ -2,10 +2,12 @@
 // Copyright (C) 2019. dc-koromo. Licensed under the MIT Licence.
 
 using Koromo_Copy.App.DataBase;
+using Koromo_Copy.App.Viewer;
 using Koromo_Copy.Framework.Cache;
 using Koromo_Copy.Framework.Extractor;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Plugin.Clipboard;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,9 +23,12 @@ namespace Koromo_Copy.App
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class DownloadInfoPage : ContentPage
     {
+        DownloadDBModel DBM;
         public DownloadInfoPage(DownloadDBModel dbm)
         {
             InitializeComponent();
+
+            DBM = dbm;
 
             if (!string.IsNullOrWhiteSpace(dbm.ShortInfo))
                 Information.Text = dbm.ShortInfo;
@@ -64,6 +69,11 @@ namespace Koromo_Copy.App
             }
 
             Capacity.Text = $"{dbm.CountOfFiles}개 항목 [{DownloadElement.convert_bytes2string(dbm.SizeOfContents)}]";
+
+            if (!string.IsNullOrWhiteSpace(dbm.Directory))
+                Witch.Text = dbm.Directory;
+            else
+                Witch.Text = "?";
 
             if (!string.IsNullOrWhiteSpace(dbm.InfoCache))
             {
@@ -125,6 +135,18 @@ namespace Koromo_Copy.App
                     });
                 });
             }
+        }
+
+        private void CopyURL_Clicked(object sender, EventArgs e)
+        {
+            CrossClipboard.Current.SetText(DBM.Url);
+            Plugin.XSnack.CrossXSnack.Current.ShowMessage("URL이 복사되었습니다!");
+        }
+
+        private async void OpenViewer_Clicked(object sender, EventArgs e)
+        {
+            //CommonAPI.Instance.OpenUri(DBM.Directory);
+            await (Application.Current.MainPage as MainPage).NaviInstance.PushAsync(new ScrollViewer(DBM));
         }
     }
 }

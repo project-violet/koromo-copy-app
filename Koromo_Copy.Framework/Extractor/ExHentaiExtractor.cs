@@ -118,7 +118,7 @@ namespace Koromo_Copy.Framework.Extractor
                     option.ThumbnailCallback?.Invoke(task);
             }
 
-            return (result.ToList(), null/*data*/);
+            return (result.ToList(), new ExtractedInfo { Type = ExtractedInfo.ExtractedType.WorksComic });
         }
     }
 }

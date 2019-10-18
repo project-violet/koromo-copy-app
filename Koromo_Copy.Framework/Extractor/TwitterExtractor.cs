@@ -195,7 +195,7 @@ namespace Koromo_Copy.Framework.Extractor
                     }
                 }
 
-                return (result, null);
+                return (result, new ExtractedInfo { Type = ExtractedInfo.ExtractedType.UserArtist });
             }
         }
 

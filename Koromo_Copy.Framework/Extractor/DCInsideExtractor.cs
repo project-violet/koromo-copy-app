@@ -275,7 +275,7 @@ namespace Koromo_Copy.Framework.Extractor
                 throw new ExtractorException("[DCInside Extractor] Not support mobile page yet.");
             }
 
-            return (result, null);
+            return (result, new ExtractedInfo { Type = ExtractedInfo.ExtractedType.Community });
         }
 
         #region Parse for DCInside Web Site

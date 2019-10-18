@@ -5,6 +5,7 @@ using Koromo_Copy.App.DataBase;
 using Koromo_Copy.Framework.Cache;
 using Koromo_Copy.Framework.Extractor;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -69,15 +70,8 @@ namespace Koromo_Copy.App
                 if (CacheManager.Instance.Exists(dbm.InfoCache))
                 {
                     var ss = CacheManager.Instance.Find(dbm.InfoCache);
-                    var info = JsonConvert.DeserializeObject<ExtractedInfo>(CacheManager.Instance.Find(dbm.InfoCache), new JsonSerializerSettings
-                    {
-                        Error = (s,e) =>
-                        {
-                            var currentError = e.ErrorContext.Error.Message;
-                            e.ErrorContext.Handled = true;
-                        }
-                    });
-                    switch (info.Type)
+                    var info = JToken.Parse(CacheManager.Instance.Find(dbm.InfoCache))["Type"].ToObject<ExtractedInfo.ExtractedType>();
+                    switch (info)
                     {
                         case ExtractedInfo.ExtractedType.WorksComic:
                             Genre.Text = "만화";

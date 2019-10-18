@@ -165,7 +165,7 @@ namespace Koromo_Copy.Framework.Extractor
 
             option.ThumbnailCallback?.Invoke(result[0]);
 
-            return (result.ToList(), null/*data*/);
+            return (result.ToList(), new ExtractedInfo { Type = ExtractedInfo.ExtractedType.WorksComic });
         }
 
         #region Parse for EHentai Web Site

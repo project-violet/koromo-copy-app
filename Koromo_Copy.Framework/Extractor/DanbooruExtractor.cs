@@ -145,7 +145,7 @@ namespace Koromo_Copy.Framework.Extractor
                     break;
             }
 
-            return (result, null/*HttpUtility.UrlDecode(tags)*/);
+            return (result, new ExtractedInfo { Type = ExtractedInfo.ExtractedType.UserArtist });
         }
     }
 }

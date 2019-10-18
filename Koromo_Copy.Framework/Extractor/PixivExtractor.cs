@@ -107,7 +107,7 @@ namespace Koromo_Copy.Framework.Extractor
                     }
                 }
 
-                return (result, null/*user*/);
+                return (result, new ExtractedInfo { Type = ExtractedInfo.ExtractedType.UserArtist });
             }
             else if (option.ExtractInformation == true)
             {

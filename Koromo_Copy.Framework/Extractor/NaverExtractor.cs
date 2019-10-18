@@ -84,7 +84,7 @@ namespace Koromo_Copy.Framework.Extractor
                 foreach (var shtml in htmls)
                     result.AddRange(extract_episode_page(shtml));
 
-                return (result, null);
+                return (result, new ExtractedInfo { Type = ExtractedInfo.ExtractedType.WorksComic });
             }
 
             return (null, null);

@@ -41,29 +41,39 @@ namespace Koromo_Copy.App.DataBase
 
     public class DownloadDBManager : ILazy<DownloadDBManager>
     {
-        SQLiteConnection db;
+        string db_path;
 
         public DownloadDBManager()
         {
-            var db_path = Path.Combine(AppProvider.ApplicationPath, "download.db");
+            db_path = Path.Combine(AppProvider.ApplicationPath, "download.db");
 
-            db = new SQLiteConnection(db_path);
+            var db = new SQLiteConnection(db_path);
             var info = db.GetTableInfo("DownloadDBModel");
             if (!info.Any())
                 db.CreateTable<DownloadDBModel>();
+            db.Close();
         }
 
         public void Add(DownloadDBModel dbm)
         {
+            var db = new SQLiteConnection(db_path);
             var count = db.ExecuteScalar<int>("select count(*) from DownloadDBModel");
             dbm.Id = count;
             db.Insert(dbm);
+            db.Close();
         }
 
         public void Update(DownloadDBModel dbm)
-            => db.Update(dbm);
+        {
+            var db = new SQLiteConnection(db_path);
+            db.Update(dbm);
+            db.Close();
+        }
 
         public List<DownloadDBModel> QueryAll()
-            => db.Table<DownloadDBModel>().ToList();
+        {
+            using (var db = new SQLiteConnection(db_path))
+                return db.Table<DownloadDBModel>().ToList();
+        }
     }
 }

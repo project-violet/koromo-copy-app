@@ -2,6 +2,9 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:xe="clr-namespace:XamEffects;assembly=XamEffects"
+             xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:ff1="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:Koromo_Copy.App"
              mc:Ignorable="d"
@@ -14,12 +17,10 @@
             </Grid.RowDefinitions>
 
             <ScrollView Grid.Row="0" VerticalOptions="FillAndExpand">
-                <!--<ListView x:Name="List">
+                <!--<ListView x:Name="List" ItemsSource="{Binding DDMBM}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <ViewCell>
-                                <local:DownloadElement/>
-                            </ViewCell>
+                            <local:DownloadElement/>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>-->

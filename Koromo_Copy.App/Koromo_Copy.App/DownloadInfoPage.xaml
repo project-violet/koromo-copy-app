@@ -5,6 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              xmlns:effects="clr-namespace:Koromo_Copy.App"
+             xmlns:sharedTransitions="clr-namespace:Plugin.SharedTransitions;assembly=Plugin.SharedTransitions"
              xmlns:ff1="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
              mc:Ignorable="d"
              Title="자세한 정보"
@@ -20,7 +21,7 @@
                     </Grid.RowDefinitions>
 
                     <Frame x:Name="ThumbnailFrame" Padding="0" Grid.Row="0" CornerRadius="30" HasShadow="True" 
-                               Margin="0,32,0,16" HorizontalOptions="Center" VerticalOptions="Start">
+                           Margin="0,32,0,16" HorizontalOptions="Center" VerticalOptions="Start">
                         <ff:CachedImage x:Name="Thumbnail" DownsampleToViewSize="True">
                             <ff:CachedImage.Transformations>
                                 <ff1:RoundedTransformation Radius="30"/>

@@ -10,6 +10,7 @@ using Newtonsoft.Json.Linq;
 using Plugin.Clipboard;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -151,7 +152,11 @@ namespace Koromo_Copy.App
         private async void OpenViewer_Clicked(object sender, EventArgs e)
         {
             //CommonAPI.Instance.OpenUri(DBM.Directory);
-            await (Application.Current.MainPage as MainPage).NaviInstance.PushAsync(new ScrollViewer(DBM));
+            var files = Directory.GetFiles(DBM.Directory);
+            if (files.Length > 0)
+                await (Application.Current.MainPage as MainPage).NaviInstance.PushAsync(new ScrollViewer(DBM.ShortInfo, DBM.Directory));
+            else
+                await (Application.Current.MainPage as MainPage).NaviInstance.PushAsync(new SubdirSelector(DBM));
         }
     }
 }

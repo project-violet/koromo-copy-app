@@ -9,6 +9,7 @@
     <PackageReference Include="Acr.UserDialogs" Version="7.0.30" />
     <PackageReference Include="CookieWebView" Version="1.0.9" />
     <PackageReference Include="Plugin.XSnack" Version="1.0.17" />
+    <PackageReference Include="Prism.DryIoc.Forms" Version="7.2.0.1367" />
     <PackageReference Include="sqlite-net-pcl" Version="1.6.292" />
     <PackageReference Include="Xam.Forms.MarkdownView" Version="0.6.1-pre" />
     <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.11.982" />
@@ -17,6 +18,7 @@
     <PackageReference Include="Xamarin.Essentials" Version="1.2.0" />
     <PackageReference Include="Xamarin.Forms.Visual.Material" Version="4.2.0.709249" />
     <PackageReference Include="Xamarin.Plugin.FilePicker" Version="2.1.34" />
+    <PackageReference Include="Xamarin.Plugin.SharedTransitions" Version="2.0.2" />
     <PackageReference Include="Xamarin.Plugins.Clipboard" Version="2.2.1" />
     <PackageReference Include="XamarinForms.CardView" Version="1.1.1.5" />
     <PackageReference Include="XamEffects" Version="1.6.3" />
@@ -63,5 +65,12 @@
     <EmbeddedResource Update="Viewer\ScrollViewer.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Viewer\SubdirSelector.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ViewModels\" />
   </ItemGroup>
 </Project>

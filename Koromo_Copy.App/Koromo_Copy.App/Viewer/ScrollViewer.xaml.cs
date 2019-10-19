@@ -20,11 +20,11 @@ namespace Koromo_Copy.App.Viewer
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ScrollViewer : ContentPage
     {
-        public ScrollViewer(DownloadDBModel dbm)
+        public ScrollViewer(string shortinfo, string directory)
         {
             InitializeComponent();
 
-            Title = dbm.ShortInfo;
+            Title = shortinfo;
 
             Task.Run(() =>
             {
@@ -32,7 +32,7 @@ namespace Koromo_Copy.App.Viewer
                 int cnt = 0;
 
                 var comp = new Strings.NaturalComparer();
-                var files = Directory.GetFiles(dbm.Directory).ToList();
+                var files = Directory.GetFiles(directory).ToList();
                 files.Sort((x, y) => comp.Compare(x, y));
 
                 foreach (var file in files)

@@ -3,6 +3,7 @@
 
 using Koromo_Copy.Framework;
 using Koromo_Copy.Framework.Log;
+using Plugin.SharedTransitions;
 using System;
 using System.Globalization;
 using System.Text;

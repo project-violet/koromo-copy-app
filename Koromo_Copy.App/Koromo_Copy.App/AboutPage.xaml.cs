@@ -102,6 +102,11 @@ Github: [https://github.com/dc-koromo/koromo-copy](https://github.com/dc-koromo/
  * [https://github.com/seansparkman/CookiesWebView](https://github.com/seansparkman/CookiesWebView)
  * Licensed under the MIT Licence.
 
+#### Prism.DryIoc.Forms
+
+ * [https://github.com/PrismLibrary/Prism](https://github.com/PrismLibrary/Prism)
+ * Licensed under the MIT Licence.
+
 #### Xam.Forms.MarkdownView
 
  * [https://github.com/dotnet-ad/MarkdownView](https://github.com/dotnet-ad/MarkdownView)
@@ -111,6 +116,11 @@ Github: [https://github.com/dc-koromo/koromo-copy](https://github.com/dc-koromo/
 
  * [https://github.com/jfversluis/FilePicker-Plugin-for-Xamarin-and-Windows](https://github.com/jfversluis/FilePicker-Plugin-for-Xamarin-and-Windows)
  * Licensed under the MIT Licence.
+
+#### Xamarin.Plugin.SharedTransitions
+
+ * [https://github.com/GiampaoloGabba/Xamarin.Plugin.SharedTransitions](https://github.com/GiampaoloGabba/Xamarin.Plugin.SharedTransitions)
+ * Licensed under the MIT Licence. 
 
 #### XamarinForms.CardView
 

@@ -6,7 +6,9 @@ using Koromo_Copy.App.DataBase;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,14 +19,16 @@ using Xamarin.Forms.Xaml;
 namespace Koromo_Copy.App
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class DownloadPage : ContentPage
+    public partial class DownloadPage : ContentPage, INotifyPropertyChanged
     {
         public DownloadPage()
         {
             InitializeComponent();
 
             Appearing += DownloadPage_Appearing;
+            BindingContext = this;
         }
+
 
         bool loaded = false;
         private void DownloadPage_Appearing(object sender, EventArgs e)
@@ -39,6 +43,7 @@ namespace Koromo_Copy.App
                     Device.BeginInvokeOnMainThread(() =>
                     {
                         List.Children.Insert(0, elem);
+                        //DDMBM.Add((dbm, null));
                     });
                     Thread.Sleep(200);
                 }
@@ -56,6 +61,7 @@ namespace Koromo_Copy.App
             {
                 var elem = new DownloadElement(result.Text);
                 List.Children.Insert(0, elem);
+                //DDMBM.Add((null, result.Text));
             }
         }
     }

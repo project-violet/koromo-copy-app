@@ -162,7 +162,7 @@ namespace Koromo_Copy.App
                     return;
                 }
 
-            WAIT_ANOTHER_TASKS:
+                WAIT_ANOTHER_TASKS:
 
                 if (DownloadAvailable == 4)
                 {
@@ -175,7 +175,7 @@ namespace Koromo_Copy.App
                         Thread.Sleep(1000);
                     }
                 }
-                
+
                 if (Interlocked.Increment(ref DownloadAvailable) > 4)
                 {
                     goto WAIT_ANOTHER_TASKS;
@@ -298,7 +298,7 @@ namespace Koromo_Copy.App
                     DownloadDBManager.Instance.Update(dbm);
                     return;
                 }
-                
+
                 if (tasks.Item2 != null)
                 {
                     ExtractedInfo = tasks.Item2;
@@ -320,7 +320,7 @@ namespace Koromo_Copy.App
                 int download_count = 0;
                 long download_bytes = 0;
                 long download_1s = 0;
-                int task_count = AppProvider.Scheduler.LatestPriority != null ? 
+                int task_count = AppProvider.Scheduler.LatestPriority != null ?
                                 AppProvider.Scheduler.LatestPriority.TaskPriority : 0;
                 int post_process_count = 0;
                 int post_process_progress = 0;

@@ -218,6 +218,13 @@ namespace Koromo_Copy.Console
                 try
                 {
                     System.Console.WriteLine("Extractor Selected: " + extractor.GetType().Name.Replace("Extractor", ""));
+
+                    if (extractor.IsForbidden)
+                    {
+                        System.Console.WriteLine("Crawling is prohibited by subject of recommendation in robots.txt provided by that website.");
+                        return;
+                    }
+
                     System.Console.Write("Extracting urls... ");
 
                     WaitProgress wp = null;

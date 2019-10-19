@@ -19,6 +19,7 @@ namespace Koromo_Copy.App.DataBase
         Aborted,
         ErrorOccured,
         Deleted, // Deleted From DB but still alive in databse.
+        Forbidden,
     }
 
     public class DownloadDBModel

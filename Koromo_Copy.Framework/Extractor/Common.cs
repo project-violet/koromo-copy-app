@@ -162,6 +162,7 @@ namespace Koromo_Copy.Framework.Extractor
         public Regex HostName { get; protected set; }
         public Regex ValidUrl { get; protected set; }
         public string ExtractorInfo { get; protected set; }
+        public bool IsForbidden { get; protected set; }
 
         public abstract IExtractorOption RecommendOption(string url);
         public abstract string RecommendFormat(IExtractorOption option);

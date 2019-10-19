@@ -2,17 +2,42 @@
 
 `Koromo Copy` is a cross platform image downloader.
 
-## Rules that must be followed
+## How to use?
 
- * Do not use this program/project to generate excessive traffic to specific sites.
+Put the URL of the site you want to download.
 
- * Do not use downloaded-data for commercial purposes.
+```
+./Koromo_Copy.Console https://www.instagram.com/taylorswift/
+```
 
- * Do not share downloaded data with others.
+If you want to see the download process, add `-p` option.
 
-Violation of these are obviously illegal and can be punished under obstruction of business or other laws.
-The developer of `Koromo Copy` assumes no responsibility for this and other illegal activities.
-All legal responsibility rests with you.
+```
+./Koromo_Copy.Console https://www.instagram.com/taylorswift/ -p
+```
+
+If you want to format the download path, enter `--list-extractor` to see the supported options. 
+`%(file)s` and `%(ext)s` are provided by default.
+
+```
+./Koromo_Copy.Console --list-extractor
+
+...
+[InstagramExtractor]
+[HostName] www\.instagram\.com
+[Checker] ^https?://www\.instagram\.com/(?:p\/)?(?<id>.*?)/?.*?$
+[Information] Instagram extactor info
+   user:             Full-name.
+   account:          User-name
+[Options]
+   --only-images               Extract only images.
+   --only-thumbnail            Extract only thumbnails.
+   --include-thumbnail         Include thumbnail extracting video.
+   --limit-posts               Limit read posts count. [use --limit-posts <Number of post>]
+...
+
+./Koromo_Copy.Console -o "[%(account)s] %(user)s/%(file)s.%(ext)s" https://www.instagram.com/taylorswift/
+```
 
 ## Documents
 
@@ -23,3 +48,65 @@ All legal responsibility rests with you.
 [Custom Crawler](Document/CustomCrawler.md)
 
 [General](Document/General.md)
+
+## Supports
+
+### Now support
+
+```
+Danbooru
+DCInside
+EHentai
+ExHentai
+Funbe
+Gelbooru
+Manamoa
+Naver - Forbidden but implemented
+Pixiv
+Hitomi
+Hiyobi
+Imgur
+Instagram (supports Video) - Forbidden but implemented
+Twitter (supports Video) - Forbidden but implemented
+```
+
+### Plan to support
+
+```
+4Chan
+ArtsAndCulture
+Daum
+Derpibooru
+DeviantArt
+Fakku
+GoogleImage
+Konachan
+Namuwiki
+Nozomi
+Pixabay
+Reddit
+Rule34
+SankakuComplex
+SMPeople
+Tistory
+Zerochan
+```
+
+## Contribution
+
+Welcome to any form of contribution!
+
+If you are interested in this project or have any suggestions, feel free to open the issue!
+
+## Thanks
+
+```
+dotnet: https://dotnet.microsoft.com/
+youtube-dl: https://github.com/ytdl-org/youtube-dl
+pixivpy: https://github.com/upbit/pixivpy
+Pixeez: https://github.com/cucmberium/Pixeez
+ImageSharp: https://github.com/SixLabors/ImageSharp
+HtmlAgilityPack: https://html-agility-pack.net/
+Json.NET: https://www.newtonsoft.com/json
+FFmpeg: https://www.ffmpeg.org/
+```

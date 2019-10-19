@@ -62,6 +62,11 @@ namespace Koromo_Copy.App
                     State.TextColor = Color.Red;
                     break;
 
+                case DownloadDBState.Forbidden:
+                    State.Text = "다운로드 금지됨";
+                    State.TextColor = Color.Red;
+                    break;
+
                 case DownloadDBState.Downloading:
                     State.Text = "다운로드 도중 중단됨";
                     State.TextColor = Color.Orange;

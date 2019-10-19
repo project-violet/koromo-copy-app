@@ -77,6 +77,10 @@ namespace Koromo_Copy.App
                 case DownloadDBState.Downloading:
                     Status.Text = "다운로드 중단됨";
                     break;
+
+                case DownloadDBState.Forbidden:
+                    Status.Text = "다운로드 금지됨";
+                    break;
             }
 
             if (!string.IsNullOrWhiteSpace(dbm.ThumbnailCahce))
@@ -141,6 +145,19 @@ namespace Koromo_Copy.App
                         Spinner.IsVisible = false;
                     });
                     dbm.State = DownloadDBState.ErrorOccured;
+                    DownloadDBManager.Instance.Update(dbm);
+                    return;
+                }
+
+                if (extractor.IsForbidden)
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        Status.Text = "정책상 금지된 작업입니다.";
+                        Status.TextColor = Color.Red;
+                        Spinner.IsVisible = false;
+                    });
+                    dbm.State = DownloadDBState.Forbidden;
                     DownloadDBManager.Instance.Update(dbm);
                     return;
                 }

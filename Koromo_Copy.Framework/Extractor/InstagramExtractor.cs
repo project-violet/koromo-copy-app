@@ -44,6 +44,7 @@ namespace Koromo_Copy.Framework.Extractor
             ExtractorInfo = "Instagram extactor info\r\n" +
                 "   user:             Full-name.\r\n" +
                 "   account:          User-name";
+            IsForbidden = true;
         }
 
         public override IExtractorOption RecommendOption(string url)

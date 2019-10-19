@@ -328,7 +328,12 @@ namespace Koromo_Copy.App
 
                 if (tasks.Item1.Count > 0)
                 {
-                    dbm.Directory = Path.GetDirectoryName(Path.Combine(Settings.Instance.Model.SuperPath, tasks.Item1[0].Format.Formatting(format)));
+                    var hash_set = new HashSet<string>();
+                    tasks.Item1.ForEach(x => hash_set.Add(Path.GetDirectoryName(Path.Combine("/", tasks.Item1[0].Format.Formatting(format)))));
+                    if (hash_set.Count == 1)
+                        dbm.Directory = Path.GetDirectoryName(Path.Combine(Settings.Instance.Model.SuperPath, tasks.Item1[0].Format.Formatting(format)));
+                    else
+                        dbm.Directory = Path.GetDirectoryName(Path.GetDirectoryName(Path.Combine(Settings.Instance.Model.SuperPath, tasks.Item1[0].Format.Formatting(format))));
                     dbm.CountOfFiles = tasks.Item1.Count;
                     DownloadDBManager.Instance.Update(dbm);
                 }

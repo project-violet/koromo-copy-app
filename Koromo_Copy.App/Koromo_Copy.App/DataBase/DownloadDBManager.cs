@@ -41,6 +41,7 @@ namespace Koromo_Copy.App.DataBase
 
     public class DownloadDBManager : ILazy<DownloadDBManager>
     {
+        object db_lock = new object();
         string db_path;
 
         public DownloadDBManager()
@@ -56,24 +57,33 @@ namespace Koromo_Copy.App.DataBase
 
         public void Add(DownloadDBModel dbm)
         {
-            var db = new SQLiteConnection(db_path);
-            var count = db.ExecuteScalar<int>("select count(*) from DownloadDBModel");
-            dbm.Id = count;
-            db.Insert(dbm);
-            db.Close();
+            lock (db_lock)
+            {
+                var db = new SQLiteConnection(db_path);
+                var count = db.ExecuteScalar<int>("select count(*) from DownloadDBModel");
+                dbm.Id = count;
+                db.Insert(dbm);
+                db.Close();
+            }
         }
 
         public void Update(DownloadDBModel dbm)
         {
-            var db = new SQLiteConnection(db_path);
-            db.Update(dbm);
-            db.Close();
+            lock (db_lock)
+            {
+                var db = new SQLiteConnection(db_path);
+                db.Update(dbm);
+                db.Close();
+            }
         }
 
         public List<DownloadDBModel> QueryAll()
         {
-            using (var db = new SQLiteConnection(db_path))
-                return db.Table<DownloadDBModel>().ToList();
+            lock (db_lock)
+            {
+                using (var db = new SQLiteConnection(db_path))
+                    return db.Table<DownloadDBModel>().ToList();
+            }
         }
     }
 }

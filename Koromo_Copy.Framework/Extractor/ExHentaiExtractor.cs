@@ -34,7 +34,7 @@ namespace Koromo_Copy.Framework.Extractor
 
         public override string RecommendFormat(IExtractorOption option)
         {
-            return "%(title)s/%(file)s.%(ext)s";
+            return "%(extractor)s/%(title)s/%(file)s.%(ext)s";
         }
 
         readonly static List<string> cookies = new List<string>()
@@ -118,7 +118,9 @@ namespace Koromo_Copy.Framework.Extractor
                     option.ThumbnailCallback?.Invoke(task);
             }
 
-            return (result.ToList(), new ExtractedInfo { Type = ExtractedInfo.ExtractedType.WorksComic });
+            var result_list = result.ToList();
+            result_list.ForEach(task => task.Format.Extractor = GetType().Name.Replace("Extractor", ""));
+            return (result_list, new ExtractedInfo { Type = ExtractedInfo.ExtractedType.WorksComic });
         }
     }
 }

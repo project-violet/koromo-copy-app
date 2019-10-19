@@ -40,7 +40,7 @@ namespace Koromo_Copy.App
                     {
                         List.Children.Insert(0, elem);
                     });
-                    Thread.Sleep(100);
+                    Thread.Sleep(200);
                 }
             });
         }

@@ -44,7 +44,7 @@ namespace Koromo_Copy.Framework.Extractor
 
         public override string RecommendFormat(IExtractorOption option)
         {
-            return "%(search)s/%(file)s.%(ext)s";
+            return "%(extractor)s/%(search)s/%(file)s.%(ext)s";
         }
 
         public override (List<NetTask>, ExtractedInfo) Extract(string url, IExtractorOption option = null)
@@ -111,6 +111,7 @@ namespace Koromo_Copy.Framework.Extractor
                     break;
             }
 
+            result.ForEach(task => task.Format.Extractor = GetType().Name.Replace("Extractor", ""));
             return (result, new ExtractedInfo { Type = ExtractedInfo.ExtractedType.Search });
         }
     }

@@ -116,6 +116,19 @@
                     </Grid>
                 </ContentView>
                 <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" Color="LightGray"/>
+                <ContentView x:Name="ExportDB" xe:TouchEffect.Color="Gray" xe:Commands.Tap="{Binding TapCommand}">
+                    <Grid Padding="16">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Row="0" Text="데이터베이스 내보내기" TextColor="Black"/>
+                        <Label Grid.Row="1" Text="지금까지 다운로드한 모든 다운로드 정보가 담긴 데이터베이스 파일을 내보냅니다."/>
+                    </Grid>
+                </ContentView>
+                <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" Color="LightGray"/>
                 <ContentView x:Name="ExportLog" xe:TouchEffect.Color="Gray" xe:Commands.Tap="{Binding TapCommand}">
                     <Grid Padding="16">
                         <Grid.RowDefinitions>

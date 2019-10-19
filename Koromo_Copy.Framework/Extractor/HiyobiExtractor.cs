@@ -38,7 +38,7 @@ namespace Koromo_Copy.Framework.Extractor
 
         public override string RecommendFormat(IExtractorOption option)
         {
-            return "%(artist)s/[%(id)s] %(title)s/%(file)s.%(ext)s";
+            return "%(extractor)s/%(artist)s/[%(id)s] %(title)s/%(file)s.%(ext)s";
         }
 
         public override (List<NetTask>, ExtractedInfo) Extract(string url, IExtractorOption option = null)
@@ -85,6 +85,7 @@ namespace Koromo_Copy.Framework.Extractor
                     result.Add(task);
                 }
                 option.ThumbnailCallback?.Invoke(result[0]);
+                result.ForEach(task => task.Format.Extractor = GetType().Name.Replace("Extractor", ""));
                 return (result, new ExtractedInfo { Type = ExtractedInfo.ExtractedType.WorksComic });
             }
             else

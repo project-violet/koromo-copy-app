@@ -53,7 +53,7 @@ namespace Koromo_Copy.Framework.Extractor
 
         public override string RecommendFormat(IExtractorOption option)
         {
-            return "%(title)s/%(episode)s/%(file)s.%(ext)s";
+            return "%(extractor)s/%(title)s/%(episode)s/%(file)s.%(ext)s";
         }
 
         public override (List<NetTask>, ExtractedInfo) Extract(string url, IExtractorOption option = null)
@@ -119,6 +119,7 @@ namespace Koromo_Copy.Framework.Extractor
                 result.Add(task);
             }
 
+            result.ForEach(task => task.Format.Extractor = GetType().Name.Replace("Extractor", ""));
             return result;
         }
     }

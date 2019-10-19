@@ -70,6 +70,14 @@ namespace Koromo_Copy.App
                 await Navigation.PushAsync(new PixivLoginPage());
             }));
 
+            Commands.SetTap(ExportDB, new Command(() => {
+                if (!Directory.Exists(AppProvider.DefaultSuperPath))
+                    Directory.CreateDirectory(AppProvider.DefaultSuperPath);
+                File.Copy(System.IO.Path.Combine(AppProvider.ApplicationPath, "download.db"),
+                    System.IO.Path.Combine(AppProvider.DefaultSuperPath, "download.db"), true);
+                Plugin.XSnack.CrossXSnack.Current.ShowMessage("데이터베이스를 성공적으로 내보냈습니다.");
+            }));
+
             Commands.SetTap(ExportLog, new Command(() => {
                 if (!Directory.Exists(AppProvider.DefaultSuperPath))
                     Directory.CreateDirectory(AppProvider.DefaultSuperPath);

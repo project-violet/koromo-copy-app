@@ -39,7 +39,7 @@ namespace Koromo_Copy.Framework.Extractor
 
         public override string RecommendFormat(IExtractorOption option)
         {
-            return "%(artist)s/[%(id)s] %(title)s/%(file)s.%(ext)s";
+            return "%(extractor)s/%(artist)s/[%(id)s] %(title)s/%(file)s.%(ext)s";
         }
 
         public override (List<NetTask>, ExtractedInfo) Extract(string url, IExtractorOption option = null)
@@ -143,6 +143,7 @@ namespace Koromo_Copy.Framework.Extractor
                 sinfo.Language = data1.Language;
                 sinfo.Parodies = data1.parody?.ToArray();
 
+                result.ForEach(task => task.Format.Extractor = GetType().Name.Replace("Extractor", ""));
                 return (result, new ExtractedInfo { Info = sinfo, Type = ExtractedInfo.ExtractedType.WorksComic });
             }
 

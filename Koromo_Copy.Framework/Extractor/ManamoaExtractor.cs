@@ -153,7 +153,7 @@ namespace Koromo_Copy.Framework.Extractor
             var list = JArray.Parse(Regex.Match(html, "var img_list = (.*);").Groups[1].Value);
             var list1 = JArray.Parse(Regex.Match(html, "var img_list1 = (.*);").Groups[1].Value);
             if (list1.Count > 0)
-                return list1.Select(x => x.ToString()).ToList();
+                return list.Select(x => x.ToString().Replace("img", "s3")).ToList();
             return list.Select(x => x.ToString()).ToList();
         }
     }

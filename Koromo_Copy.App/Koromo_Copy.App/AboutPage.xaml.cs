@@ -127,6 +127,11 @@ Github: [https://github.com/dc-koromo/koromo-copy](https://github.com/dc-koromo/
  * [https://github.com/tiger4589/Xamarin.Forms-CardView](https://github.com/tiger4589/Xamarin.Forms-CardView)
  * Licensed under the MIT Licence.
 
+#### Xamarin.Forms.PancakeView
+
+ * [https://github.com/sthewissen/Xamarin.Forms.PancakeView](https://github.com/sthewissen/Xamarin.Forms.PancakeView)
+ * Licensed under the MIT Licence.
+
 #### XamEffects
 
  * [https://github.com/mrxten/XamEffects](https://github.com/mrxten/XamEffects)

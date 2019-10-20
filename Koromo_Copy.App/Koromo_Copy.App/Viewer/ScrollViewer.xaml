@@ -16,7 +16,7 @@
                         <ContentView>
                             <ff:CachedImage Margin="4,4,4,4" HorizontalOptions="FillAndExpand"
                                             VerticalOptions="FillAndExpand"
-                                            DownsampleToViewSize="True" Source="{Binding Path}" Success="CachedImage_Success"/>
+                                            Source="{Binding Path}" Success="CachedImage_Success"/>
                             <!--<Label Text="{Binding Path}" LineBreakMode="WordWrap" FontSize="Small"/>-->
                         </ContentView>
                     </DataTemplate>

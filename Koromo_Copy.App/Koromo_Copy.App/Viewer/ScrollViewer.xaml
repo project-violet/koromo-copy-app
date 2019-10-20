@@ -3,11 +3,25 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              mc:Ignorable="d"
              x:Class="Koromo_Copy.App.Viewer.ScrollViewer">
     <ContentPage.Content>
         <ScrollView>
-            <StackLayout x:Name="ViewStack" VerticalOptions="Start"/>
+            <!--<StackLayout x:Name="ViewStack" VerticalOptions="Start"/>-->
+            <CollectionView x:Name="List" VerticalOptions="Start" ItemsSource="{Binding Images}"
+                            SelectionMode="None" BackgroundColor="LightGray" ItemSizingStrategy="MeasureAllItems">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <ContentView>
+                            <ff:CachedImage Margin="4,4,4,4" HorizontalOptions="FillAndExpand"
+                                            VerticalOptions="FillAndExpand"
+                                            DownsampleToViewSize="True" Source="{Binding Path}" Success="CachedImage_Success"/>
+                            <!--<Label Text="{Binding Path}" LineBreakMode="WordWrap" FontSize="Small"/>-->
+                        </ContentView>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </ScrollView>
     </ContentPage.Content>
 </ContentPage>

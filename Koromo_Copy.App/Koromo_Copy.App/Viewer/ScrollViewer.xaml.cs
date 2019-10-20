@@ -20,54 +20,49 @@ namespace Koromo_Copy.App.Viewer
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ScrollViewer : ContentPage
     {
+        class imgs
+        {
+            public string Path { get; set; }
+        }
+
+        IList<imgs> Images { get; set; }
+
         public ScrollViewer(string shortinfo, string directory)
         {
             InitializeComponent();
 
             Title = shortinfo;
 
-            Task.Run(() =>
+            Images = new List<imgs>();
+            List.ItemsSource = Images;
+
+            var comp = new Strings.NaturalComparer();
+            var files = Directory.GetFiles(directory).ToList();
+            files.Sort((x, y) => comp.Compare(x, y));
+
+            foreach (var file in files)
             {
-                Thread.Sleep(100);
-                int cnt = 0;
+                Images.Add(new imgs { Path = file });
+            }
+        }
 
-                var comp = new Strings.NaturalComparer();
-                var files = Directory.GetFiles(directory).ToList();
-                files.Sort((x, y) => comp.Compare(x, y));
+        private void CachedImage_Success(object sender, CachedImageEvents.SuccessEventArgs e)
+        {
+            var h = e.ImageInformation.OriginalHeight;
+            var w = e.ImageInformation.OriginalWidth;
 
-                foreach (var file in files)
-                {
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        var image = new CachedImage();
-                        ViewStack.Children.Add(image);
-                        image.Margin = new Thickness(4, 4, 4, 4);
-                        image.DownsampleToViewSize = true;
-                        image.Success += (s, e) =>
-                        {
-                            var h = e.ImageInformation.OriginalHeight;
-                            var w = e.ImageInformation.OriginalWidth;
+            var view = sender as CachedImage;
 
-                            if (Width > w)
-                            {
-                                image.HeightRequest = h;
-                                image.WidthRequest = w;
-                            }
-                            else
-                            {
-                                image.WidthRequest = Width;
-                                image.HeightRequest = Width * h / w;
-                            }
-                        };
-                        image.IsVisible = true;
-                        image.Source = file;
-                    });
-                    Thread.Sleep(500);
-
-                    if (++cnt >= 20)
-                        break;
-                }
-            });
+            if (h < 200 && w < 200)
+            {
+                view.HeightRequest = h;
+                view.WidthRequest = w;
+            }
+            else
+            {
+                view.HeightRequest = (List.Width - 8) * h / w;
+                view.WidthRequest = List.Width - 8;
+            }
         }
     }
 }

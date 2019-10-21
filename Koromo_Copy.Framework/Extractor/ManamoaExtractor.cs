@@ -72,15 +72,16 @@ namespace Koromo_Copy.Framework.Extractor
                 int count = 1;
                 foreach (var img in images)
                 {
-                    var task = NetTask.MakeDefault(img);
+                    var task = NetTask.MakeDefault(img[0]);
                     task.SaveFile = true;
-                    task.Filename = count.ToString("000") + Path.GetExtension(img.Split('/').Last());
+                    task.Filename = count.ToString("000") + Path.GetExtension(img[0].Split('/').Last());
                     task.Format = new ExtractorFileNameFormat
                     {
                         Episode = title,
                         FilenameWithoutExtension = count.ToString("000"),
                         Extension = Path.GetExtension(task.Filename).Replace(".", "")
                     };
+                    task.FailUrls = img.Skip(1).ToList();
                     result.Add(task);
                     count++;
                 }
@@ -121,16 +122,17 @@ namespace Koromo_Copy.Framework.Extractor
                         int count = 1;
                         foreach (var img in images)
                         {
-                            var task = NetTask.MakeDefault(img);
+                            var task = NetTask.MakeDefault(img[0]);
                             task.SaveFile = true;
-                            task.Filename = count.ToString("000") + Path.GetExtension(img.Split('/').Last());
+                            task.Filename = count.ToString("000") + Path.GetExtension(img[0].Split('/').Last());
                             task.Format = new ExtractorFileNameFormat
                             {
                                 Title = title,
                                 Episode = sub_titles[i],
                                 FilenameWithoutExtension = count.ToString("000"),
-                                Extension = Path.GetExtension(task.Filename).Replace(".", "")
+                                Extension = Path.GetExtension(task.Filename).Replace(".", ""),
                             };
+                            task.FailUrls = img.Skip(1).ToList();
                             result.Add(task);
                             count++;
                         }
@@ -148,13 +150,29 @@ namespace Koromo_Copy.Framework.Extractor
             return (null, null);
         }
 
-        private List<string> get_board_images(string html)
+        private List<List<string>> get_board_images(string html)
         {
+            var result = new List<List<string>>();
+
             var list = JArray.Parse(Regex.Match(html, "var img_list = (.*);").Groups[1].Value);
             var list1 = JArray.Parse(Regex.Match(html, "var img_list1 = (.*);").Groups[1].Value);
-            if (list1.Count > 0)
-                return list.Select(x => x.ToString().Replace("img", "s3")).ToList();
-            return list.Select(x => x.ToString()).ToList();
+
+            var cnt = Math.Max(list.Count, list1.Count);
+
+            for (int i = 0; i < cnt; i++)
+            {
+                var rr = new List<string>();
+                if (list.Count > 0)
+                {
+                    rr.Add(list[i].ToString());
+                    rr.Add(list[i].ToString().Replace("img", "s3"));
+                }
+                if (list1.Count > 0)
+                    rr.Add(list1[i].ToString());
+                result.Add(rr);
+            }
+
+            return result;
         }
     }
 }

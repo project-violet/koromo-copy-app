@@ -8,28 +8,27 @@
              Title="Menu">
 
     <StackLayout VerticalOptions="FillAndExpand">
-        <Label x:Name="Title" HorizontalOptions="StartAndExpand" Text="Koromo Copy" FontSize="25" Margin="8,64,8,8"/>
-        <ScrollView>
-            <ListView x:Name="ListViewMenu"
+        <Label x:Name="Title" HorizontalOptions="StartAndExpand" Text="Koromo Copy" FontSize="25" Margin="8,128,8,0"/>
+        <Label x:Name="VersionText" HorizontalOptions="StartAndExpand" FontSize="25" Margin="8,2,8,128"/>
+        <ListView x:Name="ListViewMenu"
                     HasUnevenRows="True">
-                <d:ListView.ItemsSource>
-                    <x:Array Type="{x:Type x:String}">
-                        <x:String>Item 1</x:String>
-                        <x:String>Item 2</x:String>
-                    </x:Array>
-                </d:ListView.ItemsSource>
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <StackLayout Padding="10" Orientation="Horizontal">
-                                <Label FontFamily="{StaticResource MaterialFontFamily}" Text="{Binding Icon}" FontSize="25"/>
-                                <Label Text="{Binding Title}" d:Text="{Binding .}" FontSize="20" Margin="4,0,0,0"/>
-                            </StackLayout>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </ScrollView>
-        <Label HorizontalOptions="StartAndExpand" Text="© 2019 Koromo Copy Project" Margin="16,0,8,8" FontSize="18"/>
+            <d:ListView.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>Item 1</x:String>
+                    <x:String>Item 2</x:String>
+                </x:Array>
+            </d:ListView.ItemsSource>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Padding="10" Orientation="Horizontal">
+                            <Label FontFamily="{StaticResource MaterialFontFamily}" Text="{Binding Icon}" FontSize="25"/>
+                            <Label Text="{Binding Title}" d:Text="{Binding .}" FontSize="20" Margin="4,0,0,0"/>
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <Label HorizontalOptions="StartAndExpand" Text="© 2019 Koromo Copy" Margin="16,0,8,8" FontSize="18"/>
     </StackLayout>
 </ContentPage>

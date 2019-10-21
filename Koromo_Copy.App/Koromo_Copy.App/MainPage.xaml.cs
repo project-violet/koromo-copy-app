@@ -25,7 +25,7 @@ namespace Koromo_Copy.App
             InitializeComponent();
 
             Instance = this;
-            MenuPages.Add((int)MenuItemType.Browse, (NavigationPage)Detail);
+            MenuPages.Add((int)MenuItemType.Downloader, (NavigationPage)Detail);
         }
 
         public static MainPage Instance { get; private set; }
@@ -40,6 +40,9 @@ namespace Koromo_Copy.App
                     //case (int)MenuItemType.Browse:
                     //    MenuPages.Add(id, new NavigationPage(new ItemsPage()));
                     //    break;
+                    case (int)MenuItemType.Search:
+                        MenuPages.Add(id, new NavigationPage(new SearchPage()));
+                        break;
                     case (int)MenuItemType.Settings:
                         MenuPages.Add(id, new NavigationPage(new SettingsPage()));
                         break;
@@ -74,5 +77,16 @@ namespace Koromo_Copy.App
                 });
             }
         }
+
+
+        //protected override void OnSizeAllocated(double width, double height)
+        //{
+        //    base.OnSizeAllocated(width, height);
+
+        //    if (DeviceInfo.IsOrientationPortrait() && width > height || !DeviceInfo.IsOrientationPortrait() && width < height)
+        //    {
+        //        MainMenu.SizeChange();
+        //    }
+        //}
     }
 }

@@ -8,7 +8,7 @@
              x:Class="Koromo_Copy.App.MainPage">
 
     <MasterDetailPage.Master>
-        <local:MainMenuPage/>
+        <local:MainMenuPage x:Name="MainMenu"/>
     </MasterDetailPage.Master>
 
     <MasterDetailPage.Detail>
@@ -19,10 +19,7 @@
                 </OnPlatform>
             </NavigationPage.Icon>
             <x:Arguments>
-                <TabbedPage Title="Koromo Copy">
-                    <local:SearchPage Title="검색"/>
-                    <local:DownloadPage Title="다운로드" x:Name="DP"/>
-                </TabbedPage>
+                <local:DownloadPage Title="Koromo Copy" x:Name="DP"/>
             </x:Arguments>
         </NavigationPage>
     </MasterDetailPage.Detail>

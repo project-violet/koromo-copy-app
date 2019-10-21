@@ -56,7 +56,5 @@ namespace Koromo_Copy.App
         {
             // Handle when your app resumes
         }
-
-
     }
 }

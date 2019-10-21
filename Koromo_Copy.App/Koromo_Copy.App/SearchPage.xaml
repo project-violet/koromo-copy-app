@@ -3,13 +3,38 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+             xmlns:app="clr-namespace:Koromo_Copy.App"
              mc:Ignorable="d"
+             Title="검색기"
              x:Class="Koromo_Copy.App.SearchPage">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+        <Grid>
+            <Grid Margin="4">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Frame Grid.Row="0" Margin="0,0,0,4" Padding="0" HasShadow="True">
+                    <app:NoUnderlineSearchBar x:Name="Search"/>
+                </Frame>
+
+                <ScrollView Grid.Row="1">
+                    <CollectionView x:Name="List" SelectionMode="None">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <ContentView>
+                                    <yummy:PancakeView CornerRadius="10" Margin="0,0,0,4" Elevation="4" HasShadow="True">
+
+                                    </yummy:PancakeView>
+                                </ContentView>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </ScrollView>
+            </Grid>
+            
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

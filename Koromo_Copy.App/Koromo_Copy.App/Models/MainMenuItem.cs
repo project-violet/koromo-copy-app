@@ -9,7 +9,8 @@ namespace Koromo_Copy.App.Models
 {
     public enum MenuItemType
     {
-        Browse,
+        Downloader,
+        Search,
         About,
         Settings,
         Log,

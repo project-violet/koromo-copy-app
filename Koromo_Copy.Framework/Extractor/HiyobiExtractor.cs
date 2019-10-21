@@ -23,7 +23,7 @@ namespace Koromo_Copy.Framework.Extractor
         public HiyobiExtractor()
         {
             HostName = new Regex(@"xn--9w3b15m8vo\.asia|hiyobi\.me");
-            ValidUrl = new Regex(@"^https?://(?<host>xn--9w3b15m8vo\.asia|hiyobi\.me)/(?<type>reader|search)/(?<id>\d*)(?<token>.*)$");
+            ValidUrl = new Regex(@"^https?://(?<host>xn--9w3b15m8vo\.asia|hiyobi\.me|히요비\.asia)/(?<type>reader|search)/(?<id>\d*)(?<token>.*)$");
         }
 
         public override IExtractorOption RecommendOption(string url)

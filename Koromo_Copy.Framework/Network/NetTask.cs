@@ -75,6 +75,8 @@ namespace Koromo_Copy.Framework.Network
         [JsonProperty]
         public string Url { get; set; }
         [JsonProperty]
+        public List<string> FailUrls { get; set; }
+        [JsonProperty]
         public string Accept { get; set; }
         [JsonProperty]
         public string Referer { get; set; }

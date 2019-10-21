@@ -273,6 +273,19 @@ namespace Koromo_Copy.Framework.Network
                     Log.Logs.Instance.PushError(content);
                 }
 
+                if (content.FailUrls != null && retry_count < content.FailUrls.Count)
+                {
+                    content.Url = content.FailUrls[retry_count++];
+                    content.RetryCallback?.Invoke(retry_count);
+
+                    lock (Log.Logs.Instance)
+                    {
+                        Log.Logs.Instance.Push($"[NetField] Retry [{retry_count}/{content.RetryCount}]");
+                        Log.Logs.Instance.Push(content);
+                    }
+                    goto RETRY_PROCEDURE;
+                }
+
                 if ((response != null && (
                     response.StatusCode == HttpStatusCode.NotFound ||
                     response.StatusCode == HttpStatusCode.Forbidden ||
@@ -347,6 +360,19 @@ namespace Koromo_Copy.Framework.Network
             //
             //  Retry
             //
+
+            if (content.FailUrls != null && retry_count < content.FailUrls.Count)
+            {
+                content.Url = content.FailUrls[retry_count++];
+                content.RetryCallback?.Invoke(retry_count);
+
+                lock (Log.Logs.Instance)
+                {
+                    Log.Logs.Instance.Push($"[NetField] Retry [{retry_count}/{content.RetryCount}]");
+                    Log.Logs.Instance.Push(content);
+                }
+                goto RETRY_PROCEDURE;
+            }
 
             if (content.RetryWhenFail)
             {

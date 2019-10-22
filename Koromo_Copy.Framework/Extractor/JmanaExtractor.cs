@@ -68,7 +68,7 @@ namespace Koromo_Copy.Framework.Extractor
 
             option.SimpleInfoCallback?.Invoke(title);
             option.ThumbnailCallback?.Invoke(NetTask.MakeDefault(
-                node.SelectSingleNode("/html[1]/body[1]/div[1]/div[3]/div[2]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/ul[1]/li[1]/div[1]/div[1]/a[1]/img[1]").GetAttributeValue("src", "")));
+                match["host"].Value + node.SelectSingleNode("/html[1]/body[1]/div[1]/div[3]/div[2]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/ul[1]/li[1]/div[1]/div[1]/a[1]/img[1]").GetAttributeValue("src", "")));
 
             option.ProgressMax?.Invoke(sub_urls.Count);
 

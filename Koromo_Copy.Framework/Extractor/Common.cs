@@ -391,6 +391,7 @@ namespace Koromo_Copy.Framework.Extractor
             new HiyobiExtractor(),
             new DanbooruExtractor(),
             new FunbeExtractor(),
+            new JmanaExtractor(),
         };
 
         public ExtractorModel GetExtractor(string url)

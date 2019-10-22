@@ -61,6 +61,7 @@ ExHentai
 Funbe
 Gelbooru
 Manamoa
+Jmana
 Naver - Forbidden but implemented
 Pixiv
 Hitomi

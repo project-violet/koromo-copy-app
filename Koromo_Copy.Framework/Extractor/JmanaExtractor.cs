@@ -66,7 +66,16 @@ namespace Koromo_Copy.Framework.Extractor
                 sub_titles.Add(tag_a.InnerText.Trim());
             }
 
-            var sub_htmls = NetTools.DownloadStrings(sub_urls);
+            option.SimpleInfoCallback?.Invoke(title);
+            option.ThumbnailCallback?.Invoke(NetTask.MakeDefault(
+                node.SelectSingleNode("/html[1]/body[1]/div[1]/div[3]/div[2]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/ul[1]/li[1]/div[1]/div[1]/a[1]/img[1]").GetAttributeValue("src", "")));
+
+            option.ProgressMax?.Invoke(sub_urls.Count);
+
+            var sub_htmls = NetTools.DownloadStrings(sub_urls, "", () =>
+            {
+                option.PostStatus?.Invoke(1);
+            });
 
             var result = new List<NetTask>();
 

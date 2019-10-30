@@ -58,17 +58,20 @@ namespace Koromo_Copy.Framework.Extractor
                 option.PageReadCallback?.Invoke(imgs_url);
                 var urls = new List<string> {
                     $"https://ltn.hitomi.la/galleryblock/{match["id"]}.html", 
-                    url, 
                     imgs_url };
 
                 var strings = NetTools.DownloadStrings(urls);
 
-                if (string.IsNullOrEmpty(strings[0]) || string.IsNullOrEmpty(strings[1]) || string.IsNullOrEmpty(strings[2]))
+                if (string.IsNullOrEmpty(strings[0]) || string.IsNullOrEmpty(strings[1]))
                     return (null, null);
 
                 var data1 = ParseGalleryBlock(strings[0]);
-                var data2 = ParseGallery(strings[1]);
-                var imgs = strings[2];
+                var imgs = strings[1];
+
+                var string2 = NetTools.DownloadString($"https://hitomi.la{data1.Magic}");
+                if (string.IsNullOrEmpty(string2))
+                    return (null, null);
+                var data2 = ParseGallery(string2);
 
                 option.SimpleInfoCallback?.Invoke($"[{match["id"].Value}] {data1.Title}");
 
@@ -158,7 +161,7 @@ namespace Koromo_Copy.Framework.Extractor
             document.LoadHtml(source);
             HtmlNode nodes = document.DocumentNode.SelectNodes("/div")[0];
 
-            article.Magic = nodes.SelectSingleNode("./a").GetAttributeValue("href", "").Split('/')[2].Split('.')[0];
+            article.Magic = nodes.SelectSingleNode("./a").GetAttributeValue("href", "");
             try { article.Thumbnail = nodes.SelectSingleNode("./a//img").GetAttributeValue("data-src", "").Substring("//tn.hitomi.la/".Length).Replace("smallbig", "big"); }
             catch
             { article.Thumbnail = nodes.SelectSingleNode("./a//img").GetAttributeValue("src", "").Substring("//tn.hitomi.la/".Length); }

@@ -29,7 +29,7 @@ namespace Koromo_Copy.Framework.Extractor
         public HitomiExtractor()
         {
             HostName = new Regex(@"hitomi\.la");
-            ValidUrl = new Regex(@"^https?://hitomi\.la/(?:galleries|reader)/(?<id>\d+).*?$");
+            ValidUrl = new Regex(@"^https?://hitomi\.la/(?:galleries|reader|cg|gamecg|doujinshi|manga)/(?<title>.*?)?\-?(?<id>\d+)(?:\.html|js)?$");
         }
 
         public override IExtractorOption RecommendOption(string url)
@@ -70,7 +70,7 @@ namespace Koromo_Copy.Framework.Extractor
                 var data2 = ParseGallery(strings[1]);
                 var imgs = strings[2];
 
-                option.SimpleInfoCallback?.Invoke($"[{data1.Magic}] {data1.Title}");
+                option.SimpleInfoCallback?.Invoke($"[{match["id"].Value}] {data1.Title}");
 
                 // download.js
                 var number_of_frontends = 3;
@@ -97,7 +97,7 @@ namespace Koromo_Copy.Framework.Extractor
                     task.Format = new ExtractorFileNameFormat
                     {
                         Title = data1.Title,
-                        Id = data1.Magic,
+                        Id = match["id"].Value,
                         Language = data1.Language,
                         UploadDate = data1.Posted,
                         FilenameWithoutExtension = Path.GetFileNameWithoutExtension(img.Split('/').Last()),
@@ -107,24 +107,24 @@ namespace Koromo_Copy.Framework.Extractor
                     if (data1.artist != null)
                         task.Format.Artist = data1.artist[0];
                     else
-                        task.Format.Artist = "N/A";
+                        task.Format.Artist = "NA";
 
                     if (data1.parody != null)
                         task.Format.Series = data1.parody[0];
                     else
-                        task.Format.Series = "N/A";
+                        task.Format.Series = "NA";
 
                     if (data2.group != null)
                         task.Format.Group = data2.group[0];
                     else
-                        task.Format.Group = "N/A";
+                        task.Format.Group = "NA";
 
                     if (data2.character != null)
                         task.Format.Character = data2.character[0];
                     else
-                        task.Format.Character = "N/A";
+                        task.Format.Character = "NA";
 
-                    if (task.Format.Artist == "N/A" && task.Format.Group != "N/A")
+                    if (task.Format.Artist == "NA" && task.Format.Group != "NA")
                         task.Format.Artist = task.Format.Group;
 
                     result.Add(task);
@@ -137,7 +137,7 @@ namespace Koromo_Copy.Framework.Extractor
                 sinfo.Title = data1.Title;
                 sinfo.Author = data1.artist?.ToArray();
                 sinfo.AuthorGroup = data2.group?.ToArray();
-                sinfo.ShortInfo = $"[{data1.Magic}] {data1.Title}";
+                sinfo.ShortInfo = $"[{match["id"].Value}] {data1.Title}";
                 sinfo.Tags = data1.Tags?.ToArray();
                 sinfo.Characters = data2.character?.ToArray();
                 sinfo.Language = data1.Language;
@@ -165,7 +165,7 @@ namespace Koromo_Copy.Framework.Extractor
             article.Title = nodes.SelectSingleNode("./h1").InnerText;
 
             try { article.artist = nodes.SelectNodes(".//div[@class='artist-list']//li").Select(node => node.SelectSingleNode("./a").InnerText).ToArray(); }
-            catch { article.artist = new[] { "N/A" }; }
+            catch { article.artist = new[] { "NA" }; }
 
             var contents = nodes.SelectSingleNode("./div[2]/table");
             try { article.parody = contents.SelectNodes("./tr[1]/td[2]/ul/li").Select(node => node.SelectSingleNode(".//a").InnerText).ToArray(); } catch { }
@@ -217,7 +217,7 @@ namespace Koromo_Copy.Framework.Extractor
             {
                 case "모든 언어": return "all";
                 case "한국어": return "korean";
-                case "N/A": return "n/a";
+                case "N/A": return "na";
                 case "日本語": return "japanese";
                 case "English": return "english";
                 case "Español": return "spanish";

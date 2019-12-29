@@ -7,6 +7,7 @@ using Koromo_Copy.Framework.Log;
 using System;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 
 namespace Koromo_Copy.Console
 {
@@ -40,8 +41,11 @@ namespace Koromo_Copy.Console
             //args = new string[] { "https://manamoa.net/bbs/page.php?hid=manga_detail&manga_id=10953" };
             //args = new string[] { "https://www.instagram.com/chuu__chloe/?hl=ko" };
             //args = new string[] { "https://jmana25.com/book/패러렐 파라다이스" };
-            args = new string[] { "https://hitomi.la/doujinshi/mofurefre-%ED%95%9C%EA%B5%AD%EC%96%B4-1542081.html" };
+            //args = new string[] { "https://hitomi.la/doujinshi/mofurefre-%ED%95%9C%EA%B5%AD%EC%96%B4-1542081.html" };
+            args = new string[] { "http://www.hn-hn.co.kr/shop/shopbrand.html?xcode=013&type=N&mcode=003" };
 #endif
+
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             AppProvider.Initialize();
 

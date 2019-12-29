@@ -212,7 +212,10 @@ namespace Koromo_Copy.Framework.Network
 
                         if (content.DownloadString)
                         {
-                            content.CompleteCallbackString(Encoding.UTF8.GetString(((MemoryStream)ostream).ToArray()));
+                            if (content.Encoding == null)
+                                content.CompleteCallbackString(Encoding.UTF8.GetString(((MemoryStream)ostream).ToArray()));
+                            else
+                                content.CompleteCallbackString(content.Encoding.GetString(((MemoryStream)ostream).ToArray()));
                         }
                         else if (content.MemoryCache)
                         {

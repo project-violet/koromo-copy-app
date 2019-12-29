@@ -94,6 +94,11 @@ namespace Koromo_Copy.Framework.Network
         /* Detail Information */
 
         /// <summary>
+        /// Text Encoding Information
+        /// </summary>
+        public Encoding Encoding { get; set; }
+
+        /// <summary>
         /// Set if you want to download and save file to your own device.
         /// </summary>
         [JsonProperty]

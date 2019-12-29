@@ -2,6 +2,7 @@
 // Copyright (C) 2019. dc-koromo. Licensed under the MIT Licence.
 
 using HtmlAgilityPack;
+using Koromo_Copy.Framework.CL;
 using Koromo_Copy.Framework.Network;
 using Newtonsoft.Json.Linq;
 using System;
@@ -22,6 +23,13 @@ namespace Koromo_Copy.Framework.Extractor
 
     public class HitomiExtractorOption : IExtractorOption
     {
+        [CommandLine("--real-filename", CommandType.OPTION, Info = "Use the real file name that is provided from hitomi.la.")]
+        public bool RealFilename;
+
+        public override void CLParse(ref IExtractorOption model, string[] args)
+        {
+            model = CommandLineParser.Parse(model as HitomiExtractorOption, args);
+        }
     }
 
     public class HitomiExtractor : ExtractorModel
@@ -85,15 +93,28 @@ namespace Koromo_Copy.Framework.Extractor
                 var img_urls = new List<string>();
                 foreach (var obj in arr)
                 {
-                    if (obj.Value<int>("haswebp") == 0)
+                    var hash = obj.Value<string>("hash");
+                    if (obj.Value<int>("haswebp") == 0 || hash == null)
                         img_urls.Add($"https://{subdomain}a.hitomi.la/galleries/{match["id"].Value}/{obj.Value<string>("name")}");
+                    else if (hash == "")
+                        img_urls.Add($"https://{subdomain}a.hitomi.la/webp/{obj.Value<string>("name")}.webp");
+                    else if(hash.Length < 3)
+                        img_urls.Add($"https://{subdomain}a.hitomi.la/webp/{hash}.webp");
                     else
-                        img_urls.Add($"https://{subdomain}a.hitomi.la/webp/{match["id"].Value}/{obj.Value<string>("name")}.webp");
+                    {
+                        var postfix = hash.Substring(hash.Length - 3);
+                        img_urls.Add($"https://{subdomain}a.hitomi.la/webp/{postfix[2]}/{postfix[0]}{postfix[1]}/{hash}.webp");
+                    }
                 }
 
                 var result = new List<NetTask>();
+                var ordering = 1;
                 foreach (var img in img_urls)
                 {
+                    var filename = Path.GetFileNameWithoutExtension(img.Split('/').Last());
+                    if (!(option as HitomiExtractorOption).RealFilename)
+                        filename = ordering++.ToString("000");
+
                     var task = NetTask.MakeDefault(img);
                     task.SaveFile = true;
                     task.Filename = img.Split('/').Last();
@@ -103,7 +124,7 @@ namespace Koromo_Copy.Framework.Extractor
                         Id = match["id"].Value,
                         Language = data1.Language,
                         UploadDate = data1.Posted,
-                        FilenameWithoutExtension = Path.GetFileNameWithoutExtension(img.Split('/').Last()),
+                        FilenameWithoutExtension = filename,
                         Extension = Path.GetExtension(img.Split('/').Last()).Replace(".", "")
                     };
 

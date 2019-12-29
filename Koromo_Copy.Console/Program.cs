@@ -39,7 +39,8 @@ namespace Koromo_Copy.Console
             //args = new string[] { "https://comic.naver.com/webtoon/list.nhn?titleId=626907&weekday=wed" };
             //args = new string[] { "https://manamoa.net/bbs/page.php?hid=manga_detail&manga_id=10953" };
             //args = new string[] { "https://www.instagram.com/chuu__chloe/?hl=ko" };
-            args = new string[] { "https://jmana25.com/book/패러렐 파라다이스" };
+            //args = new string[] { "https://jmana25.com/book/패러렐 파라다이스" };
+            args = new string[] { "https://hitomi.la/doujinshi/mofurefre-%ED%95%9C%EA%B5%AD%EC%96%B4-1542081.html" };
 #endif
 
             AppProvider.Initialize();

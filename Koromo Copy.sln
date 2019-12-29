@@ -15,7 +15,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Koromo_Copy.App.Android", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Koromo_Copy.App.iOS", "Koromo_Copy.App\Koromo_Copy.App.iOS\Koromo_Copy.App.iOS.csproj", "{E04FECA2-C4DD-4B87-89F6-8BFE98C202B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Koromo_Copy.App", "Koromo_Copy.App\Koromo_Copy.App\Koromo_Copy.App.csproj", "{87ECD082-8BAE-4D73-802D-CCE57A381AA3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Koromo_Copy.App", "Koromo_Copy.App\Koromo_Copy.App\Koromo_Copy.App.csproj", "{87ECD082-8BAE-4D73-802D-CCE57A381AA3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Koromo_Copy.Bot", "Koromo_Copy.Bot\Koromo_Copy.Bot.csproj", "{5D3206C0-02C7-45C2-A2C1-8AEBFFC1D4F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -115,6 +117,18 @@ Global
 		{87ECD082-8BAE-4D73-802D-CCE57A381AA3}.Release|iPhone.Build.0 = Release|Any CPU
 		{87ECD082-8BAE-4D73-802D-CCE57A381AA3}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{87ECD082-8BAE-4D73-802D-CCE57A381AA3}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{5D3206C0-02C7-45C2-A2C1-8AEBFFC1D4F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D3206C0-02C7-45C2-A2C1-8AEBFFC1D4F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D3206C0-02C7-45C2-A2C1-8AEBFFC1D4F8}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{5D3206C0-02C7-45C2-A2C1-8AEBFFC1D4F8}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{5D3206C0-02C7-45C2-A2C1-8AEBFFC1D4F8}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{5D3206C0-02C7-45C2-A2C1-8AEBFFC1D4F8}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{5D3206C0-02C7-45C2-A2C1-8AEBFFC1D4F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D3206C0-02C7-45C2-A2C1-8AEBFFC1D4F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D3206C0-02C7-45C2-A2C1-8AEBFFC1D4F8}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{5D3206C0-02C7-45C2-A2C1-8AEBFFC1D4F8}.Release|iPhone.Build.0 = Release|Any CPU
+		{5D3206C0-02C7-45C2-A2C1-8AEBFFC1D4F8}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{5D3206C0-02C7-45C2-A2C1-8AEBFFC1D4F8}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

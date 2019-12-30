@@ -23,7 +23,7 @@ namespace Koromo_Copy.Framework.Extractor.Scrap
         public HaneulHaneulExtractor()
         {
             HostName = new Regex(@"hn-hn\.co\.kr");
-            ValidUrl = new Regex(@"^https?://(www\.)?hn-hn\.co\.kr/shop/(?<menu>shopbrand|shopdetail|bestseller)\.html.*(xcode=(?<xcode>\d+)).*$");
+            ValidUrl = new Regex(@"^https?://(www\.)?hn-hn\.co\.kr/shop/(?<menu>shopbrand|shopdetail|bestseller)\.html.*(xcode=(?<xcode>\d+|BEST)).*$");
         }
 
         public override IExtractorOption RecommendOption(string url)
@@ -108,8 +108,6 @@ namespace Koromo_Copy.Framework.Extractor.Scrap
                             else
                                 return "http://www.hn-hn.co.kr" + img.GetAttributeValue("src", "").Split('?')[0];
                         }).ToList();
-
-                        //imgs.Add(thumbnail);
 
                         foreach (var img in imgs)
                         {

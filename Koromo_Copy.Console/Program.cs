@@ -42,7 +42,8 @@ namespace Koromo_Copy.Console
             //args = new string[] { "https://www.instagram.com/chuu__chloe/?hl=ko" };
             //args = new string[] { "https://jmana25.com/book/패러렐 파라다이스" };
             //args = new string[] { "https://hitomi.la/doujinshi/mofurefre-%ED%95%9C%EA%B5%AD%EC%96%B4-1542081.html" };
-            args = new string[] { "http://www.hn-hn.co.kr/shop/shopbrand.html?xcode=013&type=N&mcode=003" };
+            //args = new string[] { "http://www.hn-hn.co.kr/shop/shopbrand.html?xcode=013&type=N&mcode=003" };
+            args = new string[] { "https://attrangs.co.kr/shop/list.php?cate=2301" };
 #endif
 
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);

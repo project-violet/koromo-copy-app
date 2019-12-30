@@ -393,6 +393,7 @@ namespace Koromo_Copy.Framework.Extractor
             new FunbeExtractor(),
             new JmanaExtractor(),
             new Scrap.HaneulHaneulExtractor(),
+            new Scrap.AttrangsExtractor(),
         };
 
         public ExtractorModel GetExtractor(string url)

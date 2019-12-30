@@ -112,3 +112,7 @@ HtmlAgilityPack: https://html-agility-pack.net/
 Json.NET: https://www.newtonsoft.com/json
 FFmpeg: https://www.ffmpeg.org/
 ```
+
+## Donation
+
+https://www.patreon.com/user/posts?u=28704056

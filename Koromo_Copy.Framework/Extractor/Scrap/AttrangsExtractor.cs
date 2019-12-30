@@ -70,12 +70,13 @@ namespace Koromo_Copy.Framework.Extractor.Scrap
                 option.ProgressMax?.Invoke(sub_urls.Count);
 
                 var sub_htmls = new List<string>();
+                var rand = new Random();
                 foreach (var surl in sub_urls)
                 {
                     sub_htmls.Add(NetTools.DownloadString(surl));
                     option.PostStatus?.Invoke(1);
                     // Kuipernet Handling
-                    Thread.Sleep(200);
+                    Thread.Sleep(rand.Next(5, 11) * 100);
                 }
 
                 foreach (var shtml in sub_htmls)

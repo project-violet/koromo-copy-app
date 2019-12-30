@@ -96,39 +96,32 @@ namespace Koromo_Copy.Framework.Extractor.Scrap
 
                 foreach (var shtml in sub_htmls)
                 {
-                    try
+                    var snode = shtml.ToHtmlNode();
+                    var title = snode.SelectSingleNode("/html[1]/body[1]/div[3]/div[3]/div[1]/div[2]/div[1]/div[2]/div[1]/form[1]/div[1]/div[1]/h3[1]").InnerText.Trim();
+                    var thumbnail = "http://www.hn-hn.co.kr" + snode.SelectSingleNode("/html[1]/body[1]/div[3]/div[3]/div[1]/div[2]/div[1]/div[2]/div[1]/div[3]/div[1]/a[1]/img[1]").GetAttributeValue("src", "").Split('?')[0];
+                    var imgs = snode.SelectNodes("/html[1]/body[1]/div[3]/div[3]/div[1]/div[2]/div[1]/div[2]//img").Select(img => 
                     {
-                        var snode = shtml.ToHtmlNode();
-                        var title = snode.SelectSingleNode("/html[1]/body[1]/div[3]/div[3]/div[1]/div[2]/div[1]/div[2]/div[1]/form[1]/div[1]/div[1]/h3[1]").InnerText.Trim();
-                        var thumbnail = "http://www.hn-hn.co.kr" + snode.SelectSingleNode("/html[1]/body[1]/div[3]/div[3]/div[1]/div[2]/div[1]/div[2]/div[1]/div[3]/div[1]/a[1]/img[1]").GetAttributeValue("src", "").Split('?')[0];
-                        var imgs = snode.SelectNodes("/html[1]/body[1]/div[3]/div[3]/div[1]/div[2]/div[1]/div[2]//img").Select(img => 
-                        {
-                            if (img.GetAttributeValue("src", "").StartsWith("http"))
-                                return img.GetAttributeValue("src", "");
-                            else
-                                return "http://www.hn-hn.co.kr" + img.GetAttributeValue("src", "").Split('?')[0];
-                        }).ToList();
+                        if (img.GetAttributeValue("src", "").StartsWith("http"))
+                            return img.GetAttributeValue("src", "");
+                        else
+                            return "http://www.hn-hn.co.kr" + img.GetAttributeValue("src", "").Split('?')[0];
+                    }).ToList();
 
-                        foreach (var img in imgs)
-                        {
-                            var task = NetTask.MakeDefault(img);
-                            task.SaveFile = true;
-                            task.Filename = img.Split('/').Last();
-                            if (filtering_filename.Contains(task.Filename))
-                                continue;
-                            task.Format = new ExtractorFileNameFormat
-                            {
-                                Gallery = gallery,
-                                Title = title,
-                                FilenameWithoutExtension = Path.GetFileNameWithoutExtension(task.Filename),
-                                Extension = Path.GetExtension(task.Filename).Replace(".", "")
-                            };
-                            result.Add(task);
-                        }
-                    }
-                    catch (Exception e)
+                    foreach (var img in imgs)
                     {
-                        ;
+                        var task = NetTask.MakeDefault(img);
+                        task.SaveFile = true;
+                        task.Filename = img.Split('/').Last();
+                        if (filtering_filename.Contains(task.Filename))
+                            continue;
+                        task.Format = new ExtractorFileNameFormat
+                        {
+                            Gallery = gallery,
+                            Title = title,
+                            FilenameWithoutExtension = Path.GetFileNameWithoutExtension(task.Filename),
+                            Extension = Path.GetExtension(task.Filename).Replace(".", "")
+                        };
+                        result.Add(task);
                     }
                 }
 

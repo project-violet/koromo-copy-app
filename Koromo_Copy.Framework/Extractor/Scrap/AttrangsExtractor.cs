@@ -76,7 +76,7 @@ namespace Koromo_Copy.Framework.Extractor.Scrap
                     sub_htmls.Add(NetTools.DownloadString(surl));
                     option.PostStatus?.Invoke(1);
                     // Kuipernet Handling
-                    Thread.Sleep(rand.Next(5, 11) * 100);
+                    Thread.Sleep(rand.Next(3, 7) * 100);
                 }
 
                 foreach (var shtml in sub_htmls)
@@ -132,13 +132,16 @@ namespace Koromo_Copy.Framework.Extractor.Scrap
             public AttrangsViewParser (string html)
             {
                 var node = html.ToHtmlNode();
-                ThumbnailURL = node.SelectSingleNode("/html[1]/body[1]/div[2]/div[3]/div[1]/div[1]/div[1]/div[1]/div[1]/img[1]").GetAttributeValue("src", "");
+                //ThumbnailURL = node.SelectSingleNode("/html[1]/body[1]/div[2]/div[3]/div[1]/div[1]/div[1]/div[1]/div[1]/img[1]").GetAttributeValue("src", "");
                 Title = node.SelectSingleNode("/html[1]/head[1]/title[1]").InnerText.Replace("아뜨랑스 - ", "").Trim();
 
                 try
                 {
                     // Thumbnail Images
-                    Images.AddRange(node.SelectNodes("/html[1]/body[1]/div[2]/div[3]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]//img").Select(img => img.GetAttributeValue("src", "")));
+                    var tt = node.SelectNodes("/html[1]/body[1]/div[2]/div[3]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]//img");
+                    if (tt == null)
+                        tt = node.SelectNodes("/html[1]/body[1]/div[2]/div[3]/div[1]/div[1]/div[1]/div[2]/div[2]/div[1]/div[1]//img");
+                    Images.AddRange(tt.Select(img => img.GetAttributeValue("src", "")));
                     // Model Image Shot
                     var mm = node.SelectNodes("/html[1]/body[1]/div[2]/div[3]/div[1]/div[1]/div[10]/div[1]/div[1]/div[1]/div[1]//img");
                     if (mm != null)

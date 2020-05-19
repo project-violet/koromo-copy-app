@@ -35,6 +35,7 @@ namespace Koromo_Copy.Framework.Extractor
         }
     }
 
+    // https://www.instagram.com/fengmaoss/
     public class InstagramExtractor : ExtractorModel
     {
         public InstagramExtractor()
@@ -44,7 +45,7 @@ namespace Koromo_Copy.Framework.Extractor
             ExtractorInfo = "Instagram extactor info\r\n" +
                 "   user:             Full-name.\r\n" +
                 "   account:          User-name";
-            IsForbidden = true;
+            //IsForbidden = false;
         }
 
         public override IExtractorOption RecommendOption(string url)

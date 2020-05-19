@@ -25,12 +25,12 @@ namespace Koromo_Copy.App
             menuItems = new List<MainMenuItem>
             {
                 new MainMenuItem {Id = MenuItemType.Downloader, Title="다운로더", Icon = IconPack.CloudDownloadOutline },
-                new MainMenuItem {Id = MenuItemType.Search, Title="검색기", Icon= IconPack.Magnify },
+                //new MainMenuItem {Id = MenuItemType.Search, Title="검색기", Icon= IconPack.Magnify },
                 new MainMenuItem {Id = MenuItemType.Log, Title="로그", Icon= IconPack.PostOutline },
                 new MainMenuItem {Id = MenuItemType.Settings, Title="설정", Icon= IconPack.Settings },
                 new MainMenuItem {Id = MenuItemType.About, Title="이 어플에 관하여", Icon= IconPack.InformationOutline },
 #if DEBUG
-                new MainMenuItem {Id = MenuItemType.Test, Title="테스트", Icon= IconPack.BottleTonicSkull }
+                //new MainMenuItem {Id = MenuItemType.Test, Title="테스트", Icon= IconPack.BottleTonicSkull }
 #endif
             };
 

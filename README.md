@@ -62,13 +62,13 @@ Funbe
 Gelbooru
 Manamoa
 Jmana
-Naver - Forbidden but implemented
+Naver
 Pixiv
 Hitomi
 Hiyobi
 Imgur
-Instagram (supports Video) - Forbidden but implemented
-Twitter (supports Video) - Forbidden but implemented
+Instagram (supports Video)
+Twitter (supports Video)
 ```
 
 ### Plan to support
@@ -113,6 +113,8 @@ Json.NET: https://www.newtonsoft.com/json
 FFmpeg: https://www.ffmpeg.org/
 ```
 
-## Donation
+## Contribution
 
-https://www.patreon.com/user/posts?u=28704056
+Welcome to any form of contribution!
+
+If you are interested in this project or have any suggestions, feel free to open the issue!

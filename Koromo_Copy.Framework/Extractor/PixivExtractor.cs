@@ -29,7 +29,8 @@ namespace Koromo_Copy.Framework.Extractor
         public PixivExtractor()
         {
             HostName = new Regex(@"www\.pixiv\.net");
-            ValidUrl = new Regex(@"^https?://(www\.)?pixiv\.net/(member(?:_illust)?\.php\?id\=|artworks/)(?<id>.*?)$");
+            //ValidUrl = new Regex(@"^https?://(www\.)?pixiv\.net/((member(?:_illust)?\.php\?id\=|artworks/)|users/)(?<id>.*?)$");
+            ValidUrl = new Regex(@"^https?://(www\.)?pixiv\.net/(member(?:_illust)?\.php\?id\=|artworks/|users/)(?<id>.*?)$");
         }
 
         public override IExtractorOption RecommendOption(string url)
@@ -54,7 +55,7 @@ namespace Koromo_Copy.Framework.Extractor
             if (option == null)
                 option = new PixivExtractorOption { Type = ExtractorType.Works };
 
-            if (match[2].Value.StartsWith("member") && option.ExtractInformation == false)
+            if ((match[2].Value.StartsWith("member") || match[2].Value.StartsWith("users")) && option.ExtractInformation == false)
             {
                 var user = PixivAPI.GetUsersAsync(match["id"].Value.ToInt()).Result;
                 var works = PixivAPI.GetUsersWorksAsync(match["id"].Value.ToInt(), 1, 10000000).Result;
@@ -68,7 +69,29 @@ namespace Koromo_Copy.Framework.Extractor
                 foreach (var work in works)
                 {
                     if (work.PageCount > 1)
-                        ;
+                    {
+                        var x = PixivAPI.GetWorksAsync(work.Id.Value).Result;
+
+                        foreach (var md in x)
+                        {
+                            foreach (var dm in md.Metadata.Pages)
+                            {
+                                var task = NetTask.MakeDefault(dm.ImageUrls.Large);
+                                task.Filename = dm.ImageUrls.Large.Split('/').Last();
+                                task.SaveFile = true;
+                                task.Referer = url;
+                                task.Format = new ExtractorFileNameFormat
+                                {
+                                    Artist = user[0].Name,
+                                    Account = user[0].Account,
+                                    Id = user[0].Id.Value.ToString(),
+                                    FilenameWithoutExtension = Path.GetFileNameWithoutExtension(dm.ImageUrls.Large.Split('/').Last()),
+                                    Extension = Path.GetExtension(dm.ImageUrls.Large.Split('/').Last()).Replace(".", "")
+                                };
+                                result.Add(task);
+                            }
+                        }
+                    }
                     if (work.Type == null || work.Type == "illustration")
                     {
                         var task = NetTask.MakeDefault(work.ImageUrls.Large);
@@ -486,7 +509,7 @@ namespace Koromo_Copy.Framework.Extractor
                 const string client_id = "MOBrBDS8blbauoSck0ZfDbtuzpyT";
                 const string client_secret = "lsACyCD94FhDUtGTXi3QzcFE2uU1hqtDaKeqrdwj";
                 const string hash_secret = "28c1fdd170a5204386cb1313c7077b34f83e4aaf4aa829ce78c231e05b0bae2c";
-                var local_time = DateTime.Now.ToString("s");
+                var local_time = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:MM:ss+00:00");
 
                 var task = NetTask.MakeDefault("https://oauth.secure.pixiv.net/auth/token");
 
@@ -547,6 +570,27 @@ namespace Koromo_Copy.Framework.Extractor
 
                 var result = await NetTools.DownloadStringAsync(task);
                 return JToken.Parse(result).SelectToken("response").ToObject<List<User>>();
+            }
+
+            public static async Task<List<UsersWork>> GetWorksAsync(long illustId)
+            {
+                var url = "https://public-api.secure.pixiv.net/v1/works/" + illustId.ToString() + ".json";
+
+                var param = new Dictionary<string, string>
+                {
+                    { "profile_image_sizes", "px_170x170,px_50x50" },
+                    { "image_sizes", "px_128x128,small,medium,large,px_480mw" },
+                    { "include_stats", "true" },
+                };
+
+                var task = NetTask.MakeDefault(url + "?" + string.Join("&", param.ToList().Select(x => $"{x.Key}={x.Value}")));
+                task.Referer = "http://spapi.pixiv.net/";
+                task.UserAgent = "PixivIOSApp/5.8.0";
+                task.Headers = new Dictionary<string, string>();
+                task.Headers.Add("Authorization", "Bearer " + AccessToken);
+
+                var result = await NetTools.DownloadStringAsync(task);
+                return JToken.Parse(result).SelectToken("response").ToObject<List<UsersWork>>();
             }
 
             /// <summary>

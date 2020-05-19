@@ -29,6 +29,6 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <Label HorizontalOptions="StartAndExpand" Text="© 2019 Koromo Copy" Margin="16,0,8,8" FontSize="18"/>
+        <Label HorizontalOptions="StartAndExpand" Text="© 2019-2020 Koromo Copy" Margin="16,0,8,8" FontSize="18"/>
     </StackLayout>
 </ContentPage>

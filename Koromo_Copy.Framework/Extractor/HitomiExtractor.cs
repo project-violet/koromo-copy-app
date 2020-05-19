@@ -4,6 +4,7 @@
 using HtmlAgilityPack;
 using Koromo_Copy.Framework.CL;
 using Koromo_Copy.Framework.Network;
+using Koromo_Copy.Framework.Utils;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -59,13 +60,27 @@ namespace Koromo_Copy.Framework.Extractor
 
             if (option.Type == ExtractorType.Images)
             {
+                var id = match["id"].Value;
+
+                // Handle Redirect
+                var string3 = NetTools.DownloadString(url);
+            RETRY_DOWNLOAD1:
+                if (string.IsNullOrEmpty(string3))
+                    return (null, null);
+                if (string3.ToHtmlNode().SelectSingleNode("//title").InnerText == "Redirect")
+                {
+                    id = string3.ToHtmlNode().SelectSingleNode("//a").GetAttributeValue("href", "").Split('/', '-').Last().Split('.')[0];
+                    string3 = NetTools.DownloadString(string3.ToHtmlNode().SelectSingleNode("//a").GetAttributeValue("href", ""));
+                    goto RETRY_DOWNLOAD1;
+                }
+
                 var sinfo = new ExtractedInfo.WorksComic();
-                var imgs_url = $"https://ltn.hitomi.la/galleries/{match["id"].Value}.js";
-                option.PageReadCallback?.Invoke($"https://ltn.hitomi.la/galleryblock/{match["id"]}.html");
+                var imgs_url = $"https://ltn.hitomi.la/galleries/{id}.js";
+                option.PageReadCallback?.Invoke($"https://ltn.hitomi.la/galleryblock/{id}.html");
                 option.PageReadCallback?.Invoke(url);
                 option.PageReadCallback?.Invoke(imgs_url);
                 var urls = new List<string> {
-                    $"https://ltn.hitomi.la/galleryblock/{match["id"]}.html", 
+                    $"https://ltn.hitomi.la/galleryblock/{id}.html", 
                     imgs_url };
 
                 var strings = NetTools.DownloadStrings(urls);
@@ -81,24 +96,28 @@ namespace Koromo_Copy.Framework.Extractor
                     return (null, null);
                 var data2 = ParseGallery(string2);
 
-                option.SimpleInfoCallback?.Invoke($"[{match["id"].Value}] {data1.Title}");
+                option.SimpleInfoCallback?.Invoke($"[{id}] {data1.Title}");
 
                 // download.js
                 var number_of_frontends = 3;
-                var subdomain = Convert.ToChar(97 + (Convert.ToInt32(match["id"].Value.Last()) % number_of_frontends));
-                if (match["id"].Value.Last() == '0')
+                var subdomain = Convert.ToChar(97 + (Convert.ToInt32(id.Last()) % number_of_frontends));
+                if (id.Last() == '0')
                     subdomain = 'a';
 
-                var arr = JArray.Parse(imgs.Substring(imgs.IndexOf('[')));
+                var arr = JToken.Parse(imgs.Substring(imgs.IndexOf('=') + 1))["files"];
                 var img_urls = new List<string>();
-                foreach (var obj in arr)
+                foreach (var obj in (JArray)arr)
                 {
                     var hash = obj.Value<string>("hash");
                     if (obj.Value<int>("haswebp") == 0 || hash == null)
-                        img_urls.Add($"https://{subdomain}a.hitomi.la/galleries/{match["id"].Value}/{obj.Value<string>("name")}");
+                    {
+                        //img_urls.Add($"https://{subdomain}a.hitomi.la/galleries/{id}/{obj.Value<string>("name")}");
+                        var postfix = hash.Substring(hash.Length - 3);
+                        img_urls.Add($"https://{subdomain}a.hitomi.la/images/{postfix[2]}/{postfix[0]}{postfix[1]}/{hash}.{obj.Value<string>("name").Split('.').Last()}");
+                    }
                     else if (hash == "")
                         img_urls.Add($"https://{subdomain}a.hitomi.la/webp/{obj.Value<string>("name")}.webp");
-                    else if(hash.Length < 3)
+                    else if (hash.Length < 3)
                         img_urls.Add($"https://{subdomain}a.hitomi.la/webp/{hash}.webp");
                     else
                     {
@@ -121,7 +140,7 @@ namespace Koromo_Copy.Framework.Extractor
                     task.Format = new ExtractorFileNameFormat
                     {
                         Title = data1.Title,
-                        Id = match["id"].Value,
+                        Id = id,
                         Language = data1.Language,
                         UploadDate = data1.Posted,
                         FilenameWithoutExtension = filename,
@@ -161,7 +180,7 @@ namespace Koromo_Copy.Framework.Extractor
                 sinfo.Title = data1.Title;
                 sinfo.Author = data1.artist?.ToArray();
                 sinfo.AuthorGroup = data2.group?.ToArray();
-                sinfo.ShortInfo = $"[{match["id"].Value}] {data1.Title}";
+                sinfo.ShortInfo = $"[{id}] {data1.Title}";
                 sinfo.Tags = data1.Tags?.ToArray();
                 sinfo.Characters = data2.character?.ToArray();
                 sinfo.Language = data1.Language;
@@ -210,7 +229,7 @@ namespace Koromo_Copy.Framework.Extractor
             document.LoadHtml(source);
             HtmlNode nodes = document.DocumentNode.SelectSingleNode("//div[@class='content']");
 
-            article.Magic = nodes.SelectSingleNode("./div[3]/h1/a").GetAttributeValue("href", "").Split('/')[2].Split('.')[0];
+            article.Magic = nodes.SelectSingleNode(".//h1/a").GetAttributeValue("href", "").Split('/')[2].Split('.')[0];
 
             foreach (var tr in document.DocumentNode.SelectNodes("//div[@class='gallery-info']/table/tr").ToList())
             {

@@ -39,6 +39,10 @@ If you want to format the download path, enter `--list-extractor` to see the sup
 ./Koromo_Copy.Console -o "[%(account)s] %(user)s/%(file)s.%(ext)s" https://www.instagram.com/taylorswift/
 ```
 
+## Android
+
+You can download my app on https://play.google.com/store/apps/details?id=com.koromo_project.koromo_copy
+
 ## Documents
 
 [Development Manual](Document/Development.md)

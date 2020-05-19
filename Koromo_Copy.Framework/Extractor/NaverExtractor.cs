@@ -25,7 +25,7 @@ namespace Koromo_Copy.Framework.Extractor
         {
             HostName = new Regex(@"(comic|blog)\.naver\.com");
             ValidUrl = new Regex(@"^https?://(comic|blog)\.naver\.com/(webtoon|.*?)/((list|detail)\.nhn\?|.*)\??(titleId\=(?<id>\d+))?(.*?)$");
-            IsForbidden = true;
+            //IsForbidden = true;
         }
         
         public override IExtractorOption RecommendOption(string url)
